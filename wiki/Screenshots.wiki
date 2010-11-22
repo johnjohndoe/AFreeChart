@@ -48,6 +48,7 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYTitleAnnotationDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/MarkerDemo2.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/AxisOffsetsDemo1.png" alt="image">
+<img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/MultipleDatasetDemo1.png" alt="image">
 
 <br><br><b>!MultipleAxisCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/DualAxisDemo2.png" alt="image">
