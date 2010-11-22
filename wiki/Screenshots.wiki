@@ -48,6 +48,7 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/AnnotationDemo2.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYTitleAnnotationDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/MarkerDemo2.png" alt="image">
+<img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/AxisOffsetsDemo1.png" alt="image">
 
 <br><br><b>!MultipleAxisCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/DualAxisDemo2.png" alt="image">
@@ -65,6 +66,7 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/PieChartDemo2.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/PieChartDemo3.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/PieChartDemo4.png" alt="image">
+<img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/PieChartDemo6.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/PieChartDemo7.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/PieChartDemo8.png" alt="image">
 
@@ -74,6 +76,7 @@
 <br><br><b>!StatisticalCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYErrorRendererDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYErrorRendererDemo2.png" alt="image">
+<img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/RegressionDemo1.png" alt="image">
 
 <br><br><b>!TimeSeriesCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/CompareToPreviousYearDemo.png" alt="image">
@@ -85,7 +88,9 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimePeriodValuesDemo3.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo10.png" alt="image">
+<img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo11.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo12.png" alt="image">
+<img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo13.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo14.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo2.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo3.png" alt="image">
