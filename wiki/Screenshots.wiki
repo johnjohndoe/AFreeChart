@@ -11,7 +11,7 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYBarChartDemo6.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYBarChartDemo7.png" alt="image">
 
-<br><br><b>CombinedAxisCharts</b><br>
+<br><br><b>!CombinedAxisCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/CombinedXYPlotDemo2.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/CombinedXYPlotDemo4.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/CombinedXYPlotDemo5.png" alt="image">
