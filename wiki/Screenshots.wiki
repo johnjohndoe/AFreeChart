@@ -85,7 +85,6 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo10.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo12.png" alt="image">
-<img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo13.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo14.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo2.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo3.png" alt="image">
