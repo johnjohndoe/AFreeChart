@@ -16,7 +16,7 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/CombinedXYPlotDemo4.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/CombinedXYPlotDemo5.png" alt="image">
 
-<br><br><b>FinancialCharts</b><br>
+<br><br><b>!FinancialCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/CandlestickChartDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/HighLowChartDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/HighLowChartDemo2.png" alt="image">
@@ -27,7 +27,7 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/PriceVolumeDemo2.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/YieldCurveDemo1.png" alt="image">
 
-<br><br><b>LineCharts</b><br>
+<br><br><b>!LineCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/LineChartDemo2.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/LineChartDemo3.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/LineChartDemo4.png" alt="image">
@@ -35,7 +35,7 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYStepRendererDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYStepRendererDemo2.png" alt="image">
 
-<br><br><b>Miscellaneous</b><br>
+<br><br><b>!Miscellaneous</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/First.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/GridBandDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/HideSeriesDemo1.png" alt="image">
@@ -48,18 +48,18 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYTitleAnnotationDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/MarkerDemo2.png" alt="image">
 
-<br><br><b>MultipleAxisCharts</b><br>
+<br><br><b>!MultipleAxisCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/DualAxisDemo2.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/MultipleAxisDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/MultipleAxisDemo2.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/MultipleAxisDemo3.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/MultipleAxisDemo4.png" alt="image">
 
-<br><br><b>OverlaidCharts</b><br>
+<br><br><b>!OverlaidCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/OverlaidXYPlotDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/OverlaidXYPlotDemo2.png" alt="image">
 
-<br><br><b>PieCharts</b><br>
+<br><br><b>!PieCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/PieChartDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/PieChartDemo2.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/PieChartDemo3.png" alt="image">
@@ -67,14 +67,14 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/PieChartDemo7.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/PieChartDemo8.png" alt="image">
 
-<br><br><b>ShowcaseCharts</b><br>
+<br><br><b>!ShowcaseCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYDrawableAnnotationDemo1.png" alt="image">
 
-<br><br><b>StatisticalCharts</b><br>
+<br><br><b>!StatisticalCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYErrorRendererDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYErrorRendererDemo2.png" alt="image">
 
-<br><br><b>TimeSeriesCharts</b><br>
+<br><br><b>!TimeSeriesCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/CompareToPreviousYearDemo.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/DeviationRendererDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/DeviationRendererDemo2.png" alt="image">
@@ -95,7 +95,7 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo8.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo9.png" alt="image">
 
-<br><br><b>XYCharts</b><br>
+<br><br><b>!XYCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/DefaultXYDatasetDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/DefaultXYDatasetDemo2.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/Function2DDemo1.png" alt="image">
