@@ -34,6 +34,7 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/LineChartDemo6.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYStepRendererDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYStepRendererDemo2.png" alt="image">
+<img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYSplineRendererDemo1.png" alt="image">
 
 <br><br><b>Miscellaneous</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/First.png" alt="image">
