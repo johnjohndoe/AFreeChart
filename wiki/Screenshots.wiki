@@ -35,7 +35,7 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYStepRendererDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYStepRendererDemo2.png" alt="image">
 
-<br><br><b>!Miscellaneous</b><br>
+<br><br><b>Miscellaneous</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/First.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/GridBandDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/HideSeriesDemo1.png" alt="image">
@@ -95,7 +95,7 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo8.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/TimeSeriesDemo9.png" alt="image">
 
-<br><br><b>!XYCharts</b><br>
+<br><br><b>XYCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/DefaultXYDatasetDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/DefaultXYDatasetDemo2.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/Function2DDemo1.png" alt="image">
