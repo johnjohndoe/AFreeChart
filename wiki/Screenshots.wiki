@@ -1,6 +1,6 @@
 #summary Screenshots of DEMO APPLICATIONS
 
-<b>BarCharts</b><br>
+<b>!BarCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/RelativeDateFormatDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/RelativeDateFormatDemo2.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/XYBarChartDemo1.png" alt="image">
