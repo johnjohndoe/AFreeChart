@@ -1,3 +1,4 @@
 #summary Screenshots of DEMO APPLICATIONS
 
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/AnnotationDemo1.png" />
+<img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/AnnotationDemo2.png" />
