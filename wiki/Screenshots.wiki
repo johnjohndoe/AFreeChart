@@ -21,7 +21,6 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/HighLowChartDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/HighLowChartDemo2.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/HighLowChartDemo3.png" alt="image">
-<img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/LegendWrapperDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/MovingAverageDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/PriceVolumeDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/PriceVolumeDemo2.png" alt="image">
@@ -49,6 +48,7 @@
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/MarkerDemo2.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/AxisOffsetsDemo1.png" alt="image">
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/MultipleDatasetDemo1.png" alt="image">
+<img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/LegendWrapperDemo1.png" alt="image">
 
 <br><br><b>!MultipleAxisCharts</b><br>
 <img src="http://afreechart.googlecode.com/svn/trunk/doc/screenshot/DualAxisDemo2.png" alt="image">
