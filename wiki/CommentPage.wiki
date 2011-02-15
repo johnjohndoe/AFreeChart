@@ -1,6 +1,4 @@
-#summary One-sentence summary of this page.
-
-= CommentPage =
+#Feature Requests.
 
 Please leave the comment here if there is something.
   * if the problem and bug, please use the issues page.
