@@ -1,4 +1,4 @@
-Sorry. 
-The screen shot page moved.
+Sorry.<br>
+Screenshots page moved.
 
-New screenshot <a href="http://afreechart.googlecode.com/svn/doc/screenshot/index.html">click here</a>
+New Screenshots <a href="http://afreechart.googlecode.com/svn/doc/screenshot/index.html">click here</a>
