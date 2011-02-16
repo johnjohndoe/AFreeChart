@@ -7,31 +7,41 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * ------------------------
  * CandlestickRenderer.java
  * ------------------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 16-Dec-2010 : performance tuning
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2001-2009, by Object Refinery Limited.
  *
  * Original Authors:  David Gilbert (for Object Refinery Limited);
@@ -39,8 +49,6 @@
  * Contributor(s):    Richard Atkinson;
  *                    Christian W. Zuckschwerdt;
  *                    Jerome Fisher;
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -90,8 +98,6 @@
  * 27-Mar-2009 : Updated findRangeBounds() to call new method in
  *               superclass (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.renderer.xy;
@@ -207,6 +213,16 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
      */
     private boolean useOutlinePaint;
 
+    /** work Paint object. */
+    private Paint mWorkPaintVolume = new Paint(0);
+    private Paint mWorkPaint = new Paint(0);
+    
+    /** work RectShape object */
+    private RectShape mWorkRectShape = new RectShape();
+    
+    /** work LineShape object */
+    private LineShape mWorkLineShape = new LineShape();
+    
     /**
      * Creates a new renderer for candlestick charts.
      */
@@ -236,11 +252,8 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
      * @param candleWidth  the candle width.
      * @param drawVolume  a flag indicating whether or not volume bars should
      *                    be drawn.
-     * @param toolTipGenerator  the tool tip generator. <code>null</code> is
-     *                          none.
      */
-    public CandlestickRenderer(double candleWidth, boolean drawVolume/*,
-                               XYToolTipGenerator toolTipGenerator*/) {
+    public CandlestickRenderer(double candleWidth, boolean drawVolume) {
         super();
         //setBaseToolTipGenerator(toolTipGenerator);
         this.candleWidth = candleWidth;
@@ -428,9 +441,9 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
      * Returns the paint used to fill candles when the price moves up from open
      * to close.
      *
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      *
-     * @see #setUpPaintType(Paint)
+     * @see #setUpPaintType(PaintType)
      */
     public PaintType getUpPaintType() {
         return this.upPaintType;
@@ -454,9 +467,9 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
      * Returns the paint used to fill candles when the price moves down from
      * open to close.
      *
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      *
-     * @see #setDownPaintType(Paint)
+     * @see #setDownPaintType(PaintType)
      */
     public PaintType getDownPaintType() {
         return this.downPaintType;
@@ -508,9 +521,9 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
      * Returns the paint that is used to fill the volume bars if they are
      * visible.
      *
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      *
-     * @see #setVolumePaintType(Paint)
+     * @see #setVolumePaintType(PaintType)
      *
      * @since JFreeChart 1.0.7
      */
@@ -784,33 +797,46 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
 
             double zzVolume = volumeHeight * (max - min);
             
-//            Composite originalComposite = canvas.getComposite();
-//            canvas.setComposite(AlphaComposite.getInstance(
-//                    AlphaComposite.SRC_OVER, 0.3f));
 
-            Paint paint = PaintUtility.createPaint(
-                    getVolumePaintType(), 
-                    getItemStroke(series, item), 
-                    getItemEffect(series, item));
+            //performance tuning
+//            Paint paint = PaintUtility.createPaint(
+//                    getVolumePaintType(), 
+//                    getItemStroke(series, item), 
+//                    getItemEffect(series, item));
+            Paint paint = this.mWorkPaintVolume;
+            PaintUtility.updatePaint(paint, getVolumePaintType());
+            paint.setAlpha((int)(paint.getAlpha() * 0.3f));
+            paint.setStrokeWidth(getItemStroke(series, item));
+            paint.setPathEffect(getItemEffect(series, item));
             
+            //performance tuning
             if (horiz) {
-                new RectShape(min, xx - volumeWidth / 2,
-                        zzVolume, volumeWidth).fill(canvas, paint);
+//                new RectShape(min, xx - volumeWidth * 0.5,
+//                        zzVolume, volumeWidth).fill(canvas, paint);
+                this.mWorkRectShape.setRect(min, xx - volumeWidth * 0.5,
+                        zzVolume, volumeWidth);
             }
             else {
-                new RectShape(xx - volumeWidth / 2,
-                        max - zzVolume, volumeWidth, zzVolume).fill(canvas, paint);
+//                new RectShape(xx - volumeWidth * 0.5,
+//                        max - zzVolume, volumeWidth, zzVolume).fill(canvas, paint);
+                this.mWorkRectShape.setRect(xx - volumeWidth * 0.5,
+                        max - zzVolume, volumeWidth, zzVolume);
             }
+            this.mWorkRectShape.fill(canvas, paint);
 
 //            canvas.setComposite(originalComposite);
         }
 
-        Paint paint;
+        //performance tuning
+        //Paint paint;
+        Paint paint = this.mWorkPaint;
         if (this.useOutlinePaint) {
-            paint = PaintUtility.createPaint(outlinePaintType);
+            //paint = PaintUtility.createPaint(outlinePaintType);
+            PaintUtility.updatePaint(paint, outlinePaintType);
         }
         else {
-            paint = PaintUtility.createPaint(itemPaintType);
+            //paint = PaintUtility.createPaint(itemPaintType);
+            PaintUtility.updatePaint(paint, itemPaintType);
         }
 
         double yyMaxOpenClose = Math.max(yyOpen, yyClose);
@@ -821,63 +847,83 @@ public class CandlestickRenderer extends AbstractXYItemRenderer
         // draw the upper shadow
         if (yHigh > maxOpenClose) {
             if (horiz) {
-                new LineShape(yyHigh, xx, yyMaxOpenClose, xx).draw(canvas, paint);
+                //new LineShape(yyHigh, xx, yyMaxOpenClose, xx).draw(canvas, paint);
+                this.mWorkLineShape.setLine(yyHigh, xx, yyMaxOpenClose, xx);
             }
             else {
-                new LineShape(xx, yyHigh, xx, yyMaxOpenClose).draw(canvas, paint);
+                //new LineShape(xx, yyHigh, xx, yyMaxOpenClose).draw(canvas, paint);
+                this.mWorkLineShape.setLine(xx, yyHigh, xx, yyMaxOpenClose);
             }
+            this.mWorkLineShape.draw(canvas, paint);
         }
+        
 
         // draw the lower shadow
         if (yLow < minOpenClose) {
             if (horiz) {
-                new LineShape(yyLow, xx, yyMinOpenClose, xx).draw(canvas, paint);
+                //new LineShape(yyLow, xx, yyMinOpenClose, xx).draw(canvas, paint);
+                this.mWorkLineShape.setLine(yyLow, xx, yyMinOpenClose, xx);
             }
             else {
-                new LineShape(xx, yyLow, xx, yyMinOpenClose).draw(canvas, paint);
+                //new LineShape(xx, yyLow, xx, yyMinOpenClose).draw(canvas, paint);
+                this.mWorkLineShape.setLine(xx, yyLow, xx, yyMinOpenClose);
             }
+            this.mWorkLineShape.draw(canvas, paint);
         }
 
+        //performance tuning
         // draw the body
-        RectShape body = null;
+//        RectShape body = null;
+        RectShape body = this.mWorkRectShape;
         RectShape hotspot = null;
         double length = Math.abs(yyHigh - yyLow);
         double base = Math.min(yyHigh, yyLow);
         if (horiz) {
-            body = new RectShape(yyMinOpenClose, xx - stickWidth / 2,
+//            body = new RectShape(yyMinOpenClose, xx - stickWidth * 0.5,
+//                    yyMaxOpenClose - yyMinOpenClose, stickWidth);
+            body.setRect(yyMinOpenClose, xx - stickWidth * 0.5,
                     yyMaxOpenClose - yyMinOpenClose, stickWidth);
-            hotspot = new RectShape(base, xx - stickWidth / 2,
+            hotspot = new RectShape(base, xx - stickWidth * 0.5,
                     length, stickWidth);
         }
         else {
-            body = new RectShape(xx - stickWidth / 2, yyMinOpenClose,
+//            body = new RectShape(xx - stickWidth * 0.5, yyMinOpenClose,
+//                    stickWidth, yyMaxOpenClose - yyMinOpenClose);
+            body.setRect(xx - stickWidth * 0.5, yyMinOpenClose,
                     stickWidth, yyMaxOpenClose - yyMinOpenClose);
-            hotspot = new RectShape(xx - stickWidth / 2,
+            hotspot = new RectShape(xx - stickWidth * 0.5,
                     base, stickWidth, length);
         }
+        //performance tuning
         if (yClose > yOpen) {
             if (this.upPaintType != null) {
-                paint = PaintUtility.createPaint(this.upPaintType);
+                //paint = PaintUtility.createPaint(this.upPaintType);
+                PaintUtility.updatePaint(paint, this.upPaintType);
             }
             else {
-                paint = PaintUtility.createPaint(itemPaintType);
+                //paint = PaintUtility.createPaint(itemPaintType);
+                PaintUtility.updatePaint(paint, itemPaintType);
             }
             body.fill(canvas, paint);
         }
         else {
             if (this.downPaintType != null) {
-                paint = PaintUtility.createPaint(this.downPaintType);
+                //paint = PaintUtility.createPaint(this.downPaintType);
+                PaintUtility.updatePaint(paint, this.downPaintType);
             }
             else {
-                paint = PaintUtility.createPaint(itemPaintType);
+                //paint = PaintUtility.createPaint(itemPaintType);
+                PaintUtility.updatePaint(paint, itemPaintType);
             }
             body.fill(canvas, paint);
         }
         if (this.useOutlinePaint) {
-            paint = PaintUtility.createPaint(outlinePaintType);
+            //paint = PaintUtility.createPaint(outlinePaintType);
+            PaintUtility.updatePaint(paint, outlinePaintType);
         }
         else {
-            paint = PaintUtility.createPaint(itemPaintType);
+            //paint = PaintUtility.createPaint(itemPaintType);
+            PaintUtility.updatePaint(paint, itemPaintType);
         }
         body.draw(canvas, paint);
 

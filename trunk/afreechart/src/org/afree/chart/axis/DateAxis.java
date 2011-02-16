@@ -7,24 +7,22 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
@@ -32,6 +30,18 @@
  * DateAxis.java
  * -------------
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 17-Dec-2010 : performance tuning
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert;
@@ -44,8 +54,6 @@
  *                   Peter Kolb (patches 1934255 and 2603321);
  *                   Andrew Mickish (patch 1870189);
  *                   Fawad Halim (bug 2201869);
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes (from 23-Jun-2001)
  * --------------------------
@@ -133,8 +141,6 @@
  * 21-Jan-2009 : Check tickUnit for minor tick count (DG);
  * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.axis;
@@ -162,7 +168,6 @@ import org.afree.chart.plot.Plot;
 import org.afree.chart.plot.PlotRenderingInfo;
 import org.afree.chart.plot.ValueAxisPlot;
 import org.afree.chart.text.TextUtilities;
-import org.afree.graphics.geom.Font;
 import org.afree.graphics.geom.RectShape;
 import org.afree.graphics.PaintUtility;
 import android.graphics.Canvas;
@@ -219,6 +224,11 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      * <code>java.util.Date</code>) in the real time line.
      */
     private static class DefaultTimeline implements Timeline, Serializable {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = -7647133139814125536L;
 
         /**
          * Converts a millisecond into a timeline value.
@@ -605,13 +615,14 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      */
     public Date getMinimumDate() {
         Date result = null;
-        Range range = getRange();
-        if (range instanceof DateRange) {
-            DateRange r = (DateRange) range;
+        //performance tuning
+//        Range range = getRange();
+        if (this.mRange instanceof DateRange) {
+            DateRange r = (DateRange) this.mRange;
             result = r.getLowerDate();
         }
         else {
-            result = new Date((long) range.getLowerBound());
+            result = new Date((long) this.mRange.getLowerBound());
         }
         return result;
     }
@@ -655,13 +666,14 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      */
     public Date getMaximumDate() {
         Date result = null;
-        Range range = getRange();
-        if (range instanceof DateRange) {
-            DateRange r = (DateRange) range;
+        //performance tuning
+//        Range range = getRange();
+        if (this.mRange instanceof DateRange) {
+            DateRange r = (DateRange) this.mRange;
             result = r.getUpperDate();
         }
         else {
-            result = new Date((long) range.getUpperBound());
+            result = new Date((long) this.mRange.getUpperBound());
         }
         return result;
     }
@@ -756,14 +768,17 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
 
         value = this.timeline.toTimelineValue((long) value);
 
-        DateRange range = (DateRange) getRange();
+        //performance tuning
+//        DateRange range = (DateRange) getRange();
+        DateRange range = (DateRange) this.mRange;
         double axisMin = this.timeline.toTimelineValue(range.getLowerMillis());
         double axisMax = this.timeline.toTimelineValue(range.getUpperMillis());
         double result = 0.0;
         if (RectangleEdge.isTopOrBottom(edge)) {
             double minX = area.getX();
             double maxX = area.getMaxX();
-            if (isInverted()) {
+            //if (isInverted()) {
+            if (this.mInverted) {
                 result = maxX + ((value - axisMin) / (axisMax - axisMin))
                          * (minX - maxX);
             }
@@ -775,7 +790,8 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
         else if (RectangleEdge.isLeftOrRight(edge)) {
             double minY = area.getMinY();
             double maxY = area.getMaxY();
-            if (isInverted()) {
+            //if (isInverted()) {
+            if (this.mInverted) {
                 result = minY + (((value - axisMin) / (axisMax - axisMin))
                          * (maxY - minY));
             }
@@ -1447,14 +1463,18 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             // the font)...
             //result += lm.getHeight();
             Paint p = PaintUtility.createPaint(Paint.ANTI_ALIAS_FLAG, getTickLabelPaintType(), getTickLabelFont());
-            RectShape rec = TextUtilities.getTextBounds("0", p);
-            result += rec.getHeight();
+            //performance tuning
+//            RectShape rec = TextUtilities.getTextBounds("0", p);
+//            result += rec.getHeight();
+            result += TextUtilities.getTextHeight(p);
         }
         else {
             Paint p = PaintUtility.createPaint(Paint.ANTI_ALIAS_FLAG, getTickLabelPaintType(), getTickLabelFont());
 
+            //performance tuning
             // look at lower and upper bounds...
-            DateRange range = (DateRange) getRange();
+//            DateRange range = (DateRange) getRange();
+            DateRange range = (DateRange) this.mRange;
             Date lower = range.getLowerDate();
             Date upper = range.getUpperDate();
             String lowerStr = "";
@@ -1468,11 +1488,11 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
                 upperStr = unit.dateToString(upper);
             }
 
-//          FontMetrics fm = canvas.getFontMetrics(tickLabelFont);
-//          double w1 = fm.stringWidth(lowerStr);
-//          double w2 = fm.stringWidth(upperStr);
-            double w1 = TextUtilities.getTextBounds(lowerStr, p).getWidth();
-            double w2 = TextUtilities.getTextBounds(upperStr, p).getWidth();
+            //performance tuning
+//            double w1 = TextUtilities.getTextBounds(lowerStr, p).getWidth();
+//            double w2 = TextUtilities.getTextBounds(upperStr, p).getWidth();
+            double w1 = TextUtilities.getTextWidth(lowerStr, p);
+            double w2 = TextUtilities.getTextWidth(upperStr, p);            
             result += Math.max(w1, w2);
         }
 
@@ -1725,8 +1745,6 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
         
         List result = new java.util.ArrayList();
 
-        Font tickLabelFont = getTickLabelFont();
-
         if (isAutoTickUnitSelection()) {
             selectAutoTickUnit(canvas, dataArea, edge);
         }
@@ -1819,7 +1837,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
     }
 
     /**
-     * Draws the axis on a Java 2D graphics device (such as the screen or a
+     * Draws the axis on a graphics device (such as the screen or a
      * printer).
      *
      * @param canvas  the graphics device (<code>null</code> not permitted).
@@ -1904,10 +1922,10 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
         if (!(obj instanceof DateAxis)) {
             return false;
         }
-        DateAxis that = (DateAxis) obj;
-        
         //TODO: port ObjectUtilities
         /*
+        DateAxis that = (DateAxis) obj;
+       
         if (!ObjectUtilities.equal(this.tickUnit, that.tickUnit)) {
             return false;
         }

@@ -7,31 +7,41 @@
  * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * ------------
  * PiePlot.java
  * ------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2000-2008, by Andrzej Porebski and Contributors.
  *
  * Original Author:  Andrzej Porebski;
@@ -43,8 +53,6 @@
  *                   Martin Hilpert (patch 1891849);
  *                   Andreas Schroeder (very minor);
  *                   Christoph Beck (bug 2121818);
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -170,8 +178,6 @@
  * 18-Dec-2008 : Use ResourceBundleWrapper - see patch 1607918 by
  *               Jess Thrysoee (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.plot;
@@ -223,7 +229,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PathEffect;
 import android.graphics.PointF;
-import android.graphics.RectF;
 import android.graphics.Typeface;
 
 
@@ -277,6 +282,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     /** The default section label outline stroke. */
     public static final float DEFAULT_LABEL_OUTLINE_STROKE = 0.5f;
 
+    /** The default section label outline effect. */
     public static final PathEffect DEFAULT_LABEL_OUTLINE_EFFECT = null;
 
     /** The default section label shadow paint. */
@@ -346,11 +352,13 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     /** The section outline stroke map. */
     private StrokeMap sectionOutlineStrokeMap;
 
+    /** The section outline effect map. */
     private EffectMap sectionOutlineEffectMap;
 
     /** The base section outline stroke (fallback). */
     private transient float baseSectionOutlineStroke;
 
+    /** The base section outline effect (fallback). */
     private transient PathEffect baseSectionOutlineEffect;
 
     /**
@@ -402,6 +410,10 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      */
     private transient Float labelOutlineStroke;
 
+    /**
+     * The effect used to draw the outline of the section labels (
+     * <code>null</code> permitted).
+     */
     private transient PathEffect labelOutlineEffect;
 
     /**
@@ -460,6 +472,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     /** The stroke used for the label linking lines. */
     private transient float labelLinkStroke = 2f;
 
+    /** The effect used for the label linking lines. */
     private transient PathEffect labelLinkEffect = null;
 
     /**
@@ -858,7 +871,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * @param key
      *            the section key.
      * 
-     * @return The paint for the specified section.
+     * @return The paint type for the specified section.
      * 
      * @since JFreeChart 1.0.3
      * 
@@ -888,7 +901,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      *            a flag that controls whether the drawing supplier is used to
      *            auto-populate the section paint settings.
      * 
-     * @return The paint.
+     * @return The paint type.
      * 
      * @since JFreeChart 1.0.3
      */
@@ -924,9 +937,9 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     /**
      * Returns the paint for ALL sections in the plot.
      * 
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      * 
-     * @see #setSectionPaint(Paint)
+     * @see #setSectionPaintType(Comparable, PaintType)
      * 
      * @deprecated Use {@link #getSectionPaint(Comparable)} and
      *             {@link #getBaseSectionPaintType()}. Deprecated as of JFreeChart
@@ -971,13 +984,13 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * @param key
      *            the key (<code>null</code> not permitted).
      * 
-     * @return The paint associated with the specified key, or <code>null</code>
+     * @return The paint type associated with the specified key, or <code>null</code>
      *         .
      * 
      * @throws IllegalArgumentException
      *             if <code>key</code> is <code>null</code>.
      * 
-     * @see #setSectionPaintType(Comparable, Paint)
+     * @see #setSectionPaintType(Comparable, PaintType)
      * 
      * @since JFreeChart 1.0.3
      */
@@ -1032,9 +1045,9 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * Returns the base section paint. This is used when no other paint is
      * defined, which is rare. The default value is <code>Color.gray</code>.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setBaseSectionPainTypet(Paint)
+     * @see #setBaseSectionPainTypet(PaintType paintType)
      */
     public PaintType getBaseSectionPaintType() {
         return this.baseSectionPaintType;
@@ -1122,7 +1135,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * @param key
      *            the section key.
      * 
-     * @return The paint for the specified section.
+     * @return The paint type for the specified section.
      * 
      * @since JFreeChart 1.0.3
      * 
@@ -1152,7 +1165,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      *            a flag that controls whether the drawing supplier is used to
      *            auto-populate the section outline paint settings.
      * 
-     * @return The paint.
+     * @return The paint type.
      * 
      * @since JFreeChart 1.0.3
      */
@@ -1192,13 +1205,13 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * @param key
      *            the key (<code>null</code> not permitted).
      * 
-     * @return The paint associated with the specified key, or <code>null</code>
+     * @return The paint type associated with the specified key, or <code>null</code>
      *         .
      * 
      * @throws IllegalArgumentException
      *             if <code>key</code> is <code>null</code>.
      * 
-     * @see #setSectionOutlinePaintType(Comparable, Paint)
+     * @see #setSectionOutlinePaintType(Comparable, PaintType)
      * 
      * @since JFreeChart 1.0.3
      */
@@ -1253,9 +1266,9 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * Returns the base section paint. This is used when no other paint is
      * available.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setBaseSectionOutlinePaintType(Paint)
+     * @see #setBaseSectionOutlinePaintType(PaintType paintType)
      */
     public PaintType getBaseSectionOutlinePaintType() {
         return this.baseSectionOutlinePaintType;
@@ -1378,10 +1391,44 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         return result;
     }
 
+    /**
+     * Returns the outline effect for the specified section. This is equivalent
+     * to <code>lookupSectionOutlineEffect(section,
+     * getAutoPopulateSectionOutlineEffect())</code>.
+     * 
+     * @param key
+     *            the section key.
+     * 
+     * @return The effect for the specified section.
+     * 
+     * @see #lookupSectionOutlineEffect(Comparable, boolean)
+     */
     protected PathEffect lookupSectionOutlineEffect(Comparable key) {
         return lookupSectionOutlineEffect(key, getAutoPopulateSectionOutlineEffect());
     }
 
+    /**
+     * Returns the outline effect for the specified section. The lookup involves
+     * these steps:
+     * <ul>
+     * <li>if {@link #getSectionOutlineEffect()} is non-<code>null</code>,
+     * return it;</li>
+     * <li>otherwise, if {@link #getSectionOutlineEffect(int)} is non-
+     * <code>null</code> return it;</li>
+     * <li>if {@link #getSectionOutlineEffect(int)} is <code>null</code> but
+     * <code>autoPopulate</code> is <code>true</code>, attempt to fetch a new
+     * outline effect from the drawing supplier ({@link #getDrawingSupplier()});
+     * <li>if all else fails, return {@link #getBaseSectionOutlineEffect()}.
+     * </ul>
+     * 
+     * @param key
+     *            the section key.
+     * @param autoPopulate
+     *            a flag that controls whether the drawing supplier is used to
+     *            auto-populate the section outline effect settings.
+     * 
+     * @return The effect.
+     */
     protected PathEffect lookupSectionOutlineEffect(Comparable key, boolean autoPopulate) {
 
         // is there an override?
@@ -1424,7 +1471,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * @throws IllegalArgumentException
      *             if <code>key</code> is <code>null</code>.
      * 
-     * @see #setSectionOutlineStroke(Comparable, Stroke)
+     * @see #setSectionOutlineStroke(Comparable, Float)
      * 
      * @since JFreeChart 1.0.3
      */
@@ -1455,11 +1502,46 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         // fireChangeEvent();
     }
 
+    /**
+     * Returns the outline effect associated with the specified key, or
+     * <code>null</code> if there is no effect associated with the key.
+     * 
+     * @param key
+     *            the key (<code>null</code> not permitted).
+     * 
+     * @return The effect associated with the specified key, or
+     *         <code>null</code>.
+     * 
+     * @throws IllegalArgumentException
+     *             if <code>key</code> is <code>null</code>.
+     * 
+     * @see #setSectionOutlineEffect(Comparable key, PathEffect effect)
+     */
     public PathEffect getSectionOutlineEffect(Comparable key) {
         // null argument check delegated...
         return this.sectionOutlineEffectMap.getEffect(key);
     }
 
+    /**
+     * Sets the outline effect associated with the specified key, and sends a
+     * {@link PlotChangeEvent} to all registered listeners.
+     * 
+     * @param key
+     *            the key (<code>null</code> not permitted).
+     * @param effect
+     *            the effect.
+     * 
+     * @throws IllegalArgumentException
+     *             if <code>key</code> is <code>null</code>.
+     * 
+     * @see #getSectionOutlineEffect(Comparable)
+     */
+    public void setSectionOutlineEffect(Comparable key, PathEffect effect) {
+        // null argument check delegated...
+        this.sectionOutlineEffectMap.put(key, effect);
+        // fireChangeEvent();
+    }
+    
     /**
      * Clears the section outline stroke settings for this plot and, if
      * requested, sends a {@link PlotChangeEvent} to all registered listeners.
@@ -1486,7 +1568,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * 
      * @return The stroke (never <code>null</code>).
      * 
-     * @see #setBaseSectionOutlineStroke(Stroke)
+     * @see #setBaseSectionOutlineStroke(Float stroke)
      */
     public Float getBaseSectionOutlineStroke() {
         return this.baseSectionOutlineStroke;
@@ -1508,6 +1590,33 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         // fireChangeEvent();
     }
 
+    /**
+     * Returns the base section effect.  This is used when no other effect is
+     * available.
+     *
+     * @return The effect (never <code>null</code>).
+     *
+     * @see #setBaseSectionOutlineEffect(effect)
+     */
+    public PathEffect getBaseSectionOutlineEffect() {
+        return this.baseSectionOutlineEffect;
+    }
+
+    /**
+     * Sets the base section effect.
+     *
+     * @param effect  the effect (<code>null</code> not permitted).
+     *
+     * @see #getBaseSectionOutlineEffect()
+     */
+    public void setBaseSectionOutlineEffect(PathEffect effect) {
+        if (effect == null) {
+            throw new IllegalArgumentException("Null 'effect' argument.");
+        }
+        this.baseSectionOutlineEffect = effect;
+//        fireChangeEvent();
+    }
+    
     /**
      * Returns the flag that controls whether or not the section outline stroke
      * is auto-populated by the
@@ -1568,7 +1677,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     /**
      * Returns the x-offset for the shadow effect.
      * 
-     * @return The offset (in Java2D units).
+     * @return The offset (in Canvas units).
      * 
      * @see #setShadowXOffset(double)
      */
@@ -1581,7 +1690,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * {@link PlotChangeEvent} to all registered listeners.
      * 
      * @param offset
-     *            the offset (in Java2D units).
+     *            the offset (in Canvas units).
      * 
      * @see #getShadowXOffset()
      */
@@ -1593,7 +1702,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     /**
      * Returns the y-offset for the shadow effect.
      * 
-     * @return The offset (in Java2D units).
+     * @return The offset (in Canvas units).
      * 
      * @see #setShadowYOffset(double)
      */
@@ -1606,7 +1715,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * {@link PlotChangeEvent} to all registered listeners.
      * 
      * @param offset
-     *            the offset (in Java2D units).
+     *            the offset (in Canvas units).
      * 
      * @see #getShadowYOffset()
      */
@@ -1856,9 +1965,9 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * Returns the paint used for the lines that connect pie sections to their
      * corresponding labels.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setLabelLinkPaintType(Paint)
+     * @see #setLabelLinkPaintType(PaintType paintType)
      */
     public PaintType getLabelLinkPaintType() {
         return this.labelLinkPaintType;
@@ -1887,7 +1996,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * 
      * @return The stroke.
      * 
-     * @see #setLabelLinkStroke(Stroke)
+     * @see #setLabelLinkStroke(Float stroke)
      */
     public Float getLabelLinkStroke() {
         return this.labelLinkStroke;
@@ -1956,9 +2065,9 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     /**
      * Returns the section label paint.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setLabelPaint(Paint)
+     * @see #setLabelPaint(PaintType paintType)
      */
     public PaintType getLabelPaintType() {
         return this.labelPaintType;
@@ -1984,9 +2093,9 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     /**
      * Returns the section label background paint.
      * 
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      * 
-     * @see #setLabelBackgroundPaintType(Paint)
+     * @see #setLabelBackgroundPaintType(PaintType paintType)
      */
     public PaintType getLabelBackgroundPaintType() {
         return this.labelBackgroundPaintType;
@@ -2009,9 +2118,9 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     /**
      * Returns the section label outline paint.
      * 
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      * 
-     * @see #setLabelOutlinePaint(Paint)
+     * @see #setLabelOutlinePaint(PaintType paintType)
      */
     public PaintType getLabelOutlinePaintType() {
         return this.labelOutlinePaintType;
@@ -2036,7 +2145,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * 
      * @return The stroke (possibly <code>null</code>).
      * 
-     * @see #setLabelOutlineStroke(Stroke)
+     * @see #setLabelOutlineStroke(Float stroke)
      */
     public Float getLabelOutlineStroke() {
         return this.labelOutlineStroke;
@@ -2059,9 +2168,9 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     /**
      * Returns the section label shadow paint.
      * 
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      * 
-     * @see #setLabelShadowPaint(Paint)
+     * @see #setLabelShadowPaint(PaintType paintType)
      */
     public PaintType getLabelShadowPaintType() {
         return this.labelShadowPaintType;
@@ -2350,7 +2459,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     }
 
     /**
-     * Draws the plot on a Java 2D graphics device (such as the screen or a
+     * Draws the plot on a graphics device (such as the screen or a
      * printer).
      * 
      * @param canvas
@@ -2567,8 +2676,6 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
             }
             RectShape arcBounds = getArcBounds(state.getPieArea(), state.getExplodedPieArea(),
                     angle1, angle, ep);
-            RectF arcBoundsRect = new RectF((float) arcBounds.getMinX(), (float) arcBounds
-                    .getMinY(), (float) arcBounds.getMaxX(), (float) arcBounds.getMaxY());
             ArcShape arc = new ArcShape(arcBounds, angle1, angle, true);
 
             if (currentPass == 0) {
@@ -2694,7 +2801,6 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
                             this.shadowYOffset);
                     PaintUtility.updatePaint(paint, labelShadowPaintType);
                     shadow.fill(canvas, paint);
-                    int color = Color.alpha(labelShadowPaintType.getAlpha());
                 }
                 if (this.labelBackgroundPaintType != null) {
                     PaintUtility.updatePaint(paint, labelBackgroundPaintType);
@@ -2800,7 +2906,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
     /**
      * Draws the left labels.
      * 
-     * @param leftKeys
+     * @param keys
      *            a collection of keys and angles (to the middle of the section,
      *            in degrees) for the sections on the left side of the plot.
      * @param canvas
@@ -3028,7 +3134,6 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
 
         if (this.labelLinksVisible) {
             double theta = record.getAngle();
-            double degree = Math.toDegrees(theta);
             double linkX = state.getPieCenterX() + Math.cos(theta) * state.getPieWRadius()
                     * record.getLinkPercent();
             double linkY = state.getPieCenterY() + Math.sin(theta) * state.getPieHRadius()
@@ -3083,7 +3188,6 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
 
         if (this.labelLinksVisible) {
             double theta = record.getAngle();
-            double deg = Math.toDegrees(theta);
             double linkX = state.getPieCenterX() + Math.cos(theta) * state.getPieWRadius()
                     * record.getLinkPercent();
             double linkY = state.getPieCenterY() + Math.sin(theta) * state.getPieHRadius()
@@ -3150,14 +3254,19 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      */
     private transient Float sectionOutlineStroke;
 
+    /** The outline effect for ALL sections (overrides list).
+     * 
+    * @deprecated This field is redundant, it is sufficient to use
+    *             sectionOutlineEffectMap and baseSectionOutlineEffect.
+    */
     private transient PathEffect sectionOutlineEffect;
-
+//TODO
     /**
      * Returns the outline paint for ALL sections in the plot.
      * 
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      * 
-     * @see #setSectionOutlinePaintType(Paint)
+     * @see #setSectionOutlinePaintType(Comparable key, PaintType paintType)
      * 
      * @deprecated Use {@link #getSectionOutlinePaintType(Comparable)} and
      *             {@link #getBaseSectionOutlinePaintType()}. Deprecated as of
@@ -3172,7 +3281,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * 
      * @return The stroke (possibly <code>null</code>).
      * 
-     * @see #setSectionOutlineStroke(Stroke)
+     * @see #setSectionOutlineStroke(int section, Float stroke)
      * 
      * @deprecated Use {@link #getSectionOutlineStroke(Comparable)} and
      *             {@link #getBaseSectionOutlineStroke()}. Deprecated as of
@@ -3182,10 +3291,30 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
         return this.sectionOutlineStroke;
     }
 
+    /**
+     * Returns the outline effect for ALL sections in the plot.
+     * 
+     * @return The effect.
+     * 
+     * @see #setSectionOutlineEffect(PathEffect effect)
+     * 
+     * @deprecated Use {@link #getSectionOutlineEffect(Comparable)} and
+     *             {@link #getBaseSectionOutlineEffect()}
+     */
     public PathEffect getSectionOutlineEffect() {
         return this.sectionOutlineEffect;
     }
 
+    /**
+     * Sets the effect used to fill a section of the pie and sends a
+     * {@link PlotChangeEvent} to all registered listeners.
+     * 
+     * @param effect
+     *            the effect (<code>null</code> permitted).
+     * 
+     * @deprecated Use {@link #setSectionOutlineEffect(Comparable, PathEffect)}
+     *             instead.
+     */
     public void setSectionOutlineEffect(PathEffect effect) {
         this.sectionOutlineEffect = effect;
         // fireChangeEvent();
@@ -3200,7 +3329,7 @@ public class PiePlot extends Plot implements Cloneable, Serializable {
      * @param stroke
      *            the stroke (<code>null</code> permitted).
      * 
-     * @deprecated Use {@link #setSectionOutlineStroke(Comparable, Stroke)}
+     * @deprecated Use {@link #setSectionOutlineStroke(Comparable, Float)}
      *             instead.
      */
     public void setSectionOutlineStroke(int section, Float stroke) {

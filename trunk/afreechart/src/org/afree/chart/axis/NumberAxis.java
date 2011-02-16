@@ -7,38 +7,47 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * ---------------
  * NumberAxis.java
  * ---------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 17-Dec-2010 : performance tuning
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Laurence Vanhelsuwe;
  *                   Peter Kolb (patches 1934255 and 2603321);
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -103,8 +112,6 @@
  *               collection (DG);
  * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
  * 
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.axis;
@@ -126,7 +133,6 @@ import org.afree.chart.plot.Plot;
 import org.afree.chart.plot.PlotRenderingInfo;
 import org.afree.chart.plot.ValueAxisPlot;
 import org.afree.chart.text.TextUtilities;
-import org.afree.graphics.geom.Font;
 import org.afree.graphics.geom.RectShape;
 import org.afree.graphics.PaintUtility;
 import org.afree.graphics.SolidColor;
@@ -532,9 +538,12 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
     public double valueToJava2D(double value, RectShape area,
             RectangleEdge edge) {
 
-        Range range = getRange();
-        double axisMin = range.getLowerBound();
-        double axisMax = range.getUpperBound();
+        //perfromance tuning
+//        Range range = getRange();
+//        double axisMin = range.getLowerBound();
+//        double axisMax = range.getUpperBound();
+        double axisMin = this.mRange.getLowerBound();
+        double axisMax = this.mRange.getUpperBound();
 
         double min = 0.0;
         double max = 0.0;
@@ -545,7 +554,8 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
             max = area.getMinY();
             min = area.getMaxY();
         }
-        if (isInverted()) {
+//        if (isInverted()) {
+        if (this.mInverted) {
             return max - ((value - axisMin) / (axisMax - axisMin))
                     * (max - min);
         } else {
@@ -606,7 +616,9 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
     protected double calculateLowestVisibleTickValue() {
 
         double unit = getTickUnit().getSize();
-        double index = Math.ceil(getRange().getLowerBound() / unit);
+        //performance tuning
+//        double index = Math.ceil(getRange().getLowerBound() / unit);
+        double index = Math.ceil(this.mRange.getLowerBound() / unit);
         return index * unit;
 
     }
@@ -634,14 +646,15 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
     protected int calculateVisibleTickCount() {
 
         double unit = getTickUnit().getSize();
-        Range range = getRange();
-        return (int) (Math.floor(range.getUpperBound() / unit)
-                - Math.ceil(range.getLowerBound() / unit) + 1);
+        //perfromance tuning
+        //Range range = getRange();
+        return (int) (Math.floor(this.mRange.getUpperBound() / unit)
+                - Math.ceil(this.mRange.getLowerBound() / unit) + 1);
 
     }
 
     /**
-     * Draws the axis on a Java 2D graphics device (such as the screen or a
+     * Draws the axis on a graphics device (such as the screen or a
      * printer).
      * 
      * @param canvas
@@ -1016,7 +1029,6 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
             // look at lower and upper bounds...
             // FontMetrics fm = canvas.getFontMetrics(getTickLabelFont());
             Paint p = PaintUtility.createPaint(Paint.ANTI_ALIAS_FLAG, new SolidColor(Color.BLACK), getTickLabelFont());
-            RectShape rec = TextUtilities.getTextBounds("0", p);
             Range range = getRange();
             double lower = range.getLowerBound();
             double upper = range.getUpperBound();
@@ -1185,7 +1197,8 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
 
         List result = new java.util.ArrayList();
 
-        Font tickLabelFont = getTickLabelFont();
+        //TODO There is a possibility that tickLabelFont will be used in the future.
+        //Font tickLabelFont = getTickLabelFont();
         // canvas.setFont(tickLabelFont);
 
         if (isAutoTickUnitSelection()) {
@@ -1278,9 +1291,10 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
 
         List result = new java.util.ArrayList();
         result.clear();
-
-        Font tickLabelFont = getTickLabelFont();
-        // canvas.setFont(tickLabelFont);
+        
+        //TODO There is a possibility that tickLabelFont will be used in the future.
+        //Font tickLabelFont = getTickLabelFont();
+        //canvas.setFont(tickLabelFont);
         if (isAutoTickUnitSelection()) {
             selectAutoTickUnit(canvas, dataArea, edge);
         }
@@ -1298,7 +1312,9 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
             for (int minorTick = 1; minorTick < minorTickSpaces; minorTick++) {
                 double minorTickValue = lowestTickValue - size * minorTick
                         / minorTickSpaces;
-                if (getRange().contains(minorTickValue)) {
+                //performance tuning
+//                if (getRange().contains(minorTickValue)) {
+                if (this.mRange.contains(minorTickValue)) {
                     result.add(new NumberTick(TickType.MINOR, minorTickValue,
                             "", TextAnchor.TOP_CENTER, TextAnchor.CENTER, 0.0));
                 }
@@ -1346,7 +1362,9 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
                     double minorTickValue = currentTickValue
                             + (nextTickValue - currentTickValue) * minorTick
                             / minorTickSpaces;
-                    if (getRange().contains(minorTickValue)) {
+                    //performance tuning
+                    //if (getRange().contains(minorTickValue)) {
+                    if (this.mRange.contains(minorTickValue)) {
                         result.add(new NumberTick(TickType.MINOR,
                                 minorTickValue, "", TextAnchor.TOP_CENTER,
                                 TextAnchor.CENTER, 0.0));

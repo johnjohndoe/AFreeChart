@@ -7,31 +7,42 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * ---------------
- * JFreeChart.java
+ * AFreeChart.java
  * ---------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : renamed method name
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
@@ -42,8 +53,6 @@
  *                   Klaus Rheinwald;
  *                   Nicolas Brodu;
  *                   Peter Kolb (patch 2603321);
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * NOTE: The above list of contributors lists only the people that have
  * contributed to this source file (JFreeChart.java) - for a list of ALL
@@ -154,9 +163,6 @@
  *               Jess Thrysoee (DG);
  * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
- *
  */
 
 package org.afree.chart;
@@ -173,6 +179,8 @@ import org.afree.ui.RectangleEdge;
 import org.afree.ui.RectangleInsets;
 import org.afree.ui.Size2D;
 import org.afree.ui.VerticalAlignment;
+import org.afree.util.ObjectUtilities;
+import org.afree.util.PaintTypeUtilities;
 import org.afree.chart.block.BlockParams;
 import org.afree.chart.block.EntityBlockResult;
 import org.afree.chart.block.LengthConstraintType;
@@ -182,7 +190,6 @@ import org.afree.data.Range;
 import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.entity.AFreeChartEntity;
 import org.afree.chart.event.ChartChangeEvent;
-import org.afree.chart.event.ChartChangeListener;
 //import org.afree.chart.event.EventListenerList;
 import org.afree.chart.event.PlotChangeEvent;
 import org.afree.chart.event.PlotChangeListener;
@@ -200,31 +207,31 @@ import org.afree.graphics.geom.RectShape;
 import org.afree.graphics.PaintType;
 import org.afree.graphics.PaintUtility;
 import org.afree.graphics.SolidColor;
+
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PathEffect;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.Region.Op;
 
 /**
- * A chart class implemented using the Java 2D APIs. The current version
+ * A chart class implemented using the Android APIs. The current version
  * supports bar charts, line charts, pie charts and xy plots (including time
  * series data).
  * <P>
  * AFreeChart coordinates several objects to achieve its aim of being able to
- * draw a chart on a Java 2D graphics device: a list of {@link Title} objects
+ * draw a chart on a graphics device: a list of {@link Title} objects
  * (which often includes the chart's legend), a {@link Plot} and a
  * {@link org.afree.data.general.Dataset} (the plot in turn manages a domain
  * axis and a range axis).
  * <P>
- * You should use a {@link ChartPanel} to display a chart in a GUI.
- * <P>
  * The {@link ChartFactory} class contains static methods for creating
  * 'ready-made' charts.
  * 
- * @see ChartPanel
  * @see ChartFactory
  * @see Title
  * @see Plot
@@ -255,7 +262,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
     private transient float borderStroke;
 
     /** The paint used to draw the chart border (if visible). */
-    private transient Paint borderPaint;
+    private transient PaintType borderPaintType;
 
     /** The padding between the chart border and the chart drawing area. */
     private RectangleInsets padding;
@@ -263,6 +270,12 @@ public class AFreeChart implements Drawable, TitleChangeListener,
     /** The chart title (optional). */
     private TextTitle title;
 
+    /** The default border effect. */
+    public static final PathEffect DEFAULT_BORDER_EFFECT = null;
+
+    /** The effect used to draw the chart border (if visible). */
+    private transient PathEffect borderEffect;
+    
     /**
      * The chart subtitles (zero, one or many). This field should never be
      * <code>null</code>.
@@ -318,10 +331,8 @@ public class AFreeChart implements Drawable, TitleChangeListener,
 
         this.borderVisible = true;
         this.borderStroke = 2;
-        this.borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        this.borderPaint.setColor(Color.WHITE);
-        this.borderPaint.setStyle(Paint.Style.STROKE);
-        this.borderPaint.setStrokeWidth(borderStroke);
+        this.borderPaintType = new SolidColor(Color.WHITE);
+        this.borderEffect = DEFAULT_BORDER_EFFECT;
 
         this.plot = plot;
 
@@ -411,7 +422,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
      * 
      * @return The border stroke.
      * 
-     * @see #setBorderStroke(Stroke)
+     * @see #setBorderStroke(float stroke)
      */
     public float getBorderStroke() {
         return this.borderStroke;
@@ -434,22 +445,22 @@ public class AFreeChart implements Drawable, TitleChangeListener,
      * 
      * @return The border paint.
      * 
-     * @see #setBorderPaint(Paint)
+     * @see #setBorderPaintType(PaintType paintType)
      */
-    public Paint getBorderPaint() {
-        return this.borderPaint;
+    public PaintType getBorderPaintType() {
+        return this.borderPaintType;
     }
 
     /**
      * Sets the paint used to draw the chart border (if visible).
      * 
-     * @param paint
-     *            the paint.
+     * @param paintType
+     *            the paintType.
      * 
-     * @see #getBorderPaint()
+     * @see #getBorderPaintType()
      */
-    public void setBorderPaint(Paint paint) {
-        this.borderPaint = paint;
+    public void setBorderPaintType(PaintType paintType) {
+        this.borderPaintType = paintType;
     }
 
     /**
@@ -510,6 +521,18 @@ public class AFreeChart implements Drawable, TitleChangeListener,
 
     }
 
+    /**
+     * Sets the effect used to draw the chart border (if visible).
+     * 
+     * @param effect
+     *            the effect.
+     * 
+     * @see #getBorderEffect()
+     */
+    public void setBorderEffect(PathEffect effect) {
+        this.borderEffect = effect;
+    }
+    
     /**
      * Sets the chart title and sends a {@link ChartChangeEvent} to all
      * registered listeners. This is a convenience method that ends up calling
@@ -643,11 +666,6 @@ public class AFreeChart implements Drawable, TitleChangeListener,
     }
 
     public void clearSubtitles() {
-        Iterator iterator = this.subtitles.iterator();
-        while (iterator.hasNext()) {
-            Title t = (Title) iterator.next();
-
-        }
         this.subtitles.clear();
     }
 
@@ -718,6 +736,17 @@ public class AFreeChart implements Drawable, TitleChangeListener,
         return (XYPlot) this.plot;
     }
 
+    /**
+     * Returns the effect used to draw the chart border (if visible).
+     * 
+     * @return The border effect.
+     * 
+     * @see #setBorderEffect(PathEffect effect)
+     */
+    public PathEffect getBorderEffect() {
+        return this.borderEffect;
+    }
+    
     /**
      * Returns a flag that indicates whether or not anti-aliasing is used when
      * the chart is drawn.
@@ -812,9 +841,9 @@ public class AFreeChart implements Drawable, TitleChangeListener,
     /**
      * Returns the paint used for the chart background.
      * 
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      * 
-     * @see #setBackgroundPaintType(Paint)
+     * @see #setBackgroundPaintType(PaintType paintType)
      */
     public PaintType getBackgroundPaintType() {
         return this.backgroundPaintType;
@@ -844,7 +873,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
     }
 
     /**
-     * Draws the chart on a Java 2D graphics device (such as the screen or a
+     * Draws the chart on a graphics device (such as the screen or a
      * printer).
      * <P>
      * This method is the focus of the entire AFreeChart library.
@@ -859,7 +888,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
     }
 
     /**
-     * Draws the chart on a Java 2D graphics device (such as the screen or a
+     * Draws the chart on a graphics device (such as the screen or a
      * printer). This method is the focus of the entire AFreeChart library.
      * 
      * @param canvas
@@ -874,7 +903,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
     }
 
     /**
-     * Draws the chart on a Java 2D graphics device (such as the screen or a
+     * Draws the chart on a graphics device (such as the screen or a
      * printer).
      * <P>
      * This method is the focus of the entire AFreeChart library.
@@ -915,15 +944,13 @@ public class AFreeChart implements Drawable, TitleChangeListener,
         }
 
         if (isBorderVisible()) {
-            Paint paint = getBorderPaint();
-            float stroke = getBorderStroke();
-            if (paint != null) {
+            PaintType paintType = getBorderPaintType();
+            if (paintType != null) {
                 RectShape borderArea = new RectShape(chartArea
                         .getX(), chartArea.getY(), chartArea.getWidth() - 1.0,
                         chartArea.getHeight() - 1.0);
-                canvas.drawRect((float) borderArea.getMinX(), (float) borderArea
-                        .getMinY(), (float) borderArea.getMaxX(),
-                        (float) borderArea.getMaxY(), borderPaint);
+                Paint paint = PaintUtility.createPaint(borderPaintType, borderStroke, borderEffect);
+                borderArea.draw(canvas, paint);
             }
         }
 
@@ -1091,7 +1118,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
 
     /**
      * Handles a 'click' on the chart. AFreeChart is not a UI component, so some
-     * other object (for example, {@link ChartPanel}) needs to capture the click
+     * other object (for example, {@link DemoView}) needs to capture the click
      * event and pass it onto the AFreeChart object. If you are not using
      * AFreeChart in a client application, then this method is not required.
      * 
@@ -1111,13 +1138,11 @@ public class AFreeChart implements Drawable, TitleChangeListener,
 
     }
     
-    @Override
     public void titleChanged(TitleChangeEvent event) {
         // TODO Auto-generated method stub
 
     }
 
-    @Override
     public void plotChanged(PlotChangeEvent event) {
         // TODO Auto-generated method stub
 
@@ -1195,4 +1220,65 @@ public class AFreeChart implements Drawable, TitleChangeListener,
 //            }
         }
     }
+    
+    /**
+     * Tests this chart for equality with another object.
+     *
+     * @param obj  the object (<code>null</code> permitted).
+     *
+     * @return A boolean.
+     */
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof AFreeChart)) {
+            return false;
+        }
+        AFreeChart that = (AFreeChart) obj;
+//        if (!this.renderingHints.equals(that.renderingHints)) {
+//            return false;
+//        }
+        if (this.borderVisible != that.borderVisible) {
+            return false;
+        }
+        if (!ObjectUtilities.equal(this.borderStroke, that.borderStroke)) {
+            return false;
+        }
+        if (!PaintTypeUtilities.equal(this.borderPaintType, that.borderPaintType)) {
+            return false;
+        }
+//        if (!this.padding.equals(that.padding)) {
+//            return false;
+//        }
+        if (!ObjectUtilities.equal(this.title, that.title)) {
+            return false;
+        }
+        if (!ObjectUtilities.equal(this.subtitles, that.subtitles)) {
+            return false;
+        }
+        if (!ObjectUtilities.equal(this.plot, that.plot)) {
+            return false;
+        }
+        if (!PaintTypeUtilities.equal(
+            this.backgroundPaintType, that.backgroundPaintType
+        )) {
+            return false;
+        }
+//        if (!ObjectUtilities.equal(this.backgroundImage,
+//                that.backgroundImage)) {
+//            return false;
+//        }
+//        if (this.backgroundImageAlignment != that.backgroundImageAlignment) {
+//            return false;
+//        }
+//        if (this.backgroundImageAlpha != that.backgroundImageAlpha) {
+//            return false;
+//        }
+        if (this.notify != that.notify) {
+            return false;
+        }
+        return true;
+    }
+
 }

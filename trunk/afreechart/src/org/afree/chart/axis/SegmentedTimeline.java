@@ -7,37 +7,44 @@
  * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * -----------------------
  * SegmentedTimeline.java
  * -----------------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2003-2008, by Bill Kelemen and Contributors.
  *
  * Original Author:  Bill Kelemen;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -53,8 +60,6 @@
  * 11-Jul-2007 : Fixed time zone bugs (DG);
  * 06-Jun-2008 : Performance enhancement posted in forum (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.axis;
@@ -1230,6 +1235,11 @@ public class SegmentedTimeline implements Timeline, Cloneable, Serializable {
      */
     public class Segment implements Comparable, Cloneable, Serializable {
 
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 7498571772581666738L;
+
         /** The segment number. */
         protected long segmentNumber;
 
@@ -1618,6 +1628,10 @@ public class SegmentedTimeline implements Timeline, Cloneable, Serializable {
      */
     protected class SegmentRange extends Segment {
 
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1293040845076203128L;
         /** The number of segments in the range. */
         private long segmentCount;
 
@@ -1733,6 +1747,11 @@ public class SegmentedTimeline implements Timeline, Cloneable, Serializable {
      * Special <code>SegmentRange</code> that came from the BaseTimeline.
      */
     protected class BaseTimelineSegmentRange extends SegmentRange {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 7937604682271271892L;
 
         /**
          * Constructor.

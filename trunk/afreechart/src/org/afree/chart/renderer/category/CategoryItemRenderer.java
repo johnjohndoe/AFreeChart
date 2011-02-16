@@ -7,24 +7,22 @@
  * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
@@ -32,13 +30,21 @@
  * CategoryItemRenderer.java
  * -------------------------
  *
- * (C) Copyright 2010, by Icom Systech Co., Ltd.
+  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2001-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Mark Watson (www.markwatson.com);
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -100,8 +106,6 @@
  * 26-Jun-2008 : Added new method required for crosshair support - THIS CHANGES
  *               THE API as of version 1.0.11 (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.renderer.category;
@@ -126,7 +130,6 @@ import org.afree.graphics.geom.RectShape;
 import org.afree.graphics.geom.Shape;
 import org.afree.graphics.PaintType;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 
 /**
  * A plug-in object that is used by the {@link CategoryPlot} class to display
@@ -439,7 +442,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @param column
      *            the column (or category) index (zero-based).
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      */
     public PaintType getItemPaintType(int row, int column);
 
@@ -449,9 +452,9 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @param series
      *            the series index (zero-based).
      * 
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      * 
-     * @see #setSeriesPaintType(int, Paint)
+     * @see #setSeriesPaintType(int, PaintType)
      */
     public PaintType getSeriesPaintType(int series);
 
@@ -475,7 +478,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * 
      * @return The base paint (never <code>null</code>).
      * 
-     * @see #setBasePaintType(Paint)
+     * @see #setBasePaintType(PaintType)
      */
     public PaintType getBasePaintType();
 
@@ -556,7 +559,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @param column
      *            the column (or category) index (zero-based).
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      */
     public PaintType getItemOutlinePaintType(int row, int column);
 
@@ -566,9 +569,9 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @param series
      *            the series (zero-based index).
      * 
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      * 
-     * @see #setSeriesOutlinePaintType(int, Paint)
+     * @see #setSeriesOutlinePaintType(int, PaintType)
      */
     public PaintType getSeriesOutlinePaintType(int series);
 
@@ -590,9 +593,9 @@ public interface CategoryItemRenderer extends LegendItemSource {
     /**
      * Returns the base outline paint.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setBaseOutlinePaintType(Paint)
+     * @see #setBaseOutlinePaintType(PaintType)
      */
     public PaintType getBaseOutlinePaintType();
 
@@ -632,7 +635,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * 
      * @return The stroke (never <code>null</code>).
      * 
-     * @see #setSeriesStroke(int, Stroke)
+     * @see #setSeriesStroke(int, Float)
      */
     public Float getSeriesStroke(int series);
 
@@ -657,7 +660,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * 
      * @return The base stroke (never <code>null</code>).
      * 
-     * @see #setBaseStroke(Stroke)
+     * @see #setBaseStroke(float stroke)
      */
     public Float getBaseStroke();
 
@@ -701,7 +704,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * 
      * @return The stroke (possibly <code>null</code>).
      * 
-     * @see #setSeriesOutlineStroke(int, Stroke)
+     * @see #setSeriesOutlineStroke(int, Float)
      */
     public Float getSeriesOutlineStroke(int series);
 
@@ -725,7 +728,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * 
      * @return The stroke (never <code>null</code>).
      * 
-     * @see #setBaseOutlineStroke(Stroke)
+     * @see #setBaseOutlineStroke(Float stroke)
      */
     public Float getBaseOutlineStroke();
 
@@ -1063,7 +1066,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @param column
      *            the column index (zero based).
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      */
     public PaintType getItemLabelPaintType(int row, int column);
 
@@ -1073,9 +1076,9 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @param series
      *            the series index (zero based).
      * 
-     * @return The paint (possibly <code>null<code>).
+     * @return The paint type (possibly <code>null<code>).
      * 
-     * @see #setSeriesItemLabelPaintType(int, Paint)
+     * @see #setSeriesItemLabelPaintType(int, PaintType)
      */
     public PaintType getSeriesItemLabelPaintType(int series);
 
@@ -1097,9 +1100,9 @@ public interface CategoryItemRenderer extends LegendItemSource {
     /**
      * Returns the base item label paint.
      * 
-     * @return The paint (never <code>null<code>).
+     * @return The paint type (never <code>null<code>).
      * 
-     * @see #setBaseItemLabelPaintType(Paint)
+     * @see #setBaseItemLabelPaintType(PaintType)
      */
     public PaintType getBaseItemLabelPaintType();
 
@@ -1400,7 +1403,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @param value
      *            the value.
      * 
-     * @see #drawRangeGridline(Graphics2D, CategoryPlot, ValueAxis, RectShape,
+     * @see #drawRangeGridline(Canvas, CategoryPlot, ValueAxis, RectShape,
      *      double)
      */
     public void drawDomainGridline(Canvas canvas, CategoryPlot plot,
@@ -1421,7 +1424,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @param value
      *            the value.
      * 
-     * @see #drawDomainGridline(Graphics2D, CategoryPlot, RectShape, double)
+     * @see #drawDomainGridline(Canvas, CategoryPlot, RectShape, double)
      */
     public void drawRangeGridline(Canvas canvas, CategoryPlot plot, ValueAxis axis,
             RectShape dataArea, double value);
@@ -1441,7 +1444,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @param dataArea
      *            the area for plotting data (not including 3D effect).
      * 
-     * @see #drawRangeMarker(Graphics2D, CategoryPlot, ValueAxis, Marker,
+     * @see #drawRangeMarker(Canvas, CategoryPlot, ValueAxis, Marker,
      *      RectShape)
      */
     public void drawDomainMarker(Canvas canvas, CategoryPlot plot,
@@ -1462,7 +1465,7 @@ public interface CategoryItemRenderer extends LegendItemSource {
      * @param dataArea
      *            the area for plotting data (not including 3D effect).
      * 
-     * @see #drawDomainMarker(Graphics2D, CategoryPlot, CategoryAxis,
+     * @see #drawDomainMarker(Canvas, CategoryPlot, CategoryAxis,
      *      CategoryMarker, RectShape)
      */
     public void drawRangeMarker(Canvas canvas, CategoryPlot plot, ValueAxis axis,

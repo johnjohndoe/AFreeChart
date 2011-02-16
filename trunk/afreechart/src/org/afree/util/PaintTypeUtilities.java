@@ -7,36 +7,44 @@
  * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
  * 
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  * 
  * -------------------
  * PaintUtilities.java
  * -------------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JCommon 1.0.16 to Android as "AFreeChart"
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2003-2005, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
+ * Contributor(s):   -;
  *
  *
  * Changes
@@ -45,18 +53,11 @@
  * 04-Oct-2004 : Renamed PaintUtils --> PaintUtilities (DG);
  * 23-Feb-2005 : Rewrote equal() method with less indenting required (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JCommon 1.0.16 to Android as "AFreeChart"
  */
 
 package org.afree.util;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-
 import org.afree.graphics.PaintType;
-
-import android.graphics.Paint;
 
 /**
  * Utility code that relates to <code>Paint</code> objects.
@@ -90,25 +91,6 @@ public class PaintTypeUtilities {
         if (p2 == null) {
             return false;   
         }
-     
-        boolean result = false;
-        /*
-        // handle GradientPaint as a special case...
-        if (p1 instanceof GradientPaint && p2 instanceof GradientPaint) {
-            final GradientPaint gp1 = (GradientPaint) p1;
-            final GradientPaint gp2 = (GradientPaint) p2;
-            result = gp1.getColor1().equals(gp2.getColor1()) 
-                && gp1.getColor2().equals(gp2.getColor2())
-                && gp1.getPoint1().equals(gp2.getPoint1())    
-                && gp1.getPoint2().equals(gp2.getPoint2())
-                && gp1.isCyclic() == gp2.isCyclic()
-                && gp1.getTransparency() == gp1.getTransparency(); 
-        }
-        else {
-            result = p1.equals(p2);
-        }
-        */
-        return result;
-
+        return p1.equals(p2);
     }
 }

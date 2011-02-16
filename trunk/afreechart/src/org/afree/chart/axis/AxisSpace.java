@@ -7,36 +7,45 @@
  * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * --------------
  * AxisSpace.java
  * --------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2003-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
+ * Contributor(s):   -;
  *
  * Changes
  * -------
@@ -48,8 +57,6 @@
  * 11-Jan-2005 : Removed deprecated methods in preparation for 1.0.0
  *               release (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.axis;
@@ -92,7 +99,7 @@ public class AxisSpace implements Cloneable, Serializable {
     /**
      * Returns the space reserved for axes at the top of the plot area.
      * 
-     * @return The space (in Java2D units).
+     * @return The space (in Canvas units).
      */
     public double getTop() {
         return this.top;
@@ -102,7 +109,7 @@ public class AxisSpace implements Cloneable, Serializable {
      * Sets the space reserved for axes at the top of the plot area.
      * 
      * @param space
-     *            the space (in Java2D units).
+     *            the space (in Canvas units).
      */
     public void setTop(double space) {
         this.top = space;
@@ -111,7 +118,7 @@ public class AxisSpace implements Cloneable, Serializable {
     /**
      * Returns the space reserved for axes at the bottom of the plot area.
      * 
-     * @return The space (in Java2D units).
+     * @return The space (in Canvas units).
      */
     public double getBottom() {
         return this.bottom;
@@ -121,7 +128,7 @@ public class AxisSpace implements Cloneable, Serializable {
      * Sets the space reserved for axes at the bottom of the plot area.
      * 
      * @param space
-     *            the space (in Java2D units).
+     *            the space (in Canvas units).
      */
     public void setBottom(double space) {
         this.bottom = space;
@@ -130,7 +137,7 @@ public class AxisSpace implements Cloneable, Serializable {
     /**
      * Returns the space reserved for axes at the left of the plot area.
      * 
-     * @return The space (in Java2D units).
+     * @return The space (in Canvas units).
      */
     public double getLeft() {
         return this.left;
@@ -140,7 +147,7 @@ public class AxisSpace implements Cloneable, Serializable {
      * Sets the space reserved for axes at the left of the plot area.
      * 
      * @param space
-     *            the space (in Java2D units).
+     *            the space (in Canvas units).
      */
     public void setLeft(double space) {
         this.left = space;
@@ -149,7 +156,7 @@ public class AxisSpace implements Cloneable, Serializable {
     /**
      * Returns the space reserved for axes at the right of the plot area.
      * 
-     * @return The space (in Java2D units).
+     * @return The space (in Canvas units).
      */
     public double getRight() {
         return this.right;
@@ -159,7 +166,7 @@ public class AxisSpace implements Cloneable, Serializable {
      * Sets the space reserved for axes at the right of the plot area.
      * 
      * @param space
-     *            the space (in Java2D units).
+     *            the space (in Canvas units).
      */
     public void setRight(double space) {
         this.right = space;
@@ -169,7 +176,7 @@ public class AxisSpace implements Cloneable, Serializable {
      * Adds space to the top, bottom, left or right edge of the plot area.
      * 
      * @param space
-     *            the space (in Java2D units).
+     *            the space (in Canvas units).
      * @param edge
      *            the edge (<code>null</code> not permitted).
      */

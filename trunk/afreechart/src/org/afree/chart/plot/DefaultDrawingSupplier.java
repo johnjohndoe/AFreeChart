@@ -7,37 +7,45 @@
  * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * ---------------------------
  * DefaultDrawingSupplier.java
  * ---------------------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2003-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Jeremy Bowman;
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -51,8 +59,6 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 13-Jun-2007 : Added fillPaintSequence (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.plot;
@@ -70,7 +76,6 @@ import org.afree.graphics.geom.Shape;
 import org.afree.graphics.PaintType;
 import org.afree.graphics.SolidColor;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PathEffect;
 
 /**
@@ -88,6 +93,7 @@ public class DefaultDrawingSupplier implements DrawingSupplier, Cloneable,
     public static final PaintType[] DEFAULT_PAINT_TYPE_SEQUENCE = ChartColor
             .createDefaultPaintArray();
     
+    /** The default effect sequence. */
     public static final PathEffect[] DEFAULT_PATH_EFFECT_SEQUENCE = new PathEffect[] { null };
 
     public static final PaintType white = new SolidColor(Color.WHITE);
@@ -97,6 +103,7 @@ public class DefaultDrawingSupplier implements DrawingSupplier, Cloneable,
     /** The default outline paint sequence. */
     public static final PaintType[] DEFAULT_OUTLINE_PAINT_TYPE_SEQUENCE = new PaintType[] { ltGray };
     
+    /** The default outline effect sequence. */
     public static final PathEffect[] DEFAULT_OUTLINE_EFFECT_SEQUENCE = new PathEffect[] { null };
 
     /** The default fill paint sequence. */
@@ -119,8 +126,10 @@ public class DefaultDrawingSupplier implements DrawingSupplier, Cloneable,
     /** The current paint index. */
     private int paintTypeIndex;
     
+    /** The effect sequence. */
     private transient PathEffect[] pathEffectSequence;
 
+    /** The current effect index. */
     private int pathEffectIndex;
 
     /** The outline paint sequence. */
@@ -129,8 +138,10 @@ public class DefaultDrawingSupplier implements DrawingSupplier, Cloneable,
     /** The current outline paint index. */
     private int outlinePaintTypeIndex;
     
+    /** The outline effect sequence. */
     private transient PathEffect[] outlineEffectSequence;
 
+    /** The current outline effect index. */
     private int outlineEffectIndex;
 
     /** The fill paint sequence. */
@@ -179,8 +190,12 @@ public class DefaultDrawingSupplier implements DrawingSupplier, Cloneable,
      *            the outline paint sequence.
      * @param strokeSequence
      *            the stroke sequence.
+     * @param pathEffectSequence
+     *            the effect sequence.
      * @param outlineStrokeSequence
      *            the outline stroke sequence.
+     * @param outlineEffectSequence
+     *            the outline effect sequence.
      * @param shapeSequence
      *            the shape sequence.
      */
@@ -210,8 +225,12 @@ public class DefaultDrawingSupplier implements DrawingSupplier, Cloneable,
      *            the outline paint sequence.
      * @param strokeSequence
      *            the stroke sequence.
+     * @param pathEffectSequence
+     *            the effect sequence.
      * @param outlineStrokeSequence
      *            the outline stroke sequence.
+     * @param outlineEffectSequence
+     *            the outline effect sequence.
      * @param shapeSequence
      *            the shape sequence.
      * 
@@ -235,7 +254,7 @@ public class DefaultDrawingSupplier implements DrawingSupplier, Cloneable,
     /**
      * Returns the next paint in the sequence.
      * 
-     * @return The paint.
+     * @return The paint type.
      */
     public PaintType getNextPaintType() {
         PaintType result = this.paintTypeSequence[this.paintTypeIndex
@@ -244,7 +263,11 @@ public class DefaultDrawingSupplier implements DrawingSupplier, Cloneable,
         return result;
     }
 
-    @Override
+    /**
+     * Returns the next effect in the sequence.
+     * 
+     * @return The effect.
+     */
     public PathEffect getNextEffect() {
         PathEffect result = this.pathEffectSequence[this.pathEffectIndex
                 % this.pathEffectSequence.length];
@@ -255,7 +278,7 @@ public class DefaultDrawingSupplier implements DrawingSupplier, Cloneable,
     /**
      * Returns the next outline paint in the sequence.
      * 
-     * @return The paint.
+     * @return The paint type.
      */
     public PaintType getNextOutlinePaintType() {
         PaintType result = this.outlinePaintTypeSequence[this.outlinePaintTypeIndex
@@ -268,7 +291,7 @@ public class DefaultDrawingSupplier implements DrawingSupplier, Cloneable,
     /**
      * Returns the next fill paint in the sequence.
      * 
-     * @return The paint.
+     * @return The paint type.
      * 
      * @since JFreeChart 1.0.6
      */
@@ -303,7 +326,11 @@ public class DefaultDrawingSupplier implements DrawingSupplier, Cloneable,
         return result;
     }
 
-    @Override
+    /**
+     * Returns the next outline effect in the sequence.
+     * 
+     * @return The effect.
+     */
     public PathEffect getNextOutlineEffect() {
         PathEffect result = this.outlineEffectSequence[this.outlineEffectIndex
                 % this.outlineEffectSequence.length];

@@ -7,36 +7,44 @@
  * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * -----------------
  * ArcDialFrame.java
  * -----------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2006-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
+ * Contributor(s):   -;
  *
  * Changes
  * -------
@@ -46,8 +54,6 @@
  * 24-Oct-2007 : Added argument checks and API docs, and renamed
  *               StandardDialFrame --> ArcDialFrame (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.plot.dial;
@@ -203,7 +209,7 @@ public class ArcDialFrame extends AbstractDialLayer implements DialFrame,
      *
      * @return The stroke (never <code>null</code>).
      *
-     * @see #setStroke(Stroke)
+     * @see #setStroke(Float stroke)
      */
     public Float getStroke() {
         return this.stroke;
@@ -355,7 +361,7 @@ public class ArcDialFrame extends AbstractDialLayer implements DialFrame,
         RectF rect2 = new RectF();
         path.computeBounds(rect2, false);
         
-        PathShape p = new PathShape(rect2.left, rect2.top, path, rect2.width(), rect2.height());
+        PathShape p = new PathShape(path);
         return p;
 
     }
@@ -393,7 +399,7 @@ public class ArcDialFrame extends AbstractDialLayer implements DialFrame,
         RectF rect2 = new RectF();
         path.computeBounds(rect2, false);
         
-        PathShape p = new PathShape(rect2.left, rect2.top, path, rect2.width(), rect2.height());
+        PathShape p = new PathShape(path);
         return p;
     }
 

@@ -7,36 +7,46 @@
  * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * ------------------
  * LegendGraphic.java
  * ------------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Dec-2010 : performance tuning
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2004-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
+ * Contributor(s):   -;
  *
  * Changes
  * -------
@@ -52,8 +62,6 @@
  *               corrected clone() (DG);
  * 01-Aug-2007 : Updated API docs (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.title;
@@ -78,7 +86,6 @@ import org.afree.graphics.GradientColor;
 import org.afree.graphics.PaintType;
 import org.afree.graphics.PaintUtility;
 import android.graphics.Canvas;
-import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.PathEffect;
 import android.graphics.PointF;
@@ -139,6 +146,7 @@ public class LegendGraphic extends AbstractBlock
     /** The outline stroke for the shape. */
     private transient float outlineStroke;
 
+    /** The outline effect for the shape. */
     private transient PathEffect outlineEffect;
 
     /**
@@ -153,11 +161,15 @@ public class LegendGraphic extends AbstractBlock
     /** The line stroke. */
     private transient float lineStroke;
     
+    /** The line effect. */
     private transient PathEffect lineEffect;
 
     /** The line paint. */
     private transient PaintType linePaintType;
 
+    /** RectShape buffer */
+    private RectShape mWorkRectShape = new RectShape();
+    
     /**
      * Creates a new legend graphic.
      * 
@@ -257,7 +269,7 @@ public class LegendGraphic extends AbstractBlock
      * 
      * @return The fill paint.
      * 
-     * @see #setFillPaintType(Paint)
+     * @see #setFillPaintType(PaintType)
      */
     public PaintType getFillPaintType() {
         return this.fillPaintType;
@@ -333,9 +345,9 @@ public class LegendGraphic extends AbstractBlock
     /**
      * Returns the outline paint.
      * 
-     * @return The paint.
+     * @return The paint type.
      * 
-     * @see #setOutlinePaintType(Paint)
+     * @see #setOutlinePaintType(PaintType)
      */
     public PaintType getOutlinePaintTypw() {
         return this.outlinePaintType;
@@ -358,7 +370,7 @@ public class LegendGraphic extends AbstractBlock
      * 
      * @return The stroke.
      * 
-     * @see #setOutlineStroke(Stroke)
+     * @see #setOutlineStroke(float stroke)
      */
     public float getOutlineStroke() {
         return this.outlineStroke;
@@ -376,10 +388,25 @@ public class LegendGraphic extends AbstractBlock
         this.outlineStroke = stroke;
     }
 
+    /**
+     * Returns the outline effect.
+     * 
+     * @return The effect.
+     * 
+     * @see #setOutlineEffect(PathEffect effect)
+     */
     public PathEffect getOutlineEffect() {
         return this.outlineEffect;
     }
 
+    /**
+     * Sets the outline effect.
+     * 
+     * @param effect
+     *            the effect.
+     * 
+     * @see #getOutlineEffect()
+     */
     public void setOutlineEffect(PathEffect effect) {
         this.outlineEffect = effect;
     }
@@ -488,9 +515,9 @@ public class LegendGraphic extends AbstractBlock
     /**
      * Returns the line paint.
      * 
-     * @return The paint.
+     * @return The paint type.
      * 
-     * @see #setLinePaintType(Paint)
+     * @see #setLinePaintType(PaintType)
      */
     public PaintType getLinePaintType() {
         return this.linePaintType;
@@ -513,7 +540,7 @@ public class LegendGraphic extends AbstractBlock
      * 
      * @return The stroke.
      * 
-     * @see #setLineStroke(Stroke)
+     * @see #setLineStroke(float stroke)
      */
     public float getLineStroke() {
         return this.lineStroke;
@@ -531,10 +558,25 @@ public class LegendGraphic extends AbstractBlock
         this.lineStroke = stroke;
     }
 
+    /**
+     * Returns the line effect.
+     * 
+     * @return The effect.
+     * 
+     * @see #setLineEffect(PathEffect effect)
+     */
     public PathEffect getLineEffect() {
         return this.lineEffect;
     }
 
+    /**
+     * Sets the line effect.
+     * 
+     * @param effect
+     *            the effect.
+     * 
+     * @see #getLineEffect()
+     */
     public void setLineEffect(PathEffect effect) {
         this.lineEffect = effect;
     }
@@ -548,7 +590,7 @@ public class LegendGraphic extends AbstractBlock
      * @param constraint
      *            the constraint (<code>null</code> not permitted).
      * 
-     * @return The block size (in Java2D units, never <code>null</code>).
+     * @return The block size (in Canvas units, never <code>null</code>).
      */
     public Size2D arrange(Canvas canvas, RectangleConstraint constraint) {
         RectangleConstraint contentConstraint = toContentConstraint(constraint);
@@ -595,12 +637,17 @@ public class LegendGraphic extends AbstractBlock
      * @return The content size.
      */
     protected Size2D arrangeNN(Canvas canvas) {
+        //performance tuning
         RectShape contentSize = new RectShape();
         if (this.line != null) {
-            contentSize.setRect(this.line.getBounds());
+            //contentSize.setRect(this.line.getBounds());
+            this.line.getBounds(this.mWorkRectShape);
+            contentSize.setRect(this.mWorkRectShape);
         }
         if (this.shape != null) {
-            contentSize = contentSize.createUnion(this.shape.getBounds());
+            //contentSize = contentSize.createUnion(this.shape.getBounds());
+            this.shape.getBounds(this.mWorkRectShape);
+            contentSize = contentSize.createUnion(this.mWorkRectShape);
         }
         return new Size2D(contentSize.getWidth(), contentSize.getHeight());
     }

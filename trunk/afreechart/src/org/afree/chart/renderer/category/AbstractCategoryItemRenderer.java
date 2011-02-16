@@ -7,38 +7,46 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * ---------------------------------
  * AbstractCategoryItemRenderer.java
  * ---------------------------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2002-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Richard Atkinson;
  *                   Peter Kolb (patch 2497611);
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes:
  * --------
@@ -110,8 +118,6 @@
  *               series (DG);
  * 01-Apr-2009 : Added new addEntity() method (DG);
  * 
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.renderer.category;
@@ -184,12 +190,6 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     /** The base item label generator. */
     private CategoryItemLabelGenerator baseItemLabelGenerator;
 
-    /** A list of tool tip generators (one per series). */
-    private ObjectList toolTipGeneratorList;
-
-    /** A list of item label generators (one per series). */
-    private ObjectList itemURLGeneratorList;
-
     /** The legend item label generator. */
     private CategorySeriesLabelGenerator legendItemLabelGenerator;
 
@@ -214,8 +214,6 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     protected AbstractCategoryItemRenderer() {
         this.itemLabelGenerator = null;
         this.itemLabelGeneratorList = new ObjectList();
-        this.toolTipGeneratorList = new ObjectList();
-        this.itemURLGeneratorList = new ObjectList();
         this.legendItemLabelGenerator = new StandardCategorySeriesLabelGenerator();
     }
 
@@ -563,7 +561,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @param value
      *            the Java2D value at which the grid line should be drawn.
      * 
-     * @see #drawRangeGridline(Graphics2D, CategoryPlot, ValueAxis, RectShape,
+     * @see #drawRangeGridline(Canvas, CategoryPlot, ValueAxis, RectShape,
      *      double)
      */
     public void drawDomainGridline(Canvas canvas, CategoryPlot plot,
@@ -614,7 +612,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @param value
      *            the value at which the grid line should be drawn.
      * 
-     * @see #drawDomainGridline(Graphics2D, CategoryPlot, RectShape, double)
+     * @see #drawDomainGridline(Canvas, CategoryPlot, RectShape, double)
      */
     public void drawRangeGridline(Canvas canvas, CategoryPlot plot, ValueAxis axis,
             RectShape dataArea, double value) {
@@ -668,10 +666,12 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      *            effect).
      * @param value
      *            the value at which the grid line should be drawn.
-     * @param paint
-     *            the paint (<code>null</code> not permitted).
+     * @param paintType
+     *            the paintType (<code>null</code> not permitted).
      * @param stroke
      *            the stroke (<code>null</code> not permitted).
+     * @param effect
+     *            the effect (<code>null</code> not permitted).
      * 
      * @see #drawRangeGridline
      * 
@@ -718,7 +718,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @param dataArea
      *            the area inside the axes (not <code>null</code>).
      * 
-     * @see #drawRangeMarker(Graphics2D, CategoryPlot, ValueAxis, Marker,
+     * @see #drawRangeMarker(Canvas, CategoryPlot, ValueAxis, Marker,
      *      RectShape)
      */
     public void drawDomainMarker(Canvas canvas, CategoryPlot plot,
@@ -732,7 +732,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
         }
 
         PlotOrientation orientation = plot.getOrientation();
-        RectShape bounds = null;
+        RectShape bounds = new RectShape();
         if (marker.getDrawAsLine()) {
             double v = axis.getCategoryMiddle(columnIndex, dataset
                     .getColumnCount(), dataArea, plot.getDomainAxisEdge());
@@ -753,7 +753,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             paint.setStrokeCap(Paint.Cap.ROUND);
             paint.setAlpha(marker.getAlpha());
             line.draw(canvas, paint);
-            bounds = line.getBounds();
+            line.getBounds(bounds);
         } else {
             double v0 = axis.getCategoryStart(columnIndex, dataset
                     .getColumnCount(), dataArea, plot.getDomainAxisEdge());
@@ -809,7 +809,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      * @param dataArea
      *            the area inside the axes (not <code>null</code>).
      * 
-     * @see #drawDomainMarker(Graphics2D, CategoryPlot, CategoryAxis,
+     * @see #drawDomainMarker(Canvas, CategoryPlot, CategoryAxis,
      *      CategoryMarker, RectShape)
      */
     public void drawRangeMarker(Canvas canvas, CategoryPlot plot, ValueAxis axis,
@@ -848,8 +848,10 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             String label = marker.getLabel();
             RectangleAnchor anchor = marker.getLabelAnchor();
             if (label != null) {
+                RectShape rectShape = new RectShape();
+                line.getBounds(rectShape);
                 PointF coordinates = calculateRangeMarkerTextAnchorPoint(canvas,
-                        orientation, dataArea, line.getBounds(), marker
+                        orientation, dataArea, rectShape, marker
                                 .getLabelOffset(), LengthAdjustmentType.EXPAND,
                         anchor);
                 

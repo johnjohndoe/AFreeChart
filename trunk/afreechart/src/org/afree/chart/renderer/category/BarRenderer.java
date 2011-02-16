@@ -7,38 +7,46 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * ----------------
  * BarRenderer.java
  * ----------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2002-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Christian W. Zuckschwerdt;
  *                   Peter Kolb (patch 2497611);
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -97,8 +105,6 @@
  * 14-Jan-2009 : Added support for seriesVisible flags (PK);
  * 03-Feb-2009 : Added defaultShadowsVisible flag - see patch 2511330 (PK);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.renderer.category;
@@ -236,7 +242,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
     /** The maximum bar width as a percentage of the available space. */
     private double maximumBarWidth;
 
-    /** The minimum bar length (in Java2D units). */
+    /** The minimum bar length (in Canvas units). */
     private double minimumBarLength;
 
     /**
@@ -435,7 +441,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
     }
 
     /**
-     * Returns the minimum bar length (in Java2D units). The default value is
+     * Returns the minimum bar length (in Canvas units). The default value is
      * 0.0.
      * 
      * @return The minimum bar length.
@@ -457,7 +463,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
      * may misrepresent your data.
      * 
      * @param min
-     *            the minimum bar length (in Java2D units, must be >= 0.0).
+     *            the minimum bar length (in Canvas units, must be >= 0.0).
      * 
      * @see #getMinimumBarLength()
      */
@@ -641,7 +647,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
      * 
      * @return The shadow paint.
      * 
-     * @see #setShadowPaintType(Paint)
+     * @see #setShadowPaintType(PaintType)
      * 
      * @since JFreeChart 1.0.11
      */
@@ -1110,7 +1116,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
      * Calculates the available space for each series.
      * 
      * @param space
-     *            the space along the entire axis (in Java2D units).
+     *            the space along the entire axis (in Canvas units).
      * @param axis
      *            the category axis.
      * @param categories
@@ -1184,7 +1190,9 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
             Shape bounds = new RectShape(rectBounds);
             bounds = ShapeUtilities.rotateShape(bounds, position.getAngle(), anchorPoint.x, anchorPoint.y);
             if (bounds != null) {
-                if (!bar.contains(bounds.getBounds())) {
+                RectShape rectShape = new RectShape();
+                bounds.getBounds(rectShape);
+                if (!bar.contains(rectShape)) {
                     if (!negative) {
                         position = getPositiveItemLabelPositionFallback();
                     } else {
@@ -1322,13 +1330,11 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
                 || anchor == ItemLabelAnchor.INSIDE12;
     }
 
-    @Override
     public void addChangeListener(RendererChangeListener listener) {
         // TODO Auto-generated method stub
         
     }
 
-    @Override
     public void removeChangeListener(RendererChangeListener listener) {
         // TODO Auto-generated method stub
         

@@ -7,37 +7,45 @@
  * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * ---------------
  * SymbolAxis.java
  * ---------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2002-2008, by Anthony Boulestreau and Contributors.
  *
  * Original Author:  Anthony Boulestreau;
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  *
  * Changes
@@ -83,15 +91,10 @@
  * 25-Jul-2007 : Added new field for alternate grid band paint (DG);
  * 15-Aug-2008 : Use alternate grid band paint when drawing (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.axis;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Arrays;
@@ -100,7 +103,6 @@ import java.util.List;
 
 import org.afree.util.PaintTypeUtilities;
 import org.afree.ui.RectangleEdge;
-import org.afree.io.SerialUtilities;
 import org.afree.ui.TextAnchor;
 import org.afree.data.Range;
 import org.afree.chart.event.AxisChangeEvent;
@@ -108,7 +110,6 @@ import org.afree.chart.plot.Plot;
 import org.afree.chart.plot.PlotRenderingInfo;
 import org.afree.chart.plot.ValueAxisPlot;
 import org.afree.chart.text.TextUtilities;
-import org.afree.graphics.geom.Font;
 import org.afree.graphics.geom.RectShape;
 import org.afree.graphics.PaintType;
 import org.afree.graphics.PaintUtility;
@@ -215,7 +216,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
      *
      * @return The grid band paint (never <code>null</code>).
      *
-     * @see #setGridBandPaintType(Paint)
+     * @see #setGridBandPaintType(PaintType paintType)
      * @see #isGridBandsVisible()
      */
     public PaintType getGridBandPaintType() {
@@ -241,9 +242,9 @@ public class SymbolAxis extends NumberAxis implements Serializable {
     /**
      * Returns the paint used for alternate grid bands.
      *
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      *
-     * @see #setGridBandAlternatePaintType(Paint)
+     * @see #setGridBandAlternatePaintType(PaintType paintType)
      * @see #getGridBandPaintType()
      *
      * @since JFreeChart 1.0.7
@@ -259,7 +260,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
      * @param paintType  the paint (<code>null</code> not permitted).
      *
      * @see #getGridBandAlternatePaintType()
-     * @see #setGridBandPaintType(Paint)
+     * @see #setGridBandPaintType(PaintType paintType)
      *
      * @since JFreeChart 1.0.7
      */
@@ -284,7 +285,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
     }
 
     /**
-     * Draws the axis on a Java 2D graphics device (such as the screen or a
+     * Draws the axis on a graphics device (such as the screen or a
      * printer).
      *
      * @param canvas  the graphics device (<code>null</code> not permitted).
@@ -335,7 +336,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
                                  RectangleEdge edge,
                                  List ticks) {
 
-        RectShape savedClip = new RectShape(canvas.getClipBounds());
+        canvas.save();
         canvas.clipRect(dataArea.getRectF());
         if (RectangleEdge.isTopOrBottom(edge)) {
             drawGridBandsHorizontal(canvas, plotArea, dataArea, true, ticks);
@@ -343,7 +344,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
         else if (RectangleEdge.isLeftOrRight(edge)) {
             drawGridBandsVertical(canvas, plotArea, dataArea, true, ticks);
         }
-        canvas.clipRect(savedClip.getRectF());
+        canvas.restore();
 
     }
 

@@ -7,31 +7,41 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * --------------
  * ValueAxis.java
  * --------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 15-Dec-2010 : performance tuning
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
@@ -40,8 +50,6 @@
  *                   Center);
  *                   Peter Kolb (patch 1934255);
  *                   Andrew Mickish (patch 1870189);
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -113,8 +121,6 @@
  *               false (DG);
  * 30-Mar-2009 : Added pan(double) method (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.axis;
@@ -197,11 +203,15 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
     /** The shape used for a right arrow. */
     private transient Shape rightArrow;
 
+    //performance tuning
     /** A flag that affects the orientation of the values on the axis. */
-    private boolean inverted;
+    //private boolean inverted;
+    protected boolean mInverted;
 
+    //performance tuning
     /** The axis range. */
-    private Range range;
+    //private Range range;
+    protected Range mRange;
 
     /**
      * Flag that indicates whether the axis automatically scales to fit the
@@ -266,6 +276,9 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
     private boolean limitAble = false;
     private Range limitRange = null;
     
+    /** work LineShape object */
+    private LineShape mWorkLineShape = new LineShape();
+    
     /**
      * Constructs a value axis.
      * 
@@ -282,11 +295,11 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
         this.positiveArrowVisible = false;
         this.negativeArrowVisible = false;
 
-        this.range = DEFAULT_RANGE;
+        this.mRange = DEFAULT_RANGE;
         this.autoRange = DEFAULT_AUTO_RANGE;
         this.defaultAutoRange = DEFAULT_RANGE;
 
-        this.inverted = DEFAULT_INVERTED;
+        this.mInverted = DEFAULT_INVERTED;
         this.autoRangeMinimumSize = DEFAULT_AUTO_RANGE_MINIMUM_SIZE;
 
         this.lowerMargin = DEFAULT_LOWER_MARGIN;
@@ -540,19 +553,29 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      */
     protected void drawAxisLine(Canvas canvas, double cursor, RectShape dataArea,
             RectangleEdge edge) {
-        LineShape axisLine = null;
+        //performance tuning
+//        LineShape axisLine = null;
+        LineShape axisLine = this.mWorkLineShape;
         if (edge == RectangleEdge.TOP) {
-            axisLine = new LineShape(dataArea.getX(), cursor, dataArea
-                    .getMaxX(), cursor);
+//            axisLine = new LineShape(dataArea.getX(), cursor, dataArea
+//                    .getMaxX(), cursor);
+            axisLine.setLine(dataArea.getX(), cursor, dataArea
+                  .getMaxX(), cursor);
         } else if (edge == RectangleEdge.BOTTOM) {
-            axisLine = new LineShape(dataArea.getX(), cursor, dataArea
-                    .getMaxX(), cursor);
+//            axisLine = new LineShape(dataArea.getX(), cursor, dataArea
+//                    .getMaxX(), cursor);
+            axisLine.setLine(dataArea.getX(), cursor, dataArea
+                  .getMaxX(), cursor);
         } else if (edge == RectangleEdge.LEFT) {
-            axisLine = new LineShape(cursor, dataArea.getY(), cursor,
-                    dataArea.getMaxY());
+//            axisLine = new LineShape(cursor, dataArea.getY(), cursor,
+//                    dataArea.getMaxY());
+            axisLine.setLine(cursor, dataArea.getY(), cursor,
+                  dataArea.getMaxY());
         } else if (edge == RectangleEdge.RIGHT) {
-            axisLine = new LineShape(cursor, dataArea.getY(), cursor,
-                    dataArea.getMaxY());
+//            axisLine = new LineShape(cursor, dataArea.getY(), cursor,
+//                    dataArea.getMaxY());
+            axisLine.setLine(cursor, dataArea.getY(), cursor,
+                  dataArea.getMaxY());
         }
 
         Paint p = PaintUtility.createPaint(getAxisLinePaintType(), getAxisLineStroke(), getAxisLineEffect());
@@ -561,14 +584,14 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
         boolean drawUpOrRight = false;
         boolean drawDownOrLeft = false;
         if (this.positiveArrowVisible) {
-            if (this.inverted) {
+            if (this.mInverted) {
                 drawDownOrLeft = true;
             } else {
                 drawUpOrRight = true;
             }
         }
         if (this.negativeArrowVisible) {
-            if (this.inverted) {
+            if (this.mInverted) {
                 drawUpOrRight = true;
             } else {
                 drawDownOrLeft = true;
@@ -643,7 +666,8 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
     protected float[] calculateAnchorPoint(ValueTick tick, double cursor,
             RectShape dataArea, RectangleEdge edge, Paint paint) {
 
-        RectShape labelBounds = TextUtilities.getTextBounds(tick.getText(), paint);
+        //performance tuning
+//        RectShape labelBounds = TextUtilities.getTextBounds(tick.getText(), paint);
         
         RectangleInsets insets = getTickLabelInsets();
         float[] result = new float[2];
@@ -691,12 +715,17 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
         List ticks = refreshTicks(canvas, state, dataArea, edge);
         state.setTicks(ticks);
         // canvas.setFont(getTickLabelFont());
+        
+        //performance tuning
+        Paint tickPaint = PaintUtility.createPaint(Paint.ANTI_ALIAS_FLAG, getTickLabelPaintType(), getTickLabelFont());
+        Paint tickMark = PaintUtility.createPaint(Paint.ANTI_ALIAS_FLAG, getTickMarkPaintType(),getTickMarkStroke(), getTickMarkEffect());
+        
         Iterator iterator = ticks.iterator();
         while (iterator.hasNext()) {
             ValueTick tick = (ValueTick) iterator.next();
             if (isTickLabelsVisible()) {
 
-                Paint tickPaint = PaintUtility.createPaint(Paint.ANTI_ALIAS_FLAG, getTickLabelPaintType(), getTickLabelFont());
+                //Paint tickPaint = PaintUtility.createPaint(Paint.ANTI_ALIAS_FLAG, getTickLabelPaintType(), getTickLabelFont());
                 float[] anchorPoint = calculateAnchorPoint(tick, cursor,
                         dataArea, edge, tickPaint);
                 TextUtilities.drawRotatedString(tick.getText(), canvas,
@@ -717,20 +746,27 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
 
                 float xx = (float) valueToJava2D(tick.getValue(), dataArea,
                         edge);
-                LineShape mark = null;
+                //performance tuning
+//                LineShape mark = null;
+                LineShape mark = this.mWorkLineShape;
                 
-                Paint tickMark = PaintUtility.createPaint(Paint.ANTI_ALIAS_FLAG, getTickMarkPaintType(),getTickMarkStroke(), getTickMarkEffect());
+                //Paint tickMark = PaintUtility.createPaint(Paint.ANTI_ALIAS_FLAG, getTickMarkPaintType(),getTickMarkStroke(), getTickMarkEffect());
                 if (edge == RectangleEdge.LEFT) {
-                    mark = new LineShape(cursor - ol, xx, cursor + il, xx);
+                    //mark = new LineShape(cursor - ol, xx, cursor + il, xx);
+                    mark.setLine(cursor - ol, xx, cursor + il, xx);
                 } else if (edge == RectangleEdge.RIGHT) {
-                    mark = new LineShape(cursor + ol, xx, cursor - il, xx);
+                    //mark = new LineShape(cursor + ol, xx, cursor - il, xx);
+                    mark.setLine(cursor + ol, xx, cursor - il, xx);
                 } else if (edge == RectangleEdge.TOP) {
-                    mark = new LineShape(xx, cursor - ol, xx, cursor + il);
+                    //mark = new LineShape(xx, cursor - ol, xx, cursor + il);
+                    mark.setLine(xx, cursor - ol, xx, cursor + il);
                 } else if (edge == RectangleEdge.BOTTOM) {
-                    mark = new LineShape(xx, cursor + ol, xx, cursor - il);
+                    //mark = new LineShape(xx, cursor + ol, xx, cursor - il);
+                    mark.setLine(xx, cursor + ol, xx, cursor - il);
                 }
-                canvas.drawLine((float) mark.getX1(), (float) mark.getY1(),
-                        (float) mark.getX2(), (float) mark.getY2(), tickMark);
+//                canvas.drawLine((float) mark.getX1(), (float) mark.getY1(),
+//                        (float) mark.getX2(), (float) mark.getY2(), tickMark);
+                mark.draw(canvas,tickMark);
             }
         }
 
@@ -901,11 +937,19 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
             Iterator iterator = ticks.iterator();
             while (iterator.hasNext()) {
                 Tick tick = (Tick) iterator.next();
-                RectShape labelBounds = TextUtilities.getTextBounds(tick
+                //performance tuning
+//                RectShape labelBounds = TextUtilities.getTextBounds(tick
+//                        .getText(), paint);
+//                if (labelBounds.getWidth() + insets.getLeft()
+//                        + insets.getRight() > maxWidth) {
+//                    maxWidth = labelBounds.getWidth() + insets.getLeft()
+//                            + insets.getRight();
+//                }
+                float labelWidth = TextUtilities.getTextWidth(tick
                         .getText(), paint);
-                if (labelBounds.getWidth() + insets.getLeft()
+                if (labelWidth + insets.getLeft()
                         + insets.getRight() > maxWidth) {
-                    maxWidth = labelBounds.getWidth() + insets.getLeft()
+                    maxWidth = labelWidth + insets.getLeft()
                             + insets.getRight();
                 }
             }
@@ -931,7 +975,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      * @see #setInverted(boolean)
      */
     public boolean isInverted() {
-        return this.inverted;
+        return this.mInverted;
     }
 
     /**
@@ -945,8 +989,8 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      */
     public void setInverted(boolean flag) {
 
-        if (this.inverted != flag) {
-            this.inverted = flag;
+        if (this.mInverted != flag) {
+            this.mInverted = flag;
         }
 
     }
@@ -1181,7 +1225,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      * @see #setLowerBound(double)
      */
     public double getLowerBound() {
-        return this.range.getLowerBound();
+        return this.mRange.getLowerBound();
     }
 
     /**
@@ -1194,8 +1238,8 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      * @see #getLowerBound()
      */
     public void setLowerBound(double min) {
-        if (this.range.getUpperBound() > min) {
-            setRange(new Range(min, this.range.getUpperBound()));
+        if (this.mRange.getUpperBound() > min) {
+            setRange(new Range(min, this.mRange.getUpperBound()));
         } else {
             setRange(new Range(min, min + 1.0));
         }
@@ -1209,7 +1253,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      * @see #setUpperBound(double)
      */
     public double getUpperBound() {
-        return this.range.getUpperBound();
+        return this.mRange.getUpperBound();
     }
 
     /**
@@ -1222,8 +1266,8 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      * @see #getUpperBound()
      */
     public void setUpperBound(double max) {
-        if (this.range.getLowerBound() < max) {
-            setRange(new Range(this.range.getLowerBound(), max));
+        if (this.mRange.getLowerBound() < max) {
+            setRange(new Range(this.mRange.getLowerBound(), max));
         } else {
             setRange(max - 1.0, max);
         }
@@ -1237,7 +1281,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      * @see #setRange(Range)
      */
     public Range getRange() {
-        return this.range;
+        return this.mRange;
     }
 
     /**
@@ -1278,7 +1322,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
             this.autoRange = false;
         }
         
-        this.range = range;
+        this.mRange = range;
 
     }
 
@@ -1559,9 +1603,9 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      */
     public void centerRange(double value) {
 
-        double central = this.range.getCentralValue();
+        double central = this.mRange.getCentralValue();
         Range adjusted = new Range(
-                this.range.getLowerBound() + value - central, this.range
+                this.mRange.getLowerBound() + value - central, this.mRange
                         .getUpperBound()
                         + value - central);
         setRange(adjusted);
@@ -1582,7 +1626,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      * @see #resizeRange(double, double)
      */
     public void resizeRange(double percent) {
-        resizeRange(percent, this.range.getCentralValue());
+        resizeRange(percent, this.mRange.getCentralValue());
     }
 
     /**
@@ -1602,7 +1646,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      */
     public void resizeRange(double percent, double anchorValue) {
         if (percent > 0.0) {
-            double halfLength = this.range.getLength() * percent / 2;
+            double halfLength = this.mRange.getLength() * percent / 2;
             double lower, upper;
             lower = anchorValue - halfLength;
             upper = anchorValue + halfLength;
@@ -1664,8 +1708,8 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      *            the new upper bound.
      */
     public void zoomRange(double lowerPercent, double upperPercent) {
-        double start = this.range.getLowerBound();
-        double length = this.range.getLength();
+        double start = this.mRange.getLowerBound();
+        double length = this.mRange.getLength();
         Range adjusted = null;
         if (isInverted()) {
             adjusted = new Range(start + (length * (1 - upperPercent)), start
@@ -1723,9 +1767,9 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      */
     public void moveRange(double movePercent) {
 
-        double start = this.range.getLowerBound();
-        double end = this.range.getUpperBound();
-        double length = this.range.getLength();
+        double start = this.mRange.getLowerBound();
+        double end = this.mRange.getUpperBound();
+        double length = this.mRange.getLength();
                 
         Range adjusted = null;
         double moveBound, lower, upper;

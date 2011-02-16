@@ -7,37 +7,45 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * -----------------
  * DateTickUnit.java
  * -----------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Dec-2010 : performance tuning
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2000-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Chris Boek;
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -58,8 +66,6 @@
  * 09-Jan-2009 : Replaced the unit and rollUnit fields with an enumerated
  *               type (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.axis;
@@ -103,6 +109,10 @@ public class DateTickUnit extends TickUnit implements Serializable {
     /** The date formatter. */
     private DateFormat formatter;
 
+    //TODO : size check
+    /** working Calendar */
+    private Calendar mWorkCalendar = Calendar.getInstance();
+    
     /**
      * Creates a new date tick unit.
      *
@@ -161,7 +171,6 @@ public class DateTickUnit extends TickUnit implements Serializable {
 
         // populate deprecated fields
         this.unit = unitTypeToInt(unitType);
-        this.rollUnit = unitTypeToInt(rollUnitType);
     }
 
     /**
@@ -243,7 +252,12 @@ public class DateTickUnit extends TickUnit implements Serializable {
         // number calculations, and since DateTickUnit doesn't do week
         // arithmetic, the default locale (whatever it is) should be fine
         // here...
-        Calendar calendar = Calendar.getInstance(zone);
+        
+        //performance tuning
+        //Calendar calendar = Calendar.getInstance(zone);
+        Calendar calendar = mWorkCalendar;
+        calendar.setTimeZone(zone);
+        
         calendar.setTime(base);
         calendar.add(this.unitType.getCalendarField(), this.count);
         return calendar.getTime();
@@ -279,7 +293,12 @@ public class DateTickUnit extends TickUnit implements Serializable {
         // number calculations, and since DateTickUnit doesn't do week
         // arithmetic, the default locale (whatever it is) should be fine
         // here...
-        Calendar calendar = Calendar.getInstance(zone);
+        
+        //performance tuning
+        //Calendar calendar = Calendar.getInstance(zone);
+        Calendar calendar = this.mWorkCalendar;
+        calendar.setTimeZone(zone);
+        
         calendar.setTime(base);
         calendar.add(this.rollUnitType.getCalendarField(), this.rollCount);
         return calendar.getTime();
@@ -532,13 +551,6 @@ public class DateTickUnit extends TickUnit implements Serializable {
      * @deprecated As of JFreeChart version 1.0.13, use the unitType field.
      */
     private int unit;
-
-    /**
-     * The roll unit.
-     *
-     * @deprecated As of JFreeChart version 1.0.13, use the rollUnitType field.
-     */
-    private int rollUnit;
 
     /**
      * Creates a new date tick unit.  You can specify the units using one of

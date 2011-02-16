@@ -7,37 +7,45 @@
  * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * -------------
  * RingPlot.java
  * -------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2004-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limtied);
  * Contributor(s):   Christoph Beck (bug 2121818);
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -52,8 +60,6 @@
  * 14-Feb-2007 : Added notification in setSectionDepth() method (DG);
  * 23-Sep-2008 : Fix for bug 2121818 by Christoph Beck (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.plot;
@@ -101,6 +107,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
     /** The stroke used to draw separators. */
     private transient float separatorStroke;
     
+    /** The effect used to draw separators. */
     private transient PathEffect separatorEffect;
 
     /** The paint used to draw separators. */
@@ -179,7 +186,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
      *
      * @return The stroke (never <code>null</code>).
      *
-     * @see #setSeparatorStroke(Stroke)
+     * @see #setSeparatorStroke(Float stroke)
      */
     public Float getSeparatorStroke() {
         return this.separatorStroke;
@@ -204,9 +211,9 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
     /**
      * Returns the separator paint.
      *
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      *
-     * @see #setSeparatorPaintType(Paint)
+     * @see #setSeparatorPaintType(PaintType paintType)
      */
     public PaintType getSeparatorPaintType() {
         return this.separatorPaintType;
@@ -229,21 +236,38 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
     }
 
     /**
-     * Returns the separator stroke.
+     * Returns the separator effect.
      *
-     * @return The stroke (never <code>null</code>).
+     * @return The effect (never <code>null</code>).
      *
-     * @see #setSeparatorStroke(Stroke)
+     * @see #setSeparatorEffect(PathEffect effect)
      */
     public PathEffect getSeparatorEffect() {
         return this.separatorEffect;
     }
 
+    /**
+     * Sets the effect used to draw the separator between sections and sends
+     * a {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param effect  the effect (<code>null</code> not permitted).
+     *
+     * @see #getSeparatorEffect()
+     */
     public void setSeparatorEffect(PathEffect effect) {
         this.separatorEffect = effect;
         //fireChangeEvent();
     }
 
+    /**
+     * Returns the length of the inner extension of the separator line that
+     * is drawn between sections, expressed as a percentage of the depth of
+     * the section.
+     *
+     * @return The inner separator extension (as a percentage).
+     *
+     * @see #setInnerSeparatorExtension(double)
+     */
     public double getInnerSeparatorExtension() {
         return this.innerSeparatorExtension;
     }

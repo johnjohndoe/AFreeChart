@@ -7,31 +7,42 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * -----------
  * XYPlot.java
  * -----------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : renamed method name
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
@@ -50,8 +61,6 @@
  *                   Ulrich Voigt - patches 1997549 and 2686040;
  *                   Peter Kolb - patches 1934255 and 2603321;
  *                   Andrew Mickish - patch 1868749;
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes (from 21-Jun-2001)
  * --------------------------
@@ -228,8 +237,6 @@
  * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
  * 30-Mar-2009 : Delegate panning to axes (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.plot;
@@ -245,10 +252,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.afree.util.EffectList;
 import org.afree.ui.Layer;
 import org.afree.util.ObjectList;
-import org.afree.util.PaintTypeUtilities;
 import org.afree.ui.RectangleEdge;
 import org.afree.ui.RectangleInsets;
 import org.afree.chart.LegendItem;
@@ -310,6 +315,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     /** The default grid line paint. */
     public static final PaintType DEFAULT_GRIDLINE_PAINT = new SolidColor(Color.LTGRAY);
     
+    /** The default grid line effect. */
     public static final PathEffect DEFAULT_GRIDLINE_EFFECT = new DashPathEffect(new float[]{3.0f, 2.0f}, 0);
     
     /** The default crosshair visibility. */
@@ -321,6 +327,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     /** The default crosshair paint. */
     public static final PaintType DEFAULT_CROSSHAIR_PAINT = new SolidColor(Color.BLUE);
     
+    /** The default crosshair effect. */
     public static final PathEffect DEFAULT_CROSSHAIR_EFFECT = new DashPathEffect(new float[]{3.0f, 2.0f}, 0);
 
     /** The plot orientation. */
@@ -381,6 +388,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     /** The paint used to draw the domain grid-lines. */
     private transient PaintType domainGridlinePaintType;
     
+    /** The effect used to draw the domain grid-lines. */
     private transient PathEffect domainGridlineEffect;
 
     /** A flag that controls whether the range grid-lines are visible. */
@@ -392,6 +400,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     /** The paint used to draw the range grid-lines. */
     private transient PaintType rangeGridlinePaintType;
     
+    /** The effect used to draw the range grid-lines. */
     private transient PathEffect rangeGridlineEffect;
 
     /**
@@ -414,7 +423,8 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @since JFreeChart 1.0.12
      */
     private transient PaintType domainMinorGridlinePaint;
-    
+
+    /** The effect used to draw the domain minor grid-lines. */
     private transient PathEffect domainMinorGridlineEffect;
 
     /**
@@ -437,7 +447,8 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @since JFreeChart 1.0.12
      */
     private transient PaintType rangeMinorGridlinePaint;
-    
+
+    /** The effect used to draw the range minor grid-lines. */
     private transient PathEffect rangeMinorGridlineEffect;
 
     /**
@@ -461,7 +472,8 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @since JFreeChart 1.0.5
      */
     private transient PaintType domainZeroBaselinePaint;
-    
+
+    /** The effect used for the zero baseline against the domain axis. */
     private transient PathEffect domainZeroBaselineEffect;
 
     /**
@@ -476,6 +488,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     /** The paint used for the zero baseline against the range axis. */
     private transient PaintType rangeZeroBaselinePaint;
     
+    /** The effect used for the zero baseline against the range axis. */
     private transient PathEffect rangeZeroBaselineEffect;
 
     /** A flag that controls whether or not a domain crosshair is drawn.. */
@@ -490,6 +503,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     /** The color used to draw the crosshair (if any). */
     private transient PaintType domainCrosshairPaintType;
     
+    /** The effect used to draw the crosshair (if any). */
     private transient PathEffect domainCrosshairEffect;
 
     /**
@@ -510,6 +524,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     /** The color used to draw the crosshair (if any). */
     private transient PaintType rangeCrosshairPaintType;
     
+    /** The effect used to draw the crosshair (if any). */
     private transient PathEffect rangeCrosshairEffect;
 
     /**
@@ -668,12 +683,6 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
 
         configureDomainAxes();
         configureRangeAxes();
-
-        Paint white = new Paint(Paint.ANTI_ALIAS_FLAG);
-        white.setColor(Color.WHITE);
-
-        Paint black = new Paint(Paint.ANTI_ALIAS_FLAG);
-        white.setColor(Color.BLACK);
 
         this.domainGridlinesVisible = true;
         this.domainGridlineStroke = DEFAULT_GRIDLINE_STROKE;
@@ -1919,7 +1928,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * 
      * @return The stroke (never <code>null</code>).
      * 
-     * @see #setDomainGridlineStroke(Stroke)
+     * @see #setDomainGridlineStroke(Float stroke)
      */
     public Float getDomainGridlineStroke() {
         return this.domainGridlineStroke;
@@ -1951,7 +1960,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * 
      * @return The stroke (never <code>null</code>).
      * 
-     * @see #setDomainMinorGridlineStroke(Stroke)
+     * @see #setDomainMinorGridlineStroke(Float Stroke)
      * 
      * @since JFreeChart 1.0.12
      */
@@ -1986,11 +1995,11 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * Returns the paint for the grid lines (if any) plotted against the domain
      * axis.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setDomainGridlinePaintType(Paint)
+     * @see #setDomainGridlinePaintType(PaintType paintType)
      */
-    public PaintType getDomainGridlinePaint() {
+    public PaintType getDomainGridlinePaintType() {
         return this.domainGridlinePaintType;
     }
 
@@ -2004,7 +2013,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @throws IllegalArgumentException
      *             if <code>paint</code> is <code>null</code>.
      * 
-     * @see #getDomainGridlinePaint()
+     * @see #getDomainGridlinePaintType()
      */
     public void setDomainGridlinePaintType(PaintType paint) {
         if (paint == null) {
@@ -2018,13 +2027,13 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * Returns the paint for the minor grid lines (if any) plotted against the
      * domain axis.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setDomainMinorGridlinePaint(Paint)
+     * @see #setDomainMinorGridlinePaint(PaintType paintType)
      * 
      * @since JFreeChart 1.0.12
      */
-    public PaintType getDomainMinorGridlinePaint() {
+    public PaintType getDomainMinorGridlinePaintType() {
         return this.domainMinorGridlinePaint;
     }
 
@@ -2038,7 +2047,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @throws IllegalArgumentException
      *             if <code>paint</code> is <code>null</code>.
      * 
-     * @see #getDomainMinorGridlinePaint()
+     * @see #getDomainMinorGridlinePaintType()
      * 
      * @since JFreeChart 1.0.12
      */
@@ -2087,7 +2096,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * 
      * @return The stroke (never <code>null</code>).
      * 
-     * @see #setRangeGridlineStroke(Stroke)
+     * @see #setRangeGridlineStroke(Float Stroke)
      */
     public Float getRangeGridlineStroke() {
         return this.rangeGridlineStroke;
@@ -2114,11 +2123,11 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * Returns the paint for the grid lines (if any) plotted against the range
      * axis.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setRangeGridlinePaintType(Paint)
+     * @see #setRangeGridlinePaintType(PaintType paintType)
      */
-    public PaintType getRangeGridlinePaint() {
+    public PaintType getRangeGridlinePaintType() {
         return this.rangeGridlinePaintType;
     }
 
@@ -2129,7 +2138,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @param paint
      *            the paint (<code>null</code> not permitted).
      * 
-     * @see #getRangeGridlinePaint()
+     * @see #getRangeGridlinePaintType()
      */
     public void setRangeGridlinePaintType(PaintType paint) {
         if (paint == null) {
@@ -2180,7 +2189,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * 
      * @return The stroke (never <code>null</code>).
      * 
-     * @see #setRangeMinorGridlineStroke(Stroke)
+     * @see #setRangeMinorGridlineStroke(Float Stroke)
      * 
      * @since JFreeChart 1.0.12
      */
@@ -2211,13 +2220,13 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * Returns the paint for the minor grid lines (if any) plotted against the
      * range axis.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setRangeMinorGridlinePaint(Paint)
+     * @see #setRangeMinorGridlinePaint(PaintType paintType)
      * 
      * @since JFreeChart 1.0.12
      */
-    public PaintType getRangeMinorGridlinePaint() {
+    public PaintType getRangeMinorGridlinePaintType() {
         return this.rangeMinorGridlinePaint;
     }
 
@@ -2228,7 +2237,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @param paint
      *            the paint (<code>null</code> not permitted).
      * 
-     * @see #getRangeMinorGridlinePaint()
+     * @see #getRangeMinorGridlinePaintType()
      * 
      * @since JFreeChart 1.0.12
      */
@@ -2278,7 +2287,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * 
      * @since JFreeChart 1.0.5
      * 
-     * @see #setDomainZeroBaselineStroke(Stroke)
+     * @see #setDomainZeroBaselineStroke(Float Stroke)
      */
     public Float getDomainZeroBaselineStroke() {
         return this.domainZeroBaselineStroke;
@@ -2309,9 +2318,9 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * 
      * @since JFreeChart 1.0.5
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setDomainZeroBaselinePaintType(Paint)
+     * @see #setDomainZeroBaselinePaintType(PaintType paintType)
      */
     public PaintType getDomainZeroBaselinePaintType() {
         return this.domainZeroBaselinePaint;
@@ -2368,7 +2377,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * 
      * @return The stroke (never <code>null</code>).
      * 
-     * @see #setRangeZeroBaselineStroke(Stroke)
+     * @see #setRangeZeroBaselineStroke(Float Stroke)
      */
     public Float getRangeZeroBaselineStroke() {
         return this.rangeZeroBaselineStroke;
@@ -2395,9 +2404,9 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * Returns the paint for the zero baseline (if any) plotted against the
      * range axis.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setRangeZeroBaselinePaintType(Paint)
+     * @see #setRangeZeroBaselinePaintType(PaintType paintType)
      */
     public PaintType getRangeZeroBaselinePaintType() {
         return this.rangeZeroBaselinePaint;
@@ -2424,9 +2433,9 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * Returns the paint used for the domain tick bands. If this is
      * <code>null</code>, no tick bands will be drawn.
      * 
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      * 
-     * @see #setDomainTickBandPaint(Paint)
+     * @see #setDomainTickBandPaint(PaintType paintType)
      */
     public PaintType getDomainTickBandPaintType() {
         return this.domainTickBandPaint;
@@ -2449,11 +2458,11 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * Returns the paint used for the range tick bands. If this is
      * <code>null</code>, no tick bands will be drawn.
      * 
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      * 
-     * @see #setRangeTickBandPaintType(Paint)
+     * @see #setRangeTickBandPaintType(PaintType paintType)
      */
-    public PaintType getRangeTickBandPaint() {
+    public PaintType getRangeTickBandPaintType() {
         return this.rangeTickBandPaint;
     }
 
@@ -2463,7 +2472,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @param paint
      *            the paint (<code>null</code> permitted).
      * 
-     * @see #getRangeTickBandPaint()
+     * @see #getRangeTickBandPaintType()
      */
     public void setRangeTickBandPaintType(PaintType paint) {
         this.rangeTickBandPaint = paint;
@@ -2505,11 +2514,11 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @param index
      *            the quadrant index (0-3).
      * 
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      * 
-     * @see #setQuadrantPaint(int, Paint)
+     * @see #setQuadrantPaint(int, PaintType)
      */
-    public PaintType getQuadrantPaint(int index) {
+    public PaintType getQuadrantPaintType(int index) {
         if (index < 0 || index > 3) {
             throw new IllegalArgumentException("The index value (" + index
                     + ") should be in the range 0 to 3.");
@@ -2526,7 +2535,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @param paint
      *            the paint (<code>null</code> permitted).
      * 
-     * @see #getQuadrantPaint(int)
+     * @see #getQuadrantPaintType(int)
      */
     public void setQuadrantPaint(int index, PaintType paint) {
         if (index < 0 || index > 3) {
@@ -2618,7 +2627,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             if (markers != null) {
                 Iterator iterator = markers.iterator();
                 while (iterator.hasNext()) {
-                    Marker m = (Marker) iterator.next();
+                    //Marker m = (Marker) iterator.next();
                     // m.removeChangeListener(this);
                 }
                 markers.clear();
@@ -2630,7 +2639,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             if (markers != null) {
                 Iterator iterator = markers.iterator();
                 while (iterator.hasNext()) {
-                    Marker m = (Marker) iterator.next();
+                    //Marker m = (Marker) iterator.next();
                     // m.removeChangeListener(this);
                 }
                 markers.clear();
@@ -2946,7 +2955,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             if (markers != null) {
                 Iterator iterator = markers.iterator();
                 while (iterator.hasNext()) {
-                    Marker m = (Marker) iterator.next();
+                    //Marker m = (Marker) iterator.next();
                     // m.removeChangeListener(this);
                 }
                 markers.clear();
@@ -2958,7 +2967,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             if (markers != null) {
                 Iterator iterator = markers.iterator();
                 while (iterator.hasNext()) {
-                    Marker m = (Marker) iterator.next();
+                    //Marker m = (Marker) iterator.next();
                     // m.removeChangeListener(this);
                 }
                 markers.clear();
@@ -3566,7 +3575,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      *            the area.
      * 
      * @see #setQuadrantOrigin(PointF)
-     * @see #setQuadrantPaint(int, Paint)
+     * @see #setQuadrantPaint(int, PaintType)
      */
     protected void drawQuadrants(Canvas canvas, RectShape area) {
         // 0 | 1
@@ -3682,7 +3691,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @param ticks
      *            the ticks.
      * 
-     * @see #setDomainTickBandPaint(Paint)
+     * @see #setDomainTickBandPaint(PaintType paintType)
      */
     public void drawDomainTickBands(Canvas canvas, RectShape dataArea, List ticks) {
         PaintType bandPaint = getDomainTickBandPaintType();
@@ -3719,10 +3728,10 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @param ticks
      *            the ticks.
      * 
-     * @see #setRangeTickBandPaintType(Paint)
+     * @see #setRangeTickBandPaintType(PaintType paintType)
      */
     public void drawRangeTickBands(Canvas canvas, RectShape dataArea, List ticks) {
-        PaintType bandPaint = getRangeTickBandPaint();
+        PaintType bandPaint = getRangeTickBandPaintType();
         if (bandPaint != null) {
             boolean fillBand = false;
             ValueAxis axis = getRangeAxis();
@@ -4002,7 +4011,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @param ticks
      *            the ticks.
      * 
-     * @see #drawRangeGridlines(Graphics2D, RectShape, List)
+     * @see #drawRangeGridlines(Canvas, RectShape, List)
      */
     protected void drawDomainGridlines(Canvas canvas, RectShape dataArea,
             List ticks) {
@@ -4025,13 +4034,13 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
                 if ((tick.getTickType() == TickType.MINOR)
                         && isDomainMinorGridlinesVisible()) {
                     gridStroke = getDomainMinorGridlineStroke();
-                    gridPaintType = getDomainMinorGridlinePaint();
+                    gridPaintType = getDomainMinorGridlinePaintType();
                     gridEffect = getDomainMinorGridlineEffect();
                     paintLine = true;
                 } else if ((tick.getTickType() == TickType.MAJOR)
                         && isDomainGridlinesVisible()) {
                     gridStroke = getDomainGridlineStroke();
-                    gridPaintType = getDomainGridlinePaint();
+                    gridPaintType = getDomainGridlinePaintType();
                     gridEffect = getDomainGridlineEffect();
                     paintLine = true;
                 }
@@ -4056,7 +4065,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @param ticks
      *            the ticks.
      * 
-     * @see #drawDomainGridlines(Graphics2D, RectShape, List)
+     * @see #drawDomainGridlines(Canvas, RectShape, List)
      */
     protected void drawRangeGridlines(Canvas canvas, RectShape area, List ticks) {
 
@@ -4081,12 +4090,12 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
                             && isRangeMinorGridlinesVisible()) {
                         gridStroke = getRangeMinorGridlineStroke();
                         gridEffect = getRangeMinorGridlineEffect();
-                        gridPaint = getRangeMinorGridlinePaint();
+                        gridPaint = getRangeMinorGridlinePaintType();
                         paintLine = true;
                     } else if ((tick.getTickType() == TickType.MAJOR)
                             && isRangeGridlinesVisible()) {
                         gridStroke = getRangeGridlineStroke();
-                        gridPaint = getRangeGridlinePaint();
+                        gridPaint = getRangeGridlinePaintType();
                         gridEffect = getRangeGridlineEffect();
                         paintLine = true;
                     }
@@ -4374,8 +4383,10 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      *            the axis against which the value is measured.
      * @param stroke
      *            the stroke used to draw the crosshair line.
-     * @param paint
-     *            the paint used to draw the crosshair line.
+     * @param paintType
+     *            the paintType used to draw the crosshair line.
+     * @param pathEffect
+     *            the pathEffect used to draw the crosshair line.
      * 
      * @since JFreeChart 1.0.4
      */
@@ -4455,6 +4466,8 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      *            the stroke used to draw the crosshair line.
      * @param paintType
      *            the paint used to draw the crosshair line.
+     * @param effect
+     *            the effect used to draw the crosshair line.
      * 
      * @since JFreeChart 1.0.4
      */
@@ -4867,9 +4880,10 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * 
      * @return The crosshair stroke (never <code>null</code>).
      * 
-     * @see #setDomainCrosshairStroke(Stroke)
+     * @see #setDomainCrosshairStroke(Float stroke)
      * @see #isDomainCrosshairVisible()
      * @see #getDomainCrosshairPaintType()
+     * @see #getDomainCrosshairEffect()
      */
     public Float getDomainCrosshairStroke() {
         return this.domainCrosshairStroke;
@@ -4897,9 +4911,10 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * 
      * @return The crosshair paint (never <code>null</code>).
      * 
-     * @see #setDomainCrosshairPaintType(Paint)
+     * @see #setDomainCrosshairPaintType(PaintType paintType)
      * @see #isDomainCrosshairVisible()
      * @see #getDomainCrosshairStroke()
+     * @see #getDomainCrosshairEffect()
      */
     public PaintType getDomainCrosshairPaintType() {
         return this.domainCrosshairPaintType;
@@ -4922,10 +4937,29 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         // fireChangeEvent();
     }
 
+    /**
+     * Returns the {@link PathEffect} used to draw the crosshair (if visible).
+     * 
+     * @return The crosshair effect (never <code>null</code>).
+     * 
+     * @see #setDomainCrosshairEffect(PathEffect effect)
+     * @see #isDomainCrosshairVisible()
+     * @see #getDomainCrosshairPaintType()
+     * @see #getDomainCrosshairStroke()
+     */
     public PathEffect getDomainCrosshairEffect() {
         return this.domainCrosshairEffect;
     }
 
+    /**
+     * Sets the effect used to draw the crosshairs (if visible) and notifies
+     * registered listeners that the axis has been modified.
+     * 
+     * @param effect
+     *            the new crosshair effect (<code>null</code> not permitted).
+     * 
+     * @see #getDomainCrosshairEffect()
+     */
     public void setDomainCrosshairEffect(PathEffect pathEffect) {
         if (pathEffect == null) {
             throw new IllegalArgumentException("Null 'paint' argument.");
@@ -5041,9 +5075,10 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * 
      * @return The crosshair stroke (never <code>null</code>).
      * 
-     * @see #setRangeCrosshairStroke(Stroke)
+     * @see #setRangeCrosshairStroke(Float stroke)
      * @see #isRangeCrosshairVisible()
      * @see #getRangeCrosshairPaintType()
+     * @see #getRangeCrosshairEffect()
      */
     public Float getRangeCrosshairStroke() {
         return this.rangeCrosshairStroke;
@@ -5066,10 +5101,29 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         // fireChangeEvent();
     }
     
+    /**
+     * Returns the effect used to draw the crosshair (if visible).
+     * 
+     * @return The crosshair effect (never <code>null</code>).
+     * 
+     * @see #setRangeCrosshairEffect(PathEffect effect)
+     * @see #isRangeCrosshairVisible()
+     * @see #getRangeCrosshairPaintType()
+     * @see #getRangeCrosshairStroke()
+     */
     public PathEffect getRangeCrosshairEffect() {
         return this.rangeCrosshairEffect;
     }
     
+    /**
+     * Sets the effect used to draw the crosshairs (if visible) and sends a
+     * {@link PlotChangeEvent} to all registered listeners.
+     * 
+     * @param effect
+     *            the new crosshair effect (<code>null</code> not permitted).
+     * 
+     * @see #getRangeCrosshairEffect()
+     */
     public void setRangeCrosshairEffect(PathEffect effect) {
         if (effect == null) {
             throw new IllegalArgumentException("Null 'effect' argument.");
@@ -5083,9 +5137,10 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * 
      * @return The crosshair paint (never <code>null</code>).
      * 
-     * @see #setRangeCrosshairPaintType(Paint)
+     * @see #setRangeCrosshairPaintType(PaintType paintType)
      * @see #isRangeCrosshairVisible()
      * @see #getRangeCrosshairStroke()
+     * @see #getRangeCrosshairEffect()
      */
     public PaintType getRangeCrosshairPaintType() {
         return this.rangeCrosshairPaintType;
@@ -5578,17 +5633,41 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         return result;
     }
 
-    @Override
+    /**
+     * Returns <code>true</code>, indicating that the domain axis/axes for this
+     * plot are movable.
+     * 
+     * @return A boolean.
+     * 
+     * @see #isRangeMovable()
+     */
     public boolean isDomainMovable() {
         return true;
     }
 
-    @Override
+    /**
+     * Returns <code>true</code>, indicating that the range axis/axes for this
+     * plot are movable.
+     * 
+     * @return A boolean.
+     * 
+     * @see #isDomainMovable()
+     */
     public boolean isRangeMovable() {
         return true;
     }
 
-    @Override
+    /**
+     * Move on the domain axis/axes. The new bounds are specified as percentages
+     * of the current axis range.
+     * 
+     * @param movePercent
+     *            a percentage that determines the new bound for the axis
+     * @param info
+     *            Deletion schedule.
+     * @param source
+     *            Deletion schedule.
+     */
     public void moveDomainAxes(double movePercent, PlotRenderingInfo info, PointF source) {
         for (int i = 0; i < this.domainAxes.size(); i++) {
             ValueAxis domainAxis = (ValueAxis) this.domainAxes.get(i);
@@ -5598,7 +5677,17 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         }
     }
 
-    @Override
+    /**
+     * Move on the range axis/axes. The new bounds are specified as percentages
+     * of the current axis range.
+     * 
+     * @param movePercent
+     *            a percentage that determines the new bound for the axis
+     * @param info
+     *            Deletion schedule.
+     * @param source
+     *            Deletion schedule.
+     */
     public void moveRangeAxes(double movePercent, PlotRenderingInfo info, PointF source) {
         for (int i = 0; i < this.rangeAxes.size(); i++) {
             ValueAxis rangeAxis = (ValueAxis) this.rangeAxes.get(i);
@@ -5608,34 +5697,109 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         }
     }
 
+    /**
+     * Returns the effect for the grid-lines (if any) plotted against the domain
+     * axis.
+     * 
+     * @return The effect (never <code>null</code>).
+     * 
+     * @see #setDomainGridlineEffect(PathEffect domainGridlineEffect)
+     */
     public PathEffect getDomainGridlineEffect() {
         return domainGridlineEffect;
     }
 
+    /**
+     * Sets the effect for the grid lines plotted against the domain axis, and
+     * sends a {@link PlotChangeEvent} to all registered listeners.
+     * 
+     * @param effect
+     *            the effect (<code>null</code> not permitted).
+     * 
+     * @throws IllegalArgumentException
+     *             if <code>effect</code> is <code>null</code>.
+     * 
+     * @see #getDomainGridlineEffect()
+     */
     public void setDomainGridlineEffect(PathEffect domainGridlineEffect) {
         this.domainGridlineEffect = domainGridlineEffect;
     }
 
+    /**
+     * Returns the effect for the grid lines (if any) plotted against the range
+     * axis.
+     * 
+     * @return The effect (never <code>null</code>).
+     * 
+     * @see #setRangeGridlineEffect(PathEffect rangeGridlineEffect) {
+     */
     public PathEffect getRangeGridlineEffect() {
         return rangeGridlineEffect;
     }
 
+    /**
+     * Sets the effect for the grid lines plotted against the range axis, and
+     * sends a {@link PlotChangeEvent} to all registered listeners.
+     * 
+     * @param effect
+     *            the effect (<code>null</code> not permitted).
+     * 
+     * @see #getRangeGridlineEffect()
+     */
     public void setRangeGridlineEffect(PathEffect rangeGridlineEffect) {
         this.rangeGridlineEffect = rangeGridlineEffect;
     }
 
+    /**
+     * Returns the effect for the minor grid-lines (if any) plotted against the
+     * domain axis.
+     * 
+     * @return The effect (never <code>null</code>).
+     * 
+     * @see #setDomainMinorGridlineEffect(PathEffect domainMinorGridlineEffect)
+     * 
+     */
     public PathEffect getDomainMinorGridlineEffect() {
         return domainMinorGridlineEffect;
     }
 
+    /**
+     * Sets the effect for the minor grid lines plotted against the domain axis,
+     * and sends a {@link PlotChangeEvent} to all registered listeners.
+     * 
+     * @param effect
+     *            the effect (<code>null</code> not permitted).
+     * 
+     * @see #getDomainMinorGridlineEffect()
+     * 
+     */
     public void setDomainMinorGridlineEffect(PathEffect domainMinorGridlineEffect) {
         this.domainMinorGridlineEffect = domainMinorGridlineEffect;
     }
 
+    /**
+     * Returns the effect for the minor grid lines (if any) plotted against the
+     * range axis.
+     * 
+     * @return The effect (never <code>null</code>).
+     * 
+     * @see #setRangeMinorGridlineEffect(PathEffect rangeMinorGridlineEffect)
+     * 
+     */
     public PathEffect getRangeMinorGridlineEffect() {
         return rangeMinorGridlineEffect;
     }
 
+    /**
+     * Sets the effect for the minor grid lines plotted against the range axis,
+     * and sends a {@link PlotChangeEvent} to all registered listeners.
+     * 
+     * @param effect
+     *            the effect (<code>null</code> not permitted).
+     * 
+     * @see #getRangeMinorGridlineEffect()
+     * 
+     */
     public void setRangeMinorGridlineEffect(PathEffect rangeMinorGridlineEffect) {
         this.rangeMinorGridlineEffect = rangeMinorGridlineEffect;
     }

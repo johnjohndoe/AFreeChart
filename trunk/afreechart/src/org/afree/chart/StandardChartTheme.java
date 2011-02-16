@@ -7,44 +7,50 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * -----------------------
  * StandardChartTheme.java
  * -----------------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2008, 2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
+ * Contributor(s):   -;
  *
  * Changes
  * -------
  * 14-Aug-2008 : Version 1 (DG);
  * 10-Apr-2009 : Added getter/setter for smallFont (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart;
@@ -57,7 +63,6 @@ import java.io.Serializable;
 import java.util.Iterator;
 
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PathEffect;
 import android.graphics.Typeface;
 
@@ -112,6 +117,11 @@ import org.afree.graphics.SolidColor;
  */
 public class StandardChartTheme implements ChartTheme, Cloneable,
         PublicCloneable, Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -5657231725996574858L;
 
     /** The name of this theme. */
     private String name;
@@ -288,6 +298,11 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      */
     public static ChartTheme createLegacyTheme() {
         StandardChartTheme theme = new StandardChartTheme("Legacy") {
+            /**
+             * 
+             */
+            private static final long serialVersionUID = -741206071198207569L;
+
             public void apply(AFreeChart chart) {
                 // do nothing at all
             }
@@ -445,7 +460,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The title paint (never <code>null</code>).
      *
-     * @see #setTitlePaintType(Paint)
+     * @see #setTitlePaintType(PaintType paintType)
      */
     public PaintType getTitlePaintType() {
         return this.titlePaintType;
@@ -470,7 +485,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The subtitle paint (never <code>null</code>).
      *
-     * @see #setSubtitlePaintType(Paint)
+     * @see #setSubtitlePaintType(PaintType paintType)
      */
     public PaintType getSubtitlePaintType() {
         return this.subtitlePaintType;
@@ -495,7 +510,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The chart background paint (never <code>null</code>).
      *
-     * @see #setChartBackgroundPaintType(Paint)
+     * @see #setChartBackgroundPaintType(PaintType paintType)
      */
     public PaintType getChartBackgroundPaintType() {
         return this.chartBackgroundPaintType;
@@ -520,7 +535,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The legend background paint (never <code>null</code>).
      *
-     * @see #setLegendBackgroundPaintType(Paint)
+     * @see #setLegendBackgroundPaintType(PaintType paintType)
      */
     public PaintType getLegendBackgroundPaintType() {
         return this.legendBackgroundPaintType;
@@ -545,7 +560,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The legend item paint (never <code>null</code>).
      *
-     * @see #setLegendItemPaintType(Paint)
+     * @see #setLegendItemPaintType(PaintType paintType)
      */
     public PaintType getLegendItemPaintType() {
         return this.legendItemPaintType;
@@ -570,7 +585,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The plot background paint (never <code>null</code>).
      *
-     * @see #setPlotBackgroundPaintType(Paint)
+     * @see #setPlotBackgroundPaintType(PaintType paintType)
      */
     public PaintType getPlotBackgroundPaintType() {
         return this.plotBackgroundPaintType;
@@ -595,7 +610,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The plot outline paint (never <code>null</code>).
      *
-     * @see #setPlotOutlinePaintType(Paint)
+     * @see #setPlotOutlinePaintType(PaintType paintType)
      */
     public PaintType getPlotOutlinePaintType() {
         return this.plotOutlinePaintType;
@@ -645,7 +660,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The label link paint (never <code>null</code>).
      *
-     * @see #setLabelLinkPaintType(Paint)
+     * @see #setLabelLinkPaintType(PaintType paintType)
      */
     public PaintType getLabelLinkPaintType() {
         return this.labelLinkPaintType;
@@ -670,7 +685,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The domain grid line paint (never <code>null<code>).
      *
-     * @see #setDomainGridlinePaintType(Paint)
+     * @see #setDomainGridlinePaintType(PaintType paintType)
      */
     public PaintType getDomainGridlinePaintType() {
         return this.domainGridlinePaintType;
@@ -695,7 +710,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The range grid line paint (never <code>null</code>).
      *
-     * @see #setRangeGridlinePaintType(Paint)
+     * @see #setRangeGridlinePaintType(PaintType paintType)
      */
     public PaintType getRangeGridlinePaintType() {
         return this.rangeGridlinePaintType;
@@ -791,7 +806,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The axis label paint (never <code>null</code>).
      *
-     * @see #setAxisLabelPaintType(Paint)
+     * @see #setAxisLabelPaintType(PaintType paintType)
      */
     public PaintType getAxisLabelPaintType() {
         return this.axisLabelPaintType;
@@ -816,7 +831,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The tick label paint (never <code>null</code>).
      *
-     * @see #setTickLabelPaintType(Paint)
+     * @see #setTickLabelPaintType(PaintType paintType)
      */
     public PaintType getTickLabelPaintType() {
         return this.tickLabelPaintType;
@@ -841,7 +856,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The item label paint (never <code>null</code>).
      *
-     * @see #setItemLabelPaintType(Paint)
+     * @see #setItemLabelPaintType(PaintType paintType)
      */
     public PaintType getItemLabelPaintType() {
         return this.itemLabelPaintType;
@@ -888,7 +903,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The shadow paint (never <code>null</code>).
      *
-     * @see #setShadowPaintType(Paint)
+     * @see #setShadowPaintType(PaintType paintType)
      */
     public PaintType getShadowPaintType() {
         return this.shadowPaintType;
@@ -963,7 +978,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The thermometer paint (never <code>null</code>).
      *
-     * @see #setThermometerPaintType(Paint)
+     * @see #setThermometerPaintType(PaintType paintType)
      */
     public PaintType getThermometerPaintType() {
         return this.thermometerPaint;
@@ -988,7 +1003,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The wall paint (never <code>null</code>).
      *
-     * @see #setWallPaintType(Paint)
+     * @see #setWallPaintType(PaintType paintType)
      */
     public PaintType getWallPaintType() {
         return this.wallPaintType;
@@ -1013,7 +1028,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The error indicator paint (never <code>null</code>).
      *
-     * @see #setErrorIndicatorPaintType(Paint)
+     * @see #setErrorIndicatorPaintType(PaintType paintType)
      */
     public PaintType getErrorIndicatorPaintType() {
         return this.errorIndicatorPaintType;
@@ -1038,7 +1053,7 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
      *
      * @return The grid band paint (never <code>null</code>).
      *
-     * @see #setGridBandPaintType(Paint)
+     * @see #setGridBandPaintType(PaintType paintType)
      */
     public PaintType getGridBandPaintType() {
         return this.gridBandPaintType;
@@ -1061,9 +1076,9 @@ public class StandardChartTheme implements ChartTheme, Cloneable,
     /**
      * Returns the grid band alternate paint (used for a {@link SymbolAxis}).
      *
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      *
-     * @see #setGridBandAlternatePaintType(Paint)
+     * @see #setGridBandAlternatePaintType(PaintType paintType)
      */
     public PaintType getGridBandAlternatePaintType() {
         return this.gridBandAlternatePaintType;
