@@ -7,31 +7,41 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * ---------
  * Axis.java
  * ---------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
@@ -39,8 +49,6 @@
  *                   Nicolas Brodu;
  *                   Peter Kolb (patches 1934255 and 2603321);
  *                   Andrew Mickish (patch 1870189);
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -90,8 +98,6 @@
  * 26-Sep-2008 : Added fireChangeEvent() method (DG);
  * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.axis;
@@ -99,7 +105,6 @@ package org.afree.chart.axis;
 import java.io.Serializable;
 import java.util.List;
 
-import org.afree.util.PaintTypeUtilities;
 import org.afree.ui.RectangleEdge;
 import org.afree.ui.RectangleInsets;
 import org.afree.ui.TextAnchor;
@@ -112,20 +117,17 @@ import org.afree.chart.text.TextUtilities;
 import org.afree.graphics.geom.Font;
 import org.afree.graphics.geom.LineShape;
 import org.afree.graphics.geom.RectShape;
-import org.afree.graphics.geom.Shape;
 import org.afree.graphics.PaintType;
 import org.afree.graphics.PaintUtility;
 import org.afree.graphics.SolidColor;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.graphics.Paint.Align;
 
 /**
  * The base class for all axes in AFreeChart. Subclasses are divided into those
@@ -157,6 +159,7 @@ public abstract class Axis implements Cloneable, Serializable {
     /** The default axis line stroke. */
     public static final float DEFAULT_AXIS_LINE_STROKE = 1;
     
+    /** The default axis line effect. */
     public static final PathEffect DEFAULT_AXIS_LINE_EFFECT = null;
 
     /** The default tick labels visibility. */
@@ -182,6 +185,7 @@ public abstract class Axis implements Cloneable, Serializable {
     /** The default tick paint. */
     public static final PaintType DEFAULT_TICK_MARK_PAINT = new SolidColor(Color.DKGRAY);
     
+    /** The default tick effect. */
     public static final PathEffect DEFAULT_TICK_MARK_EFFECT = null;
 
     /** The default tick mark inside length. */
@@ -214,6 +218,7 @@ public abstract class Axis implements Cloneable, Serializable {
     /** The stroke used for the axis line. */
     private transient float axisLineStroke;
     
+    /** The effect used for the axis line. */
     private transient PathEffect axisLineEffect;
 
     /** The paint used for the axis line. */
@@ -278,6 +283,7 @@ public abstract class Axis implements Cloneable, Serializable {
     /** The paint used to draw tick marks. */
     private transient PaintType tickMarkPaintType;
     
+    /** The effect used to draw tick marks. */
     private transient PathEffect tickMarkEffect;
 
     /** The fixed (horizontal or vertical) dimension for the axis. */
@@ -378,7 +384,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * 
      * @see #getLabel()
      * @see #setLabelFont(Font)
-     * @see #setLabelPaintType(Paint)
+     * @see #setLabelPaintType(PaintType paintType)
      */
     public void setLabel(String label) {
 
@@ -427,9 +433,9 @@ public abstract class Axis implements Cloneable, Serializable {
     /**
      * Returns the color/shade used to draw the axis label.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setLabelPaintType(Paint)
+     * @see #setLabelPaintType(PaintType paintType)
      */
     public PaintType getLabelPaintType() {
         return this.labelPaintType;
@@ -542,8 +548,8 @@ public abstract class Axis implements Cloneable, Serializable {
      *            the flag.
      * 
      * @see #isAxisLineVisible()
-     * @see #setAxisLinePaintType(Paint)
-     * @see #setAxisLineStroke(Stroke)
+     * @see #setAxisLinePaintType(PaintType paintType)
+     * @see #setAxisLineStroke(float stroke)
      */
     public void setAxisLineVisible(boolean visible) {
         this.axisLineVisible = visible;
@@ -552,9 +558,9 @@ public abstract class Axis implements Cloneable, Serializable {
     /**
      * Returns the paint used to draw the axis line.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setAxisLinePaintType(Paint)
+     * @see #setAxisLinePaintType(PaintType paintType)
      */
     public PaintType getAxisLinePaintType() {
         return this.axisLinePaintType;
@@ -581,7 +587,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * 
      * @return The stroke (never <code>null</code>).
      * 
-     * @see #setAxisLineStroke(Stroke)
+     * @see #setAxisLineStroke(float stroke)
      */
     public float getAxisLineStroke() {
         return this.axisLineStroke;
@@ -601,11 +607,27 @@ public abstract class Axis implements Cloneable, Serializable {
         this.axisLineStroke = stroke;
     }
 
+    /**
+     * Returns the effect used to draw the axis line.
+     * 
+     * @return The effect (never <code>null</code>).
+     * 
+     * @see #setAxisLineEffect(PathEffect pathEffect)
+     */
     public PathEffect getAxisLineEffect() {
         return this.axisLineEffect;
     }
 
-    public void setAxisLineStroke(PathEffect pathEffect) {
+    /**
+     * Sets the effect used to draw the axis line and sends an
+     * {@link AxisChangeEvent} to all registered listeners.
+     * 
+     * @param pathEffect
+     *            the effect (<code>null</code> not permitted).
+     * 
+     * @see #getAxisLineEffect()
+     */
+    public void setAxisLineEffect(PathEffect pathEffect) {
 
         this.axisLineEffect = pathEffect;
     }
@@ -632,7 +654,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * 
      * @see #isTickLabelsVisible()
      * @see #setTickLabelFont(Font)
-     * @see #setTickLabelPaintType(Paint)
+     * @see #setTickLabelPaintType(PaintType paintType)
      */
     public void setTickLabelsVisible(boolean flag) {
 
@@ -709,9 +731,9 @@ public abstract class Axis implements Cloneable, Serializable {
     /**
      * Returns the color/shade used for the tick labels.
      * 
-     * @return The paint used for the tick labels.
+     * @return The paint type used for the tick labels.
      * 
-     * @see #setTickLabelPaintType(Paint)
+     * @see #setTickLabelPaintType(PaintType paintType)
      */
     public PaintType getTickLabelPaintType() {
         return this.tickLabelPaintType;
@@ -845,7 +867,7 @@ public abstract class Axis implements Cloneable, Serializable {
      * 
      * @return The stroke (never <code>null</code>).
      * 
-     * @see #setTickMarkStroke(Stroke)
+     * @see #setTickMarkStroke(int stroke)
      */
     public int getTickMarkStroke() {
         return this.tickMarkStroke;
@@ -866,10 +888,26 @@ public abstract class Axis implements Cloneable, Serializable {
 
     }
 
+    /**
+     * Returns the effect used to draw tick marks.
+     * 
+     * @return The effect (never <code>null</code>).
+     * 
+     * @see #setTickMarkEffect(PathEffect pathEffect)
+     */
     public PathEffect getTickMarkEffect() {
         return this.tickMarkEffect;
     }
 
+    /**
+     * Sets the effect used to draw tick marks and sends an
+     * {@link AxisChangeEvent} to all registered listeners.
+     * 
+     * @param pathEffect
+     *            the effect (<code>null</code> not permitted).
+     * 
+     * @see #getTickMarkEffect()
+     */
     public void setTickMarkEffect(PathEffect pathEffect) {
 
         this.tickMarkEffect = pathEffect;
@@ -879,9 +917,9 @@ public abstract class Axis implements Cloneable, Serializable {
     /**
      * Returns the paint used to draw tick marks (if they are showing).
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setTickMarkPaintType(Paint)
+     * @see #setTickMarkPaintType(PaintType paintType)
      */
     public PaintType getTickMarkPaintType() {
         return this.tickMarkPaintType;
@@ -1046,7 +1084,7 @@ public abstract class Axis implements Cloneable, Serializable {
             RectShape plotArea, RectangleEdge edge, AxisSpace space);
 
     /**
-     * Draws the axis on a Java 2D graphics device (such as the screen or a
+     * Draws the axis on a graphics device (such as the screen or a
      * printer).
      * 
      * @param canvas
@@ -1110,7 +1148,7 @@ public abstract class Axis implements Cloneable, Serializable {
             PlotRenderingInfo plotState) {
 
         if (plotState == null || plotState.getOwner() == null) {
-            return; // no need to create entity if we can卒t save it anyways...
+            return; // no need to create entity if we can't save it anyways...
         }
         RectShape hotspot = null;
         if (edge.equals(RectangleEdge.TOP)) {

@@ -7,33 +7,45 @@
  * (C) Copyright 2000-2004, by Object Refinery Limited and Contributors.
  * 
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it under the terms
- * of the GNU Lesser General Public License as published by the Free Software Foundation;
- * either version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License along with this
- * library; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307, USA.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  * 
  * -----------------
  * TextFragment.java
  * -----------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JCommon 1.0.16 to Android as "AFreeChart"
+ * 17-Dec-2010 : performance tuning
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2003, 2004, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
+ * Contributor(s):   -;
  *
  *
  * Changes
@@ -46,8 +58,6 @@
  * 01-Apr-2004 : Changed java.awt.geom.Dimension2D to org.jfree.ui.Size2D because of 
  *               JDK bug 4976448 which persists on JDK 1.3.1 (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JCommon 1.0.16 to Android as "AFreeChart"
  */
 
 package org.afree.chart.text;
@@ -58,14 +68,12 @@ import org.afree.ui.RefineryUtilities;
 import org.afree.ui.Size2D;
 import org.afree.ui.TextAnchor;
 import org.afree.graphics.geom.Font;
-import org.afree.graphics.geom.RectShape;
 import org.afree.graphics.PaintType;
 import org.afree.graphics.PaintUtility;
 import org.afree.graphics.SolidColor;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.Paint.FontMetrics;
 
@@ -209,16 +217,17 @@ public class TextFragment implements Serializable {
      */
     public Size2D calculateDimensions(final Canvas canvas) {
         Paint paint = PaintUtility.createPaint(Paint.ANTI_ALIAS_FLAG, paintType, font);
-        RectShape rec = TextUtilities.getTextBounds(text, paint);
-        return new Size2D(rec.getWidth(), rec.getHeight());
+        //performance tuning
+//        RectShape rec = TextUtilities.getTextBounds(text, paint);
+//        return new Size2D(rec.getWidth(), rec.getHeight());
+        return new Size2D(TextUtilities.getTextWidth(text, paint), 
+                TextUtilities.getTextHeight(paint));
     }
 
     /**
      * Calculates the vertical offset between the baseline and the specified
      * text anchor.
      * 
-     * @param canvas
-     *            the graphics device.
      * @param anchor
      *            the anchor.
      * 

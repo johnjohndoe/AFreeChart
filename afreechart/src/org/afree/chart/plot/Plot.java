@@ -7,31 +7,41 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * ---------
  * Plot.java
  * ---------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
@@ -43,8 +53,6 @@
  *                   Michal Krause;
  *                   Richard West, Advanced Micro Devices, Inc.;
  *                   Peter Kolb - patch 2603321;
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -133,8 +141,6 @@
  * 13-Jan-2009 : Added notify flag (DG);
  * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.plot;
@@ -165,7 +171,6 @@ import org.afree.graphics.geom.Shape;
 import org.afree.graphics.PaintType;
 import org.afree.graphics.PaintUtility;
 import org.afree.graphics.SolidColor;
-import org.afree.ui.Align;
 import org.afree.ui.RectangleEdge;
 import org.afree.ui.RectangleInsets;
 import org.afree.util.ObjectUtilities;
@@ -199,6 +204,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
     /** The default outline stroke. */
     public static final float DEFAULT_OUTLINE_STROKE = 0.5f;
     
+    /** The default outline effect. */
     public static final PathEffect DEFAULT_OUTLINE_EFFECT = null;
 
     /** The default outline color. */
@@ -255,6 +261,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
     /** The Stroke used to draw an outline around the plot. */
     private transient float outlineStroke;
     
+    /** The effect used to draw an outline around the plot. */
     private transient PathEffect outlineEffect;
 
     /** The Paint used to draw an outline around the plot. */
@@ -262,12 +269,6 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
 
     /** An optional color used to fill the plot background. */
     private transient PaintType backgroundPaintType;
-
-    /** The alignment for the background image. */
-    private int backgroundImageAlignment = Align.FIT;
-
-    /** The alpha value used to draw the background image. */
-    private float backgroundImageAlpha = 0.5f;
 
     /** The alpha-transparency for the plot. */
     private int foregroundAlpha;
@@ -397,9 +398,9 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
     /**
      * Returns the paint used to display the 'no data' message.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setNoDataMessagePaintType(Paint)
+     * @see #setNoDataMessagePaintType(PaintType paintType)
      * @see #getNoDataMessage()
      */
     public PaintType getNoDataMessagePaintType() {
@@ -543,9 +544,9 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
     /**
      * Returns the background color of the plot area.
      * 
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      * 
-     * @see #setBackgroundPaintType(Paint)
+     * @see #setBackgroundPaintType(PaintType paintType)
      */
     public PaintType getBackgroundPaintType() {
         return this.backgroundPaintType;
@@ -582,7 +583,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
      * 
      * @return The alpha transparency.
      * 
-     * @see #setBackgroundAlpha(float)
+     * @see #setBackgroundAlpha(int)
      */
     public int getBackgroundAlpha() {
         return this.backgroundAlpha;
@@ -695,7 +696,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
      * 
      * @return The stroke (possibly <code>null</code>).
      * 
-     * @see #setOutlineStroke(Stroke)
+     * @see #setOutlineStroke(float stroke)
      */
     public float getOutlineStroke() {
         return this.outlineStroke;
@@ -717,10 +718,26 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
 
     }
 
+    /**
+     * Returns the effect used to outline the plot area.
+     * 
+     * @return The effect (possibly <code>null</code>).
+     * 
+     * @see #setOutlineEffect(PathEffect effect)
+     */
     public PathEffect getOutlineEffect() {
         return this.outlineEffect;
     }
 
+    /**
+     * Sets the effect used to outline the plot area and sends a
+     * {@link PlotChangeEvent} to all registered listeners.
+     * 
+     * @param effect
+     *            the effect (<code>null</code> permitted).
+     * 
+     * @see #getOutlineEffect()
+     */
     public void setOutlineEffect(PathEffect effect) {
         this.outlineEffect = effect;
     }
@@ -730,7 +747,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
      * 
      * @return The color (possibly <code>null<code>).
      * 
-     * @see #setOutlinePaintType(Paint)
+     * @see #setOutlinePaintType(PaintType paintType)
      */
     public PaintType getOutlinePaintType() {
         return this.outlinePaintType;
@@ -766,7 +783,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
      * 
      * @return The alpha-transparency.
      * 
-     * @see #setForegroundAlpha(float)
+     * @see #setForegroundAlpha(int)
      */
     public int getForegroundAlpha() {
         return this.foregroundAlpha;
@@ -863,7 +880,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
      * 
      * @see #getBackgroundPaintType()
      * @see #getBackgroundAlpha()
-     * @see #fillBackground(Graphics2D, RectShape, PlotOrientation)
+     * @see #fillBackground(Canvas, RectShape, PlotOrientation)
      */
     protected void fillBackground(Canvas canvas, RectShape area) {
         fillBackground(canvas, area, PlotOrientation.VERTICAL);
@@ -1259,6 +1276,14 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
 //        this.listenerList.remove(PlotChangeListener.class, listener);
     }
     
+    /**
+     * Sets the background image for the plot and sends a
+     * {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @param image  the image (<code>null</code> permitted).
+     *
+     * @see #getBackgroundImage()
+     */
     public void setBackgroundImage(BitmapDrawable image) {
         this.backgroundImage = image;
     }

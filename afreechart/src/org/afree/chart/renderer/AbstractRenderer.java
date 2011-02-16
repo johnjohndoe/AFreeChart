@@ -7,37 +7,45 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * ---------------------
  * AbstractRenderer.java
  * ---------------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2002-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Nicolas Brodu;
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes:
  * --------
@@ -95,8 +103,6 @@
  * 01-Apr-2009 : Factored up the defaultEntityRadius field from the
  *               AbstractXYItemRenderer class (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.renderer;
@@ -248,6 +254,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     /** The base stroke. */
     private transient float baseStroke;
     
+    /** The base effect. */
     private transient PathEffect baseEffect;
 
     /** The outline stroke list. */
@@ -731,7 +738,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @param column
      *            the column (or category) index (zero-based).
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      */
     public PaintType getItemPaintType(int row, int column) {
         return lookupSeriesPaintType(row);
@@ -743,7 +750,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @param series
      *            the series index (zero-based).
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
      * @since JFreeChart 1.0.6
      */
@@ -773,7 +780,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * 
      * @return The paint (possibly <code>null</code>).
      * 
-     * @see #setSeriesPaintType(int, Paint)
+     * @see #setSeriesPaintType(int, PaintType)
      */
     public PaintType getSeriesPaintType(int series) {
         return this.paintList.getPaintType(series);
@@ -831,7 +838,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * 
      * @return The base paint (never <code>null</code>).
      * 
-     * @see #setBasePaintType(Paint)
+     * @see #setBasePaintType(PaintType paintType)
      */
     public PaintType getBasePaintType() {
         return this.basePaintType;
@@ -908,7 +915,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @param column
      *            the column (or category) index (zero-based).
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      */
     public PaintType getItemFillPaintType(int row, int column) {
         return lookupSeriesFillPaintType(row);
@@ -920,7 +927,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @param series
      *            the series (zero-based index).
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
      * @since JFreeChart 1.0.6
      */
@@ -948,9 +955,9 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @param series
      *            the series (zero-based index).
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setSeriesFillPaintType(int, Paint)
+     * @see #setSeriesFillPaintType(int, PaintType)
      */
     public PaintType getSeriesFillPaintType(int series) {
         return this.fillPaintList.getPaintType(series);
@@ -992,9 +999,9 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     /**
      * Returns the base fill paint.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setBaseFillPaintType(Paint)
+     * @see #setBaseFillPaintType(PaintType paintType)
      */
     public PaintType getBaseFillPaintType() {
         return this.baseFillPaintType;
@@ -1078,7 +1085,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @param column
      *            the column (or category) index (zero-based).
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      */
     public PaintType getItemOutlinePaintType(int row, int column) {
         return lookupSeriesOutlinePaintType(row);
@@ -1090,7 +1097,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @param series
      *            the series (zero-based index).
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
      * @since JFreeChart 1.0.6
      */
@@ -1118,9 +1125,9 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @param series
      *            the series (zero-based index).
      * 
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      * 
-     * @see #setSeriesOutlinePaintType(int, Paint)
+     * @see #setSeriesOutlinePaintType(int, PaintType)
      */
     public PaintType getSeriesOutlinePaintType(int series) {
         return this.outlinePaintList.getPaintType(series);
@@ -1162,9 +1169,9 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     /**
      * Returns the base outline paint.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setBaseOutlinePaintType(Paint)
+     * @see #setBaseOutlinePaintType(PaintType paintType)
      */
     public PaintType getBaseOutlinePaintType() {
         return this.baseOutlinePaintType;
@@ -1252,7 +1259,20 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     public Float getItemStroke(int row, int column) {
         return lookupSeriesStroke(row);
     }
-    
+
+    /**
+     * Returns the effect used to draw data items.
+     * <p>
+     * The default implementation passes control to the getSeriesEffect method.
+     * You can override this method if you require different behaviour.
+     * 
+     * @param row
+     *            the row (or series) index (zero-based).
+     * @param column
+     *            the column (or category) index (zero-based).
+     * 
+     * @return The effect (never <code>null</code>).
+     */
     public PathEffect getItemEffect(int row, int column) {
         return lookupSeriesEffect(row);
     }
@@ -1285,6 +1305,14 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
 
     }
     
+    /**
+     * Returns the effect used to draw the items in a series.
+     * 
+     * @param series
+     *            the series (zero-based index).
+     * 
+     * @return The effect (never <code>null</code>).
+     */
     public PathEffect lookupSeriesEffect(int series) {
 
         // otherwise look up the paint table
@@ -1311,12 +1339,22 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * 
      * @return The stroke (possibly <code>null</code>).
      * 
-     * @see #setSeriesStroke(int, Stroke)
+     * @see #setSeriesStroke(int, Float)
      */
     public Float getSeriesStroke(int series) {
         return this.strokeList.getStroke(series);
     }
     
+    /**
+     * Returns the effect used to draw the items in a series.
+     * 
+     * @param series
+     *            the series (zero-based index).
+     * 
+     * @return The effect (possibly <code>null</code>).
+     * 
+     * @see #setSeriesEffect(int series, PathEffect effect, boolean notify)
+     */
     public PathEffect getSeriesEffect(int series) {
         return this.effectList.getEffect(series);
     }
@@ -1354,6 +1392,19 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
 
     }
     
+    /**
+     * Sets the effect for a series and, if requested, sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series
+     *            the series index (zero-based).
+     * @param effect
+     *            the effect (<code>null</code> permitted).
+     * @param notify
+     *            notify listeners?
+     * 
+     * @see #getSeriesEffect(int)
+     */
     public void setSeriesEffect(int series, PathEffect effect, boolean notify) {
         this.effectList.setEffect(series, effect);
 
@@ -1378,7 +1429,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * 
      * @return The base stroke (never <code>null</code>).
      * 
-     * @see #setBaseStroke(Stroke)
+     * @see #setBaseStroke(float stroke)
      */
     public Float getBaseStroke() {
         return this.baseStroke;
@@ -1502,23 +1553,44 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
 
     }
 
+    /**
+     * Returns the effect used to outline the items in a series.
+     * 
+     * @param series
+     *            the series (zero-based index).
+     * 
+     * @return The effect (possibly <code>null</code>).
+     * 
+     * @see #setSeriesOutlineEffect(int series, PathEffect effect)
+     */
     public PathEffect getSeriesOutlineEffect(int series) {
         return this.outlineEffectList.getEffect(series);
     }
     
+    /**
+     * Returns the effect used to outline data items. The default implementation
+     * passes control to the {@link #lookupSeriesOutlineEffect(int)} method. You
+     * can override this method if you require different behaviour.
+     * 
+     * @param row
+     *            the row (or series) index (zero-based).
+     * @param column
+     *            the column (or category) index (zero-based).
+     * 
+     * @return The effect (never <code>null</code>).
+     */
     public PathEffect getItemOutlineEffect(int row, int column) {
         return lookupSeriesOutlineEffect(row);
     }
 
     /**
-     * Returns the stroke used to outline the items in a series.
+     * Returns the effect used to outline the items in a series.
      * 
      * @param series
-     *            the series (zero-based index).
+     *            the effect (zero-based index).
      * 
-     * @return The stroke (never <code>null</code>).
+     * @return The effect (never <code>null</code>).
      * 
-     * @since JFreeChart 1.0.6
      */
     public PathEffect lookupSeriesOutlineEffect(int series) {
 
@@ -1544,7 +1616,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * 
      * @return The stroke (possibly <code>null</code>).
      * 
-     * @see #setSeriesOutlineStroke(int, Stroke)
+     * @see #setSeriesOutlineStroke(int, Float)
      */
     public Float getSeriesOutlineStroke(int series) {
         return this.outlineStrokeList.getStroke(series) == null ? 1
@@ -1584,25 +1656,38 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
 
     }
 
-    public void setSeriesOutlineEffect(int series, PathEffect stroke) {
-        setSeriesOutlineEffect(series, stroke, true);
-    }
-
     /**
-     * Sets the outline stroke for a series and, if requested, sends a
+     * Sets the outline effect for a series and, if requested, sends a
      * {@link RendererChangeEvent} to all registered listeners.
      * 
      * @param series
      *            the series index.
-     * @param stroke
-     *            the stroke (<code>null</code> permitted).
+     * @param effect
+     *            the effect (<code>null</code> permitted).
      * @param notify
      *            notify listeners?
      * 
-     * @see #getSeriesOutlineStroke(int)
+     * @see #getSeriesOutlineEffect(int)
      */
-    public void setSeriesOutlineEffect(int series, PathEffect stroke, boolean notify) {
-        this.outlineEffectList.setEffect(series, stroke);
+    public void setSeriesOutlineEffect(int series, PathEffect effect) {
+        setSeriesOutlineEffect(series, effect, true);
+    }
+
+    /**
+     * Sets the outline effect for a series and, if requested, sends a
+     * {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param series
+     *            the series index.
+     * @param effect
+     *            the effect (<code>null</code> permitted).
+     * @param notify
+     *            notify listeners?
+     * 
+     * @see #getSeriesOutlineEffect(int)
+     */
+    public void setSeriesOutlineEffect(int series, PathEffect effect, boolean notify) {
+        this.outlineEffectList.setEffect(series, effect);
 
     }
     
@@ -1611,7 +1696,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * 
      * @return The stroke (never <code>null</code>).
      * 
-     * @see #setBaseOutlineStroke(Stroke)
+     * @see #setBaseOutlineStroke(Float stroke)
      */
     public Float getBaseOutlineStroke() {
         return this.baseOutlineStroke;
@@ -1674,29 +1759,36 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * 
      * @see #getAutoPopulateSeriesOutlineStroke()
      */
-    public void setAutoPopulateSeriesOutlineEffect(boolean auto) {
-        this.autoPopulateSeriesOutlineEffect = auto;
+    public void setAutoPopulateSeriesOutlineStroke(boolean auto) {
+        this.autoPopulateSeriesOutlineStroke = auto;
     }
     
-
+    /**
+     * Returns the flag that controls whether or not the series outline effect
+     * list is automatically populated when
+     * {@link #lookupSeriesOutlineEffect(int)} is called.
+     * 
+     * @return A boolean.
+     * 
+     * @see #setAutoPopulateSeriesOutlineEffect(boolean auto)
+     */
     public boolean getAutoPopulateSeriesOutlineEffect() {
-        return this.autoPopulateSeriesOutlineStroke;
+        return this.autoPopulateSeriesOutlineEffect;
     }
 
     /**
-     * Sets the flag that controls whether or not the series outline stroke list
-     * is automatically populated when {@link #lookupSeriesOutlineStroke(int)}
+     * Sets the flag that controls whether or not the series outline effect list
+     * is automatically populated when {@link #lookupSeriesOutlineEffect(int)}
      * is called.
      * 
      * @param auto
      *            the new flag value.
      * 
-     * @since JFreeChart 1.0.6
      * 
-     * @see #getAutoPopulateSeriesOutlineStroke()
+     * @see #getAutoPopulateSeriesOutlineEffect()
      */
-    public void setAutoPopulateSeriesOutlineStroke(boolean auto) {
-        this.autoPopulateSeriesOutlineStroke = auto;
+    public void setAutoPopulateSeriesOutlineEffect(boolean auto) {
+        this.autoPopulateSeriesOutlineEffect = auto;
     }
 
     // SHAPE
@@ -2130,7 +2222,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @param column
      *            the column index (zero based).
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      */
     public PaintType getItemLabelPaintType(int row, int column) {
         PaintType result = null;
@@ -2149,9 +2241,9 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @param series
      *            the series index (zero based).
      * 
-     * @return The paint (possibly <code>null<code>).
+     * @return The paint type (possibly <code>null<code>).
      * 
-     * @see #setSeriesItemLabelPaintType(int, Paint)
+     * @see #setSeriesItemLabelPaintType(int, PaintType)
      */
     public PaintType getSeriesItemLabelPaintType(int series) {
         return this.itemLabelPaintList.getPaintType(series);
@@ -2193,9 +2285,9 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
     /**
      * Returns the base item label paint.
      * 
-     * @return The paint (never <code>null<code>).
+     * @return The paint type (never <code>null<code>).
      * 
-     * @see #setBaseItemLabelPaintType(Paint)
+     * @see #setBaseItemLabelPaintType(PaintType paintType)
      */
     public PaintType getBaseItemLabelPaintType() {
         return this.baseItemLabelPaintType;
@@ -2796,7 +2888,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @param series
      *            the series index.
      * 
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      * 
      * @since JFreeChart 1.0.11
      */
@@ -2815,7 +2907,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      * @param series
      *            the series index.
      * 
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      * 
      * @see #lookupLegendTextPaintType(int)
      * 

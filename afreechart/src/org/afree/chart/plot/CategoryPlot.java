@@ -7,31 +7,41 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * -----------------
  * CategoryPlot.java
  * -----------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
@@ -40,8 +50,6 @@
  *                   Richard West, Advanced Micro Devices, Inc.;
  *                   Ulrich Voigt - patch 2686040;
  *                   Peter Kolb - patch 2603321;
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -179,8 +187,6 @@
  * 19-Mar-2009 : Implemented Pannable interface - see patch 2686040 (DG);
  * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.plot;
@@ -266,12 +272,12 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0.0f, new float[] {2.0f,
      * 2.0f}, 0.0f);
      */
-
     public static final float DEFAULT_GRIDLINE_STROKE = 1f;
 
     /** The default grid line paint. */
     public static final PaintType DEFAULT_GRIDLINE_PAINT_TYPE = new SolidColor(Color.LTGRAY);
     
+    /** The default grid line effect. */
     public static final PathEffect DEFAULT_GRIDLINE_EFFECT = new DashPathEffect(new float[]{3.0f, 2.0f}, 0);
 
     /** The default value label font. */
@@ -298,9 +304,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * @since JFreeChart 1.0.5
      */
     public static final PaintType DEFAULT_CROSSHAIR_PAINT_TYPE = new SolidColor(Color.BLUE);
-    
-    public static final PathEffect DEFAULT_CROSSHAIR_EFFECT = new DashPathEffect(new float[]{3.0f, 2.0f}, 0);
 
+    /** The default crosshair effect. */
+    public static final PathEffect DEFAULT_CROSSHAIR_EFFECT = new DashPathEffect(new float[]{3.0f, 2.0f}, 0);
 
     /** The plot orientation. */
     private PlotOrientation orientation;
@@ -368,6 +374,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     /** The paint used to draw the domain grid-lines. */
     private transient PaintType domainGridlinePaintType;
     
+    /** The effect used to draw the domain grid-lines. */
     private transient PathEffect domainGridlineEffect;
 
     /**
@@ -392,6 +399,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     private transient PaintType rangeZeroBaselinePaintType;
     
+    /** The effect used for the zero baseline against the range axis. */
     private transient PathEffect rangeZeroBaselineEffect;
 
     /**
@@ -405,7 +413,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
 
     /** The paint used to draw the range axis grid-lines. */
     private transient PaintType rangeGridlinePaintType;
-    
+
+    /** The effect used to draw the range axis grid-lines. */
     private transient PathEffect rangeGridlineEffect;
 
     /**
@@ -422,7 +431,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * @since JFreeChart 1.0.13
      */
     private transient float rangeMinorGridlineStroke;
-    
+
+    /** The effect used to draw the range minor grid-lines. */
     private transient PathEffect rangeMinorGridlineEffect;
 
     /**
@@ -478,6 +488,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     private transient PaintType domainCrosshairPaintType;
     
+    /** The effect used to draw the domain crosshair if it is visible. */
     private transient PathEffect domainCrosshairEffect;
 
     /** A flag that controls whether or not a range crosshair is drawn. */
@@ -492,6 +503,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     /** The color used to draw the crosshair (if any). */
     private transient PaintType rangeCrosshairPaintType;
     
+    /** The effect used to draw the crosshair . */
     private transient PathEffect rangeCrosshairEffect;
 
     /**
@@ -797,8 +809,6 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      *            notify listeners?
      */
     public void setDomainAxis(int index, CategoryAxis axis, boolean notify) {
-        CategoryAxis existing = (CategoryAxis) this.domainAxes.get(index);
-
         if (axis != null) {
             axis.setPlot(this);
         }
@@ -993,10 +1003,6 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * to all registered listeners.
      */
     public void clearDomainAxes() {
-        for (int i = 0; i < this.domainAxes.size(); i++) {
-            CategoryAxis axis = (CategoryAxis) this.domainAxes.get(i);
-
-        }
         this.domainAxes.clear();
     }
 
@@ -1082,7 +1088,6 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      *            notify listeners?
      */
     public void setRangeAxis(int index, ValueAxis axis, boolean notify) {
-        ValueAxis existing = (ValueAxis) this.rangeAxes.get(index);
 
         if (axis != null) {
             axis.setPlot(this);
@@ -1280,10 +1285,6 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * to all registered listeners.
      */
     public void clearRangeAxes() {
-        for (int i = 0; i < this.rangeAxes.size(); i++) {
-            ValueAxis axis = (ValueAxis) this.rangeAxes.get(i);
-
-        }
         this.rangeAxes.clear();
     }
 
@@ -1355,11 +1356,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * @see #getDataset(int)
      */
     public void setDataset(int index, CategoryDataset dataset) {
-
-        CategoryDataset existing = (CategoryDataset) this.datasets.get(index);
-
         this.datasets.set(index, dataset);
-
     }
 
     /**
@@ -1887,7 +1884,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * 
      * @return The stroke (never <code>null</code>).
      * 
-     * @see #setDomainGridlineStroke(Stroke)
+     * @see #setDomainGridlineStroke(float stroke)
      */
     public float getDomainGridlineStroke() {
         return this.domainGridlineStroke;
@@ -1910,9 +1907,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     /**
      * Returns the paint used to draw grid-lines against the domain axis.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setDomainGridlinePaintType(Paint)
+     * @see #setDomainGridlinePaintType(PaintType paintType)
      */
     public PaintType getDomainGridlinePaintType() {
         return this.domainGridlinePaintType;
@@ -1929,19 +1926,35 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     public void setDomainGridlinePaintType(PaintType paintType) {
         if (paintType == null) {
-            throw new IllegalArgumentException("Null 'paint' argument.");
+            throw new IllegalArgumentException("Null 'paintType' argument.");
         }
         this.domainGridlinePaintType = paintType;
     }
     
 
+    /**
+     * Returns the effect used to draw grid-lines against the domain axis.
+     * 
+     * @return The effect (never <code>null</code>).
+     * 
+     * @see #setDomainGridlineEffect(PathEffect effect)
+     */
     public PathEffect getDomainGridlineEffect() {
         return this.domainGridlineEffect;
     }
 
-    public void setDomainGridlinePaintType(PathEffect effect) {
+    /**
+     * Sets the effect used to draw grid-lines against the domain axis and sends
+     * a {@link PlotChangeEvent} to all registered listeners.
+     * 
+     * @param effect
+     *            the effect (<code>null</code> not permitted).
+     * 
+     * @see #getDomainGridlineEffect()
+     */
+    public void setDomainGridlineEffect(PathEffect effect) {
         if (effect == null) {
-            throw new IllegalArgumentException("Null 'paint' argument.");
+            throw new IllegalArgumentException("Null 'effect' argument.");
         }
         this.domainGridlineEffect = effect;
     }
@@ -1981,7 +1994,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * 
      * @return The stroke (never <code>null</code>).
      * 
-     * @see #setRangeZeroBaselineStroke(Stroke)
+     * @see #setRangeZeroBaselineStroke(float stroke)
      * 
      * @since JFreeChart 1.0.13
      */
@@ -2009,9 +2022,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * Returns the paint for the zero baseline (if any) plotted against the
      * range axis.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setRangeZeroBaselinePaintType(Paint)
+     * @see #setRangeZeroBaselinePaintType(PaintType paintType)
      * 
      * @since JFreeChart 1.0.13
      */
@@ -2069,7 +2082,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * 
      * @return The stroke (never <code>null</code>).
      * 
-     * @see #setRangeGridlineStroke(Stroke)
+     * @see #setRangeGridlineStroke(float stroke)
      */
     public float getRangeGridlineStroke() {
         return this.rangeGridlineStroke;
@@ -2092,9 +2105,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     /**
      * Returns the paint used to draw the grid-lines against the range axis.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setRangeGridlinePaintType(Paint)
+     * @see #setRangeGridlinePaintType(PaintType paintType)
      */
     public PaintType getRangeGridlinePaintType() {
         return this.rangeGridlinePaintType;
@@ -2116,16 +2129,31 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         this.rangeGridlinePaintType = paintType;
     }
     
-
+    /**
+     * Returns the effect used to draw the grid-lines against the range axis.
+     * 
+     * @return The effect (never <code>null</code>).
+     * 
+     * @see #setRangeGridlineEffect(PathEffect effect)
+     */
     public PathEffect getRangeGridlineEffect() {
         return this.rangeGridlineEffect;
     }
 
-    public void setRangeGridlinePaintEffect(PaintType effect) {
+    /**
+     * Sets the effect used to draw the grid-lines against the range axis and
+     * sends a {@link PlotChangeEvent} to all registered listeners.
+     * 
+     * @param effect
+     *            the effect (<code>null</code> not permitted).
+     * 
+     * @see #getRangeGridlineEffect()
+     */
+    public void setRangeGridlineEffect(PathEffect effect) {
         if (effect == null) {
-            throw new IllegalArgumentException("Null 'paint' argument.");
+            throw new IllegalArgumentException("Null 'effect' argument.");
         }
-        this.rangeGridlinePaintType = effect;
+        this.rangeGridlineEffect = effect;
     }
 
     /**
@@ -2168,7 +2196,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * 
      * @return The stroke (never <code>null</code>).
      * 
-     * @see #setRangeMinorGridlineStroke(Stroke)
+     * @see #setRangeMinorGridlineStroke(float stroke)
      * 
      * @since JFreeChart 1.0.13
      */
@@ -2192,20 +2220,26 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         this.rangeMinorGridlineStroke = stroke;
     }
 
+    /**
+     * Returns the effect for the minor grid lines (if any) plotted against the
+     * range axis.
+     * 
+     * @return The effect (never <code>null</code>).
+     * 
+     * @see #setRangeMinorGridlineEffect(PathEffect effect)
+     */
     public PathEffect getRangeMinorGridlineEffect() {
         return this.rangeMinorGridlineEffect;
     }
 
     /**
-     * Sets the stroke for the minor grid lines plotted against the range axis,
+     * Sets the effect for the minor grid lines plotted against the range axis,
      * and sends a {@link PlotChangeEvent} to all registered listeners.
      * 
-     * @param stroke
-     *            the stroke (<code>null</code> not permitted).
+     * @param effect
+     *            the effect (<code>null</code> not permitted).
      * 
-     * @see #getRangeMinorGridlineStroke()
-     * 
-     * @since JFreeChart 1.0.13
+     * @see #getRangeMinorGridlineEffect()
      */
     public void setRangeMinorGridlineEffect(PathEffect effect) {
 
@@ -2216,9 +2250,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * Returns the paint for the minor grid lines (if any) plotted against the
      * range axis.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setRangeMinorGridlinePaintType(Paint)
+     * @see #setRangeMinorGridlinePaintType(PaintType paintType)
      * 
      * @since JFreeChart 1.0.13
      */
@@ -2231,7 +2265,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * and sends a {@link PlotChangeEvent} to all registered listeners.
      * 
      * @param paintType
-     *            the paint (<code>null</code> not permitted).
+     *            the paintType (<code>null</code> not permitted).
      * 
      * @see #getRangeMinorGridlinePaintType()
      * 
@@ -2537,10 +2571,6 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             Collection markers = (Collection) this.backgroundDomainMarkers
                     .get(key);
             if (markers != null) {
-                Iterator iterator = markers.iterator();
-                while (iterator.hasNext()) {
-                    Marker m = (Marker) iterator.next();
-                }
                 markers.clear();
             }
         }
@@ -2548,10 +2578,6 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             Collection markers = (Collection) this.foregroundDomainMarkers
                     .get(key);
             if (markers != null) {
-                Iterator iterator = markers.iterator();
-                while (iterator.hasNext()) {
-                    Marker m = (Marker) iterator.next();
-                }
                 markers.clear();
             }
         }
@@ -2823,10 +2849,6 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             Collection markers = (Collection) this.backgroundRangeMarkers
                     .get(key);
             if (markers != null) {
-                Iterator iterator = markers.iterator();
-                while (iterator.hasNext()) {
-                    Marker m = (Marker) iterator.next();
-                }
                 markers.clear();
             }
         }
@@ -2834,10 +2856,6 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             Collection markers = (Collection) this.foregroundRangeMarkers
                     .get(key);
             if (markers != null) {
-                Iterator iterator = markers.iterator();
-                while (iterator.hasNext()) {
-                    Marker m = (Marker) iterator.next();
-                }
                 markers.clear();
             }
         }
@@ -3100,11 +3118,11 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     /**
      * Returns the paint used to draw the domain crosshair.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
      * @since JFreeChart 1.0.11
      * 
-     * @see #setDomainCrosshairPaintType(Paint)
+     * @see #setDomainCrosshairPaintType(PaintType paintType)
      * @see #getDomainCrosshairStroke()
      */
     public PaintType getDomainCrosshairPaintType() {
@@ -3128,22 +3146,28 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         this.domainCrosshairPaintType = paintType;
     }
     
-
+    /**
+     * Returns the effect used to draw the domain crosshair.
+     * 
+     * @return The effect (never <code>null</code>).
+     * 
+     * @see #setDomainCrosshairEffect(PathEffect effect)
+     * @see #getDomainCrosshairPaintType()
+     * @see #getDomainCrosshairStroke()
+     */
     public PathEffect getDomainCrosshairEffect() {
         return this.domainCrosshairEffect;
     }
 
     /**
-     * Sets the paint used to draw the domain crosshair.
+     * Sets the effect used to draw the domain crosshair.
      * 
-     * @param paintType
-     *            the paint (<code>null</code> not permitted).
+     * @param effect
+     *            the effect (<code>null</code> not permitted).
      * 
-     * @since JFreeChart 1.0.11
-     * 
-     * @see #getDomainCrosshairPaintType()
+     * @see #getDomainCrosshairEffect()
      */
-    public void setDomainCrosshairPaintType(PathEffect effect) {
+    public void setDomainCrosshairEffect(PathEffect effect) {
         this.domainCrosshairEffect = effect;
     }
 
@@ -3154,7 +3178,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * 
      * @since JFreeChart 1.0.11
      * 
-     * @see #setDomainCrosshairStroke(Stroke)
+     * @see #setDomainCrosshairStroke(float stroke)
      * @see #getDomainCrosshairPaintType()
      */
     public float getDomainCrosshairStroke() {
@@ -3277,7 +3301,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * 
      * @return The crosshair stroke (never <code>null</code>).
      * 
-     * @see #setRangeCrosshairStroke(Stroke)
+     * @see #setRangeCrosshairStroke(float stroke)
      * @see #isRangeCrosshairVisible()
      * @see #getRangeCrosshairPaintType()
      */
@@ -3303,9 +3327,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     /**
      * Returns the paint used to draw the range crosshair.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setRangeCrosshairPaintType(Paint)
+     * @see #setRangeCrosshairPaintType(PaintType paintType)
      * @see #isRangeCrosshairVisible()
      * @see #getRangeCrosshairStroke()
      */
@@ -3329,19 +3353,28 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         this.rangeCrosshairPaintType = paintType;
     }
     
-
+    /**
+     * Returns the effect used to draw the crosshair (if visible).
+     * 
+     * @return The crosshair effect (never <code>null</code>).
+     * 
+     * @see #setRangeCrosshairEffect(PathEffect effect)
+     * @see #isRangeCrosshairVisible()
+     * @see #getRangeCrosshairPaintType()
+     * @see #getRangeCrosshairStroke()
+     */
     public PathEffect getRangeCrosshairEffect() {
         return this.rangeCrosshairEffect;
     }
 
     /**
-     * Sets the paint used to draw the range crosshair (if visible) and sends a
+     * Sets the effect used to draw the range crosshair (if visible) and sends a
      * {@link PlotChangeEvent} to all registered listeners.
      * 
      * @param effect
-     *            the paint (<code>null</code> not permitted).
+     *            the effect (<code>null</code> not permitted).
      * 
-     * @see #getRangeCrosshairPaintType()
+     * @see #getRangeCrosshairEffect()
      */
     public void setRangeCrosshairEffect(PathEffect effect) {
         this.rangeCrosshairEffect = effect;
@@ -3556,7 +3589,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     }
 
     /**
-     * Draws the plot on a Java 2D graphics device (such as the screen or a
+     * Draws the plot on a graphics device (such as the screen or a
      * printer).
      * <P>
      * At your option, you may supply an instance of {@link PlotRenderingInfo}.
@@ -3961,7 +3994,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * @param dataArea
      *            the area inside the axes.
      * 
-     * @see #drawRangeGridlines(Graphics2D, RectShape, List)
+     * @see #drawRangeGridlines(Canvas, RectShape, List)
      */
     protected void drawDomainGridlines(Canvas canvas, RectShape dataArea) {
 
@@ -3998,7 +4031,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * @param ticks
      *            the ticks.
      * 
-     * @see #drawDomainGridlines(Graphics2D, RectShape)
+     * @see #drawDomainGridlines(Canvas, RectShape)
      */
     protected void drawRangeGridlines(Canvas canvas, RectShape dataArea,
             List ticks) {
@@ -4117,7 +4150,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * @param layer
      *            the layer (foreground or background).
      * 
-     * @see #drawRangeMarkers(Graphics2D, RectShape, int, Layer)
+     * @see #drawRangeMarkers(Canvas, RectShape, int, Layer)
      */
     protected void drawDomainMarkers(Canvas canvas, RectShape dataArea,
             int index, Layer layer) {
@@ -4152,7 +4185,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * @param layer
      *            the layer (foreground or background).
      * 
-     * @see #drawDomainMarkers(Graphics2D, RectShape, int, Layer)
+     * @see #drawDomainMarkers(Canvas, RectShape, int, Layer)
      */
     protected void drawRangeMarkers(Canvas canvas, RectShape dataArea, int index,
             Layer layer) {
@@ -4227,9 +4260,11 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      *            the stroke used to draw the crosshair line.
      * @param paintType
      *            the paint used to draw the crosshair line.
+     * @param effect
+     *            the effect used to draw the crosshair line.
      * 
-     * @see #drawRangeCrosshair(Graphics2D, RectShape, PlotOrientation,
-     *      double, ValueAxis, Stroke, Paint)
+     * @see #drawRangeCrosshair(Canvas, RectShape, PlotOrientation,
+     *      double, ValueAxis, float, PaintType, PathEffect)
      * 
      * @since JFreeChart 1.0.11
      */
@@ -4278,9 +4313,11 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      *            the stroke used to draw the crosshair line.
      * @param paintType
      *            the paint used to draw the crosshair line.
+     * @param effect
+     *            the effect used to draw the crosshair line.
      * 
-     * @see #drawDomainCrosshair(Graphics2D, RectShape, PlotOrientation, int,
-     *      Comparable, Comparable, Stroke, Paint)
+     * @see #drawDomainCrosshair(Canvas, RectShape, PlotOrientation, int,
+     *      Comparable, Comparable, float, PaintType, PathEffect)
      * 
      * @since JFreeChart 1.0.5
      */
@@ -4873,29 +4910,24 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
 
     }
 
-    @Override
     public void rendererChanged(RendererChangeEvent event) {
         // TODO Auto-generated method stub
 
     }
 
-    @Override
     public boolean isDomainMovable() {
         return false;
     }
 
-    @Override
     public boolean isRangeMovable() {
         return true;
     }
 
-    @Override
     public void moveDomainAxes(double movePercent, PlotRenderingInfo info,
             PointF source) {
         // do nothing    
     }
 
-    @Override
     public void moveRangeAxes(double movePercent, PlotRenderingInfo info,
             PointF source) {
         for (int i = 0; i < this.rangeAxes.size(); i++) {

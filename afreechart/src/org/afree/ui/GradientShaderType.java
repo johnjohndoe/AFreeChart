@@ -7,50 +7,58 @@
  * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
  * 
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  * 
  * -------------------------------
- * GradientPaintTransformType.java
+ * GradientShaderType.java
  * -------------------------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JCommon 1.0.16 to Android as "AFreeChart"
+ * 29-Nov-2010 : initialization value of the instance variable was changed.
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2003-2005, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
+ * Contributor(s):   -;
  *
  *
  * Changes:
  * --------
  * 21-Oct-2003 (DG);
  * 
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JCommon 1.0.16 to Android as "AFreeChart"
  */
 
 package org.afree.ui;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+
 
 /**
  * Represents a type of transform for a <code>GradientPaint</code>.
@@ -64,19 +72,19 @@ public final class GradientShaderType implements Serializable {
 
     /** Vertical. */
     public static final GradientShaderType VERTICAL = new GradientShaderType(
-            "GradientPaintTransformType.VERTICAL");
+            "GradientShaderType.VERTICAL");
 
     /** Horizontal. */
     public static final GradientShaderType HORIZONTAL = new GradientShaderType(
-            "GradientPaintTransformType.HORIZONTAL");
+            "GradientShaderType.HORIZONTAL");
 
     /** Center/vertical. */
     public static final GradientShaderType CENTER_VERTICAL = new GradientShaderType(
-            "GradientPaintTransformType.CENTER_VERTICAL");
+            "GradientShaderType.CENTER_VERTICAL");
 
     /** Center/horizontal. */
     public static final GradientShaderType CENTER_HORIZONTAL = new GradientShaderType(
-            "GradientPaintTransformType.CENTER_HORIZONTAL");
+            "GradientShaderType.CENTER_HORIZONTAL");
 
     /** The name. */
     private String name;

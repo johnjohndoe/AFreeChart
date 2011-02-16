@@ -7,31 +7,41 @@
  * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * -------------------
  * XYItemRenderer.java
  * -------------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2001-2008, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
@@ -39,8 +49,6 @@
  *                   Sylvain Vieujot;
  *                   Focus Computer Services Limited;
  *                   Richard Atkinson;
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -89,8 +97,6 @@
  *               negativeItemLabelPosition and createEntities override
  *               fields (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.renderer.xy;
@@ -115,7 +121,6 @@ import org.afree.graphics.geom.RectShape;
 import org.afree.graphics.geom.Shape;
 import org.afree.graphics.PaintType;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PathEffect;
 
 
@@ -372,7 +377,7 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param row  the row (or series) index (zero-based).
      * @param column  the column (or category) index (zero-based).
      *
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      */
     public PaintType getItemPaintType(int row, int column);
 
@@ -381,9 +386,9 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @param series  the series index (zero-based).
      *
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      *
-     * @see #setSeriesPaintType(int, Paint)
+     * @see #setSeriesPaintType(int, PaintType)
      */
     public PaintType getSeriesPaintType(int series);
 
@@ -405,7 +410,7 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @return The base paint (never <code>null</code>).
      *
-     * @see #setBasePaintType(Paint)
+     * @see #setBasePaintType(PaintType)
      */
     public PaintType getBasePaintType();
 
@@ -478,7 +483,7 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param row  the row (or series) index (zero-based).
      * @param column  the column (or category) index (zero-based).
      *
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      */
     public PaintType getItemOutlinePaintType(int row, int column);
 
@@ -487,9 +492,9 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @param series  the series (zero-based index).
      *
-     * @return The paint (possibly <code>null</code>).
+     * @return The paint type (possibly <code>null</code>).
      *
-     * @see #setSeriesOutlinePaintType(int, Paint)
+     * @see #setSeriesOutlinePaintType(int, PaintType)
      */
     public PaintType getSeriesOutlinePaintType(int series);
 
@@ -509,9 +514,9 @@ public interface XYItemRenderer extends LegendItemSource {
     /**
      * Returns the base outline paint.
      *
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      *
-     * @see #setBaseOutlinePaintType(Paint)
+     * @see #setBaseOutlinePaintType(PaintType)
      */
     public PaintType getBaseOutlinePaintType();
 
@@ -546,7 +551,7 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @return The stroke (possibly <code>null</code>).
      *
-     * @see #setSeriesStroke(int, Stroke)
+     * @see #setSeriesStroke(int, Float)
      */
     public Float getSeriesStroke(int series);
 
@@ -568,7 +573,7 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @return The base stroke (never <code>null</code>).
      *
-     * @see #setBaseStroke(Stroke)
+     * @see #setBaseStroke(Float stroke)
      */
     public Float getBaseStroke();
 
@@ -605,7 +610,7 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @return The stroke (possibly <code>null</code>).
      *
-     * @see #setSeriesOutlineStroke(int, Stroke)
+     * @see #setSeriesOutlineStroke(int, Float)
      */
     public Float getSeriesOutlineStroke(int series);
 
@@ -627,7 +632,7 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @return The stroke (never <code>null</code>).
      *
-     * @see #setBaseOutlineStroke(Stroke)
+     * @see #setBaseOutlineStroke(Float stroke)
      */
     public Float getBaseOutlineStroke();
 
@@ -953,7 +958,7 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param row  the row index (zero based).
      * @param column  the column index (zero based).
      *
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      */
     public PaintType getItemLabelPaintType(int row, int column);
 
@@ -962,9 +967,9 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @param series  the series index (zero based).
      *
-     * @return The paint (possibly <code>null<code>).
+     * @return The paint type (possibly <code>null<code>).
      *
-     * @see #setSeriesItemLabelPaintType(int, Paint)
+     * @see #setSeriesItemLabelPaintType(int, PaintType)
      */
     public PaintType getSeriesItemLabelPaintType(int series);
 
@@ -982,7 +987,7 @@ public interface XYItemRenderer extends LegendItemSource {
     /**
      * Returns the base item label paint.
      *
-     * @return The paint (never <code>null<code>).
+     * @return The paint type (never <code>null<code>).
      */
     public PaintType getBaseItemLabelPaintType();
 
@@ -1325,6 +1330,7 @@ public interface XYItemRenderer extends LegendItemSource {
      * @param value  the data value.
      * @param paint  the paint (<code>null</code> not permitted).
      * @param stroke  the stroke (<code>null</code> not permitted).
+     * @param pathEffect  the pathEffect (<code>null</code> not permitted).
      */
     public void drawRangeLine(Canvas canvas, XYPlot plot, ValueAxis axis,
             RectShape dataArea, double value, PaintType paint, Float stroke, PathEffect pathEffect);

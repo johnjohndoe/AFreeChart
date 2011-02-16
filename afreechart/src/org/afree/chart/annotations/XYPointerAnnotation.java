@@ -7,36 +7,45 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * ------------------------
  * XYPointerAnnotation.java
  * ------------------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2003-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
+ * Contributor(s):   -;
  *
  * Changes:
  * --------
@@ -54,8 +63,6 @@
  * 12-Feb-2009 : Added support for rotated label, plus background and
  *               outline (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.annotations;
@@ -107,19 +114,19 @@ public class XYPointerAnnotation extends XYTextAnnotation
     /** For serialization. */
     private static final long serialVersionUID = -4031161445009858551L;
 
-    /** The default tip radius (in Java2D units). */
+    /** The default tip radius (in Canvas units). */
     public static final double DEFAULT_TIP_RADIUS = 10.0;
 
-    /** The default base radius (in Java2D units). */
+    /** The default base radius (in Canvas units). */
     public static final double DEFAULT_BASE_RADIUS = 30.0;
 
-    /** The default label offset (in Java2D units). */
+    /** The default label offset (in Canvas units). */
     public static final double DEFAULT_LABEL_OFFSET = 3.0;
 
-    /** The default arrow length (in Java2D units). */
+    /** The default arrow length (in Canvas units). */
     public static final double DEFAULT_ARROW_LENGTH = 5.0;
 
-    /** The default arrow width (in Java2D units). */
+    /** The default arrow width (in Canvas units). */
     public static final double DEFAULT_ARROW_WIDTH = 3.0;
 
     /** The angle of the arrow's line (in radians). */
@@ -137,15 +144,16 @@ public class XYPointerAnnotation extends XYTextAnnotation
      */
     private double baseRadius;
 
-    /** The length of the arrow head (in Java2D units). */
+    /** The length of the arrow head (in Canvas units). */
     private double arrowLength;
 
-    /** The arrow width (in Java2D units, per side). */
+    /** The arrow width (in Canvas units, per side). */
     private double arrowWidth;
 
     /** The arrow stroke. */
     private transient float arrowStroke;
     
+    /** The arrow effect. */
     private transient PathEffect arrowEffect;
 
     /** The arrow paint. */
@@ -203,7 +211,7 @@ public class XYPointerAnnotation extends XYTextAnnotation
     /**
      * Returns the tip radius.
      *
-     * @return The tip radius (in Java2D units).
+     * @return The tip radius (in Canvas units).
      *
      * @see #setTipRadius(double)
      */
@@ -214,7 +222,7 @@ public class XYPointerAnnotation extends XYTextAnnotation
     /**
      * Sets the tip radius.
      *
-     * @param radius  the radius (in Java2D units).
+     * @param radius  the radius (in Canvas units).
      *
      * @see #getTipRadius()
      */
@@ -225,7 +233,7 @@ public class XYPointerAnnotation extends XYTextAnnotation
     /**
      * Returns the base radius.
      *
-     * @return The base radius (in Java2D units).
+     * @return The base radius (in Canvas units).
      *
      * @see #setBaseRadius(double)
      */
@@ -236,7 +244,7 @@ public class XYPointerAnnotation extends XYTextAnnotation
     /**
      * Sets the base radius.
      *
-     * @param radius  the radius (in Java2D units).
+     * @param radius  the radius (in Canvas units).
      *
      * @see #getBaseRadius()
      */
@@ -247,7 +255,7 @@ public class XYPointerAnnotation extends XYTextAnnotation
     /**
      * Returns the label offset.
      *
-     * @return The label offset (in Java2D units).
+     * @return The label offset (in Canvas units).
      *
      * @see #setLabelOffset(double)
      */
@@ -257,9 +265,9 @@ public class XYPointerAnnotation extends XYTextAnnotation
 
     /**
      * Sets the label offset (from the arrow base, continuing in a straight
-     * line, in Java2D units).
+     * line, in Canvas units).
      *
-     * @param offset  the offset (in Java2D units).
+     * @param offset  the offset (in Canvas units).
      *
      * @see #getLabelOffset()
      */
@@ -292,7 +300,7 @@ public class XYPointerAnnotation extends XYTextAnnotation
     /**
      * Returns the arrow width.
      *
-     * @return The arrow width (in Java2D units).
+     * @return The arrow width (in Canvas units).
      *
      * @see #setArrowWidth(double)
      */
@@ -303,7 +311,7 @@ public class XYPointerAnnotation extends XYTextAnnotation
     /**
      * Sets the arrow width.
      *
-     * @param width  the width (in Java2D units).
+     * @param width  the width (in Canvas units).
      *
      * @see #getArrowWidth()
      */
@@ -316,7 +324,7 @@ public class XYPointerAnnotation extends XYTextAnnotation
      *
      * @return The arrow stroke (never <code>null</code>).
      *
-     * @see #setArrowStroke(Stroke)
+     * @see #setArrowStroke(float stroke)
      */
     public float getArrowStroke() {
         return this.arrowStroke;
@@ -341,7 +349,7 @@ public class XYPointerAnnotation extends XYTextAnnotation
      *
      * @return The arrow paint (never <code>null</code>).
      *
-     * @see #setArrowPaintType(Paint)
+     * @see #setArrowPaintType(PaintType paintType)
      */
     public PaintType getArrowPaintType() {
         return this.arrowPaintType;
@@ -360,11 +368,25 @@ public class XYPointerAnnotation extends XYTextAnnotation
         }
         this.arrowPaintType = paintType;
     }
-    
+
+    /**
+     * Returns the effect used for the arrow.
+     *
+     * @return The arrow effect (never <code>null</code>).
+     *
+     * @see #setArrowPaintEffect(PathEffect pathEffect)
+     */
     public PathEffect getArrowPaintEffect() {
         return this.arrowEffect;
     }
 
+    /**
+     * Sets the effect used for the arrow.
+     *
+     * @param pathEffect  the arrow effect (<code>null</code> not permitted).
+     *
+     * @see #getArrowPaintEffect()
+     */
     public void setArrowPaintEffect(PathEffect pathEffect) {
         if (pathEffect == null) {
             throw new IllegalArgumentException("Null 'paint' argument.");
@@ -427,7 +449,6 @@ public class XYPointerAnnotation extends XYTextAnnotation
 
 //        canvas.setStroke(this.arrowStroke);
 //        canvas.setPaint(this.arrowPaint);
-        PaintType paintType = this.arrowPaintType;
         
         Paint paint = PaintUtility.createPaint(
                 Paint.ANTI_ALIAS_FLAG,

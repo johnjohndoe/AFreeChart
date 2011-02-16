@@ -1,9 +1,14 @@
-AFreeChart : version 0.0.1
+AFreeChart : version 0.0.2
 
 (C) Copyright 2010, by Icom Systech Co., Ltd.
 
 The latest version of AFreeChart can be obtained from:
     http://code.google.com/p/afreechart/downloads/list
+
+If you want contact us, please send E-mail or submit comment.
+E-mail and comment welcome in Japanese.
+  E-mail : icomsystech.oss@gmail.com
+  comment page : http://code.google.com/p/afreechart/wiki/CommentPage
 
 ===============================================================
 1. INTRODUCTION
@@ -20,7 +25,7 @@ The latest version of AFreeChart can be obtained from:
 - Using AFreeChart, you can make graph/chart application very easily.
   There are many Screenshots of DEMO APPLICATION in
 
-  http://code.google.com/p/afreechart/wiki/Screenshots
+  http://afreechart.googlecode.com/svn/doc/screenshot/index.html
 
   And you can get DEMO APPLICATION from download page.
 
@@ -52,12 +57,12 @@ AFreeChart has the following dependencies:
 
 (a) Android 2.1-update 1 (API Level7) or higher.
 
-(b) ChartGraphics 0.0.1 or later. - To render all shapes, 
-    AFreeChart uses functions of ChartGraphics.
+(b) AFreeGraphics 0.0.2 or later. - To render all shapes, 
+    AFreeChart uses functions of AFreeGraphics.
     The runtime jar file is distributed with AFreeChart.
 
     You can use this library free of charge.
-    Copyright owner of ChartGraphics library is Icomsystech Co.,Ltd.
+    Copyright owner of AFreeGraphics library is Icomsystech Co.,Ltd.
 
 
 ===============================================================
@@ -94,6 +99,12 @@ Support questions can be posted in the Issues at
   Version 0.0.1 release.
   porting JFreeChart 1.0.13 to Android platform. 
 
+15 Feb. 2011
+  Version 0.0.2 release.
+  Performance tuning for some functions.
+  Fixed bugs and updated documentation.
+  Added new JDBC Chart, source location is the following.
+    org.afree.chart.demo.activity
 
 ===============================================================
 9. Trademarks
@@ -112,4 +123,14 @@ Support questions can be posted in the Issues at
 - port more functions from JFreeChart.
 
 
+===============================================================
+11. CONTRIBUTORS
+---------------------------------------------------------------
+AFreeChart consists by the developer's contribution described 
+in the list below:
 
+    - Shiraki Seiyu  (for Icom Systech Co., Ltd)
+    - Ikeda Koichiro
+    - Sato Yoshiaki
+    - Niwano Masayoshi
+    - Nada Wataru  (for Tokyo University of information Sciences)

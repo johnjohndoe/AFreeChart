@@ -7,33 +7,45 @@
  * (C) Copyright 2000-2004, by Object Refinery Limited and Contributors.
  * 
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it under the terms
- * of the GNU Lesser General Public License as published by the Free Software Foundation;
- * either version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License along with this
- * library; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307, USA.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  * 
  * ------------------
  * TextUtilities.java
  * ------------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JCommon 1.0.16 to Android as "AFreeChart"
+ * 15-Dec-2010 : performance tuning
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2004, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
+ * Contributor(s):   -;
  *
  *
  * Changes
@@ -44,8 +56,6 @@
  * 08-Apr-2004 : Changed word break iterator to line break iterator in the createTextBlock()
  *               method - see bug report 926074 (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JCommon 1.0.16 to Android as "AFreeChart"
  */
 
 package org.afree.chart.text;
@@ -53,13 +63,11 @@ package org.afree.chart.text;
 
 import java.text.BreakIterator;
 
-import org.afree.util.PaintTypeUtilities;
 import org.afree.ui.TextAnchor;
 import org.afree.graphics.geom.Font;
 import org.afree.graphics.geom.PathShape;
 import org.afree.graphics.geom.RectShape;
 import org.afree.graphics.PaintType;
-import org.afree.graphics.PaintUtility;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -234,8 +242,6 @@ public abstract class TextUtilities {
      * 
      * @param text
      *            the text (<code>null</code> permitted).
-     * @param canvas
-     *            the graphics context (not <code>null</code>).
      * @param paint
      *            the font metrics (not <code>null</code>).
      * 
@@ -256,6 +262,45 @@ public abstract class TextUtilities {
         return new RectShape(bounds);
     }
 
+    //performance tuning
+    /**
+     * Returns the width for the specified text.
+     * 
+     * @param text
+     *            the text (<code>null</code> permitted).
+     * @param paint
+     *            the font metrics (not <code>null</code>).
+     * 
+     * @return The text width
+     */
+    public static float getTextWidth(final String text, final Paint paint) {
+//        Rect bounds = new Rect();
+//        
+//        if (!text.equals("")) {
+//            paint.getTextBounds(text, 0, text.length(), bounds);
+//        }
+//        
+//        return bounds.right - bounds.left;
+        return paint.measureText(text);
+    }
+    
+    /**
+     * Returns the height for the specified text.
+     * 
+     * @param paint
+     *            the font metrics (not <code>null</code>).
+     * 
+     * @return The text height
+     */
+    public static float getTextHeight(final Paint paint) {
+        FontMetrics fontMetrix = paint.getFontMetrics();
+        
+        int bottom = (int)fontMetrix.bottom;
+        int top = (int)fontMetrix.top;
+        
+        return bottom - top;
+    }
+    
     /**
      * A flag that controls whether the FontMetrics.getStringBounds() method is
      * used or a workaround is applied.
@@ -307,16 +352,21 @@ public abstract class TextUtilities {
     public static void drawRotatedString(final String text, final Canvas canvas,
             final float x, final float y, final TextAnchor textAnchor,
             final double angle, final TextAnchor rotationAnchor, Paint paint) {
-
+        
         if (text == null || text.equals("")) {
             return;
         }
 
-        final RectShape textBounds = new RectShape();
+        //performance tuning
+//        final RectShape textBounds = new RectShape();
+//        final float[] textAdjust = deriveTextBoundsAnchorOffsets(canvas, text, textAnchor,
+//                textBounds, paint);
+//        final float[] rotateAdjust = deriveTextBoundsAnchorOffsets(canvas, text, rotationAnchor,
+//                        textBounds, paint);
         final float[] textAdjust = deriveTextBoundsAnchorOffsets(canvas, text, textAnchor,
-                textBounds, paint);
+                paint);
         final float[] rotateAdjust = deriveTextBoundsAnchorOffsets(canvas, text, rotationAnchor,
-                        textBounds, paint);
+                paint);
         
         //canvas.drawCircle(x, y, 2, paint);
         canvas.save();
@@ -351,8 +401,11 @@ public abstract class TextUtilities {
             final TextAnchor anchor, Paint paint) {
 
         final RectShape textBounds = new RectShape();
+        //performance tuning
+//        final float[] adjust = deriveTextBoundsAnchorOffsets(canvas, text, anchor,
+//                textBounds, paint);
         final float[] adjust = deriveTextBoundsAnchorOffsets(canvas, text, anchor,
-                textBounds, paint);
+                paint);
         paint.setTextAlign(Align.LEFT);
         // adjust text bounds to match string position
         /*
@@ -368,15 +421,17 @@ public abstract class TextUtilities {
     }
 
     private static float[] deriveTextBoundsAnchorOffsets(final Canvas canvas,
-            final String text, final TextAnchor anchor,
-            final RectShape textBounds, Paint paint) {
+            final String text, final TextAnchor anchor,Paint paint) {
 
         final float[] result = new float[3];
 
         final FontMetrics fm = paint.getFontMetrics();
         
-        final RectShape bounds = TextUtilities.getTextBounds(text, paint);
-
+        //performance tuning
+        //final RectShape bounds = TextUtilities.getTextBounds(text, paint);
+        float width = TextUtilities.getTextWidth(text, paint);
+        float height = TextUtilities.getTextHeight(paint);
+        
         final float ascent = fm.ascent;
         result[2] = -ascent;
         final float halfAscent = ascent / 2.0f;
@@ -391,7 +446,8 @@ public abstract class TextUtilities {
                 || anchor == TextAnchor.BASELINE_CENTER
                 || anchor == TextAnchor.HALF_ASCENT_CENTER) {
 
-            xAdj = (float) -bounds.getWidth() / 2.0f;
+            //xAdj = (float) -bounds.getWidth() / 2.0f;
+            xAdj = -width * 0.5f;
 
         }
         else if (anchor == TextAnchor.TOP_RIGHT
@@ -400,7 +456,8 @@ public abstract class TextUtilities {
                 || anchor == TextAnchor.BASELINE_RIGHT
                 || anchor == TextAnchor.HALF_ASCENT_RIGHT) {
 
-            xAdj = (float) -bounds.getWidth();
+            //xAdj = (float) -bounds.getWidth();
+            xAdj = -width;
 
         }
 
@@ -408,8 +465,9 @@ public abstract class TextUtilities {
                 || anchor == TextAnchor.TOP_CENTER
                 || anchor == TextAnchor.TOP_RIGHT) {
 
-            yAdj = -descent - leading + (float) bounds.getHeight();
-
+            //yAdj = -descent - leading + (float) bounds.getHeight();
+            yAdj = -descent - leading + height;
+            
         }
         else if (anchor == TextAnchor.HALF_ASCENT_LEFT
                 || anchor == TextAnchor.HALF_ASCENT_CENTER
@@ -422,7 +480,8 @@ public abstract class TextUtilities {
                 || anchor == TextAnchor.CENTER
                 || anchor == TextAnchor.CENTER_RIGHT) {
 
-            yAdj = -descent - leading + (float) (bounds.getHeight() / 2.0);
+            //yAdj = -descent - leading + (float) (bounds.getHeight() / 2.0);
+            yAdj = -descent - leading + height * 0.5f;
 
         }
         else if (anchor == TextAnchor.BASELINE_LEFT
@@ -439,9 +498,9 @@ public abstract class TextUtilities {
             yAdj = -fm.descent - fm.leading;
 
         }
-        if (textBounds != null) {
-            textBounds.setRect(bounds);
-        }
+//        if (textBounds != null) {
+//            textBounds.setRect(bounds);
+//        }
         result[0] = xAdj;
         result[1] = yAdj;
         return result;
@@ -455,16 +514,14 @@ public abstract class TextUtilities {
      * 
      * @param text
      *            the text (<code>null</code> permitted).
-     * @param canvas
-     *            the graphics device.
-     * @param x
-     *            the x coordinate for the anchor point.
-     * @param y
-     *            the y coordinate for the anchor point.
+     * @param anchorX
+     *            the anchorX coordinate for the anchor point.
+     * @param anchorY
+     *            the anchorY coordinate for the anchor point.
      * @param textAnchor
      *            the text anchor.
-     * @param angle
-     *            the angle.
+     * @param rotationAngle
+     *            the rotationAngle.
      * @param rotationAnchor
      *            the rotation anchor.
      * 
@@ -690,7 +747,6 @@ public abstract class TextUtilities {
      * specified rotation has been applied.
      *
      * @param text  the text (<code>null</code> permitted).
-     * @param canvas  the graphics device.
      * @param textX  the x coordinate for the text.
      * @param textY  the y coordinate for the text.
      * @param angle  the angle.
@@ -720,8 +776,10 @@ public abstract class TextUtilities {
         RectF rect = new RectF();
         path.computeBounds(rect, false);
         
-        PathShape pathShape = new PathShape(rect.left, rect.top, path, rect.width(), rect.height());
+        PathShape pathShape = new PathShape(path);
         
-        return pathShape.getBounds();
+        RectShape rectShape = new RectShape();
+        pathShape.getBounds(rectShape);
+        return rectShape;
     }
 }

@@ -7,37 +7,45 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * ---------------
  * LabelBlock.java
  * ---------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2004-2009, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Pierre-Marie Le Biot;
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes:
  * --------
@@ -53,8 +61,6 @@
  * 16-Mar-2007 : Fixed serialization when using GradientPaint (DG);
  * 10-Feb-2009 : Added alignment fields (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.block;
@@ -70,11 +76,9 @@ import org.afree.graphics.geom.Font;
 import org.afree.graphics.geom.RectShape;
 import org.afree.graphics.geom.Shape;
 import org.afree.graphics.PaintType;
-import org.afree.graphics.PaintUtility;
 import org.afree.graphics.SolidColor;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Typeface;
 
@@ -197,9 +201,9 @@ public class LabelBlock extends AbstractBlock implements Block {
     /**
      * Returns the paint.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setPaintType(Paint)
+     * @see #setPaintType(PaintType paintType)
      */
     public PaintType getPaintType() {
         return this.paintType;
@@ -327,7 +331,7 @@ public class LabelBlock extends AbstractBlock implements Block {
      * @param constraint
      *            the constraint (<code>null</code> not permitted).
      * 
-     * @return The block size (in Java2D units, never <code>null</code>).
+     * @return The block size (in Canvas units, never <code>null</code>).
      */
     public Size2D arrange(Canvas canvas, RectangleConstraint constraint) {
         // canvas.setFont(this.font);
@@ -377,8 +381,7 @@ public class LabelBlock extends AbstractBlock implements Block {
                 entityArea = (Shape) area.clone();
             }
         }
-        
-        Paint paint = PaintUtility.createPaint(Paint.ANTI_ALIAS_FLAG, paintType, font);
+
         PointF pt = RectangleAnchor.coordinates(area, this.textAnchor);
         this.label.draw(canvas, (float) pt.x, (float) pt.y,
                 this.contentAlignmentPoint);

@@ -7,31 +7,40 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * ------------------
  * BarRenderer3D.java
  * ------------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2001-2009, by Serge V. Grachov and Contributors.
  *
  * Original Author:  Serge V. Grachov;
@@ -41,8 +50,6 @@
  *                   Richard Atkinson;
  *                   Rich Unger;
  *                   Christian W. Zuckschwerdt;
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -100,8 +107,6 @@
  * 16-Oct-2007 : Fixed bug in range marker drawing (DG);
  * 19-Mar-2009 : Override for drawRangeLine() method (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.renderer.category;
@@ -109,7 +114,6 @@ package org.afree.chart.renderer.category;
 import java.io.Serializable;
 
 import org.afree.ui.LengthAdjustmentType;
-import org.afree.util.PaintTypeUtilities;
 import org.afree.ui.RectangleAnchor;
 import org.afree.ui.RectangleEdge;
 import org.afree.ui.TextAnchor;
@@ -130,7 +134,6 @@ import org.afree.chart.plot.PlotOrientation;
 import org.afree.chart.plot.PlotRenderingInfo;
 import org.afree.chart.plot.ValueMarker;
 import org.afree.chart.text.TextUtilities;
-import org.afree.graphics.geom.Font;
 import org.afree.graphics.geom.LineShape;
 import org.afree.graphics.geom.PathShape;
 import org.afree.graphics.geom.RectShape;
@@ -229,9 +232,9 @@ public class BarRenderer3D extends BarRenderer
      * Returns the paint used to highlight the left and bottom wall in the plot
      * background.
      *
-     * @return The paint.
+     * @return The paint type.
      *
-     * @see #setWallPaintType(Paint)
+     * @see #setWallPaintType(PaintType)
      */
     public PaintType getWallPaintType() {
         return this.wallPaintType;
@@ -653,15 +656,17 @@ public class BarRenderer3D extends BarRenderer
             String label = marker.getLabel();
             RectangleAnchor anchor = marker.getLabelAnchor();
             if (label != null) {
-                Font labelFont = marker.getLabelFont();
 
                 paint = PaintUtility.createPaint(
                         Paint.ANTI_ALIAS_FLAG, 
                         marker.getLabelPaintType(), 
                         marker.getLabelFont());
+
+                RectShape rectShape = new RectShape();
+                path.getBounds(rectShape);
                 
                 PointF coordinates = calculateRangeMarkerTextAnchorPoint(
-                        canvas, orientation, dataArea, path.getBounds(),
+                        canvas, orientation, dataArea, rectShape,
                         marker.getLabelOffset(), LengthAdjustmentType.EXPAND,
                         anchor);
                 TextUtilities.drawAlignedString(label, canvas,

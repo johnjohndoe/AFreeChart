@@ -7,31 +7,42 @@
  * (C) Copyright 2000-2009, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * ---------------------------
  * AbstractXYItemRenderer.java
  * ---------------------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 17-Dec-2010 : performance tuning
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2002-2009, by Object Refinery Limited and Contributors.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
@@ -39,8 +50,6 @@
  *                   Focus Computer Services Limited;
  *                   Tim Bardzil;
  *                   Sergei Ivanov;
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes:
  * --------
@@ -117,8 +126,6 @@
  *               take account of hidden series (DG);
  * 01-Apr-2009 : Moved defaultEntityRadius up to superclass (DG);
  * 
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.renderer.xy;
@@ -218,6 +225,9 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
     /** The legend item URL generator. */
     private XYSeriesLabelGenerator legendItemURLGenerator;
 
+    /** work LineShape object */
+    private LineShape mWorkLineShape = new LineShape();
+    
     /**
      * Creates a renderer where the tooltip generator and the URL generator are
      * both <code>null</code>.
@@ -364,6 +374,16 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
         // fireChangeEvent();
     }
 
+    /**
+     * Returns the tool tip generator for a data item.  If, for some reason,
+     * you want a different generator for individual items, you can override
+     * this method.
+     *
+     * @param series  the series index (zero based).
+     * @param item  the item index (zero based).
+     *
+     * @return The generator (possibly <code>null</code>).
+     */
     public XYToolTipGenerator getToolTipGenerator(int series, int item) {
 
         // otherwise look up the generator table
@@ -743,7 +763,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
                     .getHeight());
         }
 
-        Paint paint = PaintUtility.createPaint(plot.getRangeTickBandPaint());
+        Paint paint = PaintUtility.createPaint(plot.getRangeTickBandPaintType());
 
         if (paint != null) {
             band.fill(canvas, paint);
@@ -783,7 +803,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
             line = new LineShape(v, dataArea.getMinY(), v, dataArea.getMaxY());
         }
 
-        PaintType paintType = plot.getDomainGridlinePaint();
+        PaintType paintType = plot.getDomainGridlinePaintType();
         Float stroke = plot.getDomainGridlineStroke();
         PaintType p = paintType != null ? paintType : Plot.DEFAULT_OUTLINE_PAINT_TYPE;
         Float s = stroke != null ? stroke : Plot.DEFAULT_OUTLINE_STROKE;
@@ -815,6 +835,8 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
      *            the paint (<code>null</code> not permitted).
      * @param stroke
      *            the stroke (<code>null</code> not permitted).
+     * @param effect
+     *            the effect (<code>null</code> not permitted).
      * 
      * @since JFreeChart 1.0.5
      */
@@ -827,12 +849,16 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
         }
 
         PlotOrientation orientation = plot.getOrientation();
-        LineShape line = null;
+        //performance tuning
+//        LineShape line = null;
+        LineShape line = this.mWorkLineShape;
         double v = axis.valueToJava2D(value, dataArea, plot.getDomainAxisEdge());
         if (orientation == PlotOrientation.HORIZONTAL) {
-            line = new LineShape(dataArea.getMinX(), v, dataArea.getMaxX(), v);
+            //line = new LineShape(dataArea.getMinX(), v, dataArea.getMaxX(), v);
+            line.setLine(dataArea.getMinX(), v, dataArea.getMaxX(), v);
         } else if (orientation == PlotOrientation.VERTICAL) {
-            line = new LineShape(v, dataArea.getMinY(), v, dataArea.getMaxY());
+            //line = new LineShape(v, dataArea.getMinY(), v, dataArea.getMaxY());
+            line.setLine(v, dataArea.getMinY(), v, dataArea.getMaxY());
         }
 
         Paint paint = PaintUtility
@@ -856,10 +882,12 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
      *            effect).
      * @param value
      *            the value at which the grid line should be drawn.
-     * @param paint
-     *            the paint.
+     * @param paintType
+     *            the paintType.
      * @param stroke
      *            the stroke.
+     * @param pathEffect
+     *            the pathEffect.
      */
     public void drawRangeLine(Canvas canvas, XYPlot plot, ValueAxis axis, RectShape dataArea,
             double value, PaintType paintType, Float stroke, PathEffect pathEffect) {
@@ -870,12 +898,16 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
         }
 
         PlotOrientation orientation = plot.getOrientation();
-        LineShape line = null;
+        //performance tuning
+        //LineShape line = null;
+        LineShape line = this.mWorkLineShape;
         double v = axis.valueToJava2D(value, dataArea, plot.getRangeAxisEdge());
         if (orientation == PlotOrientation.HORIZONTAL) {
-            line = new LineShape(v, dataArea.getMinY(), v, dataArea.getMaxY());
+            //line = new LineShape(v, dataArea.getMinY(), v, dataArea.getMaxY());
+            line.setLine(v, dataArea.getMinY(), v, dataArea.getMaxY());
         } else if (orientation == PlotOrientation.VERTICAL) {
-            line = new LineShape(dataArea.getMinX(), v, dataArea.getMaxX(), v);
+            //line = new LineShape(dataArea.getMinX(), v, dataArea.getMaxX(), v);
+            line.setLine(dataArea.getMinX(), v, dataArea.getMaxX(), v);
         }
 
         Paint paint = PaintUtility.createPaint(paintType, stroke, pathEffect);
@@ -937,8 +969,10 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
                 Paint labelPaint = PaintUtility.createPaint(Paint.ANTI_ALIAS_FLAG,
                         labelPaintType, labelFont);
                 labelPaint.setAlpha(marker.getAlpha());
+                RectShape rectShape = new RectShape();
+                line.getBounds(rectShape);
                 PointF coordinates = calculateDomainMarkerTextAnchorPoint(canvas, orientation,
-                        dataArea, line.getBounds(), marker.getLabelOffset(),
+                        dataArea, rectShape, marker.getLabelOffset(),
                         LengthAdjustmentType.EXPAND, anchor);
                 TextUtilities.drawAlignedString(label, canvas, (float) coordinates.x,
                         (float) coordinates.y, marker.getLabelTextAnchor(), labelPaint);
@@ -971,7 +1005,6 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
                 rect = new RectShape(low, dataArea.getMinY(), high - low, dataArea.getHeight());
             }
 
-            PaintType paintType = marker.getPaintType();
             Paint paint = PaintUtility
                     .createPaint(Paint.ANTI_ALIAS_FLAG, marker.getPaintType());
             paint.setAlpha(marker.getAlpha());
@@ -1112,8 +1145,10 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
                         Paint.ANTI_ALIAS_FLAG,
                         marker.getLabelPaintType(),
                         marker.getLabelFont());
+                RectShape rectShape = new RectShape();
+                line.getBounds(rectShape);
                 PointF coordinates = calculateRangeMarkerTextAnchorPoint(canvas, orientation, dataArea,
-                        line.getBounds(), marker.getLabelOffset(), LengthAdjustmentType.EXPAND,
+                        rectShape, marker.getLabelOffset(), LengthAdjustmentType.EXPAND,
                         anchor);
                 TextUtilities.drawAlignedString(label, canvas, (float) coordinates.x,
                         (float) coordinates.y, marker.getLabelTextAnchor(), markerLabelPaint);

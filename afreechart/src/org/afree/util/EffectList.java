@@ -7,44 +7,51 @@
  * (C) Copyright 2000-2005, by Object Refinery Limited and Contributors.
  * 
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as published by 
- * the Free Software Foundation; either version 2.1 of the License, or 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public 
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, 
- * USA.  
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  * 
  * ---------------
- * StrokeList.java
+ * EffectList.java
  * ---------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JCommon 1.0.16 to Android as "AFreeChart"
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2003, 2004, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
+ * Contributor(s):   -;
  *
  *
  * Changes
  * -------
  * 19-Aug-2003 : Version 1 (DG);
  * 
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JCommon 1.0.16 to Android as "AFreeChart"
  */
 
 package org.afree.util;
@@ -59,6 +66,11 @@ import android.graphics.PathEffect;
 public class EffectList extends AbstractObjectList {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -5216122258429168187L;
+
+    /**
      * Creates a new list.
      */
     public EffectList() {
@@ -66,7 +78,7 @@ public class EffectList extends AbstractObjectList {
     }
 
     /**
-     * Returns a {@link Stroke} object from the list.
+     * Returns a {@link PathEffect} object from the list.
      * 
      * @param index
      *            the index (zero-based).
@@ -78,13 +90,13 @@ public class EffectList extends AbstractObjectList {
     }
 
     /**
-     * Sets the {@link Stroke} for an item in the list. The list is expanded if
+     * Sets the {@link PathEffect} for an item in the list. The list is expanded if
      * necessary.
      * 
      * @param index
      *            the index (zero-based).
      * @param effect
-     *            the {@link Stroke}.
+     *            the {@link PathEffect}.
      */
     public void setEffect(final int index, final PathEffect effect) {
         set(index, effect);
@@ -134,7 +146,7 @@ public class EffectList extends AbstractObjectList {
      * @return the hashcode
      */
     public int hashCode() {
-        return super.hashCode();
+        return super.size();
     }
 
 }

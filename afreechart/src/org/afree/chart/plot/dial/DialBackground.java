@@ -7,44 +7,50 @@
  * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * -------------------
  * DialBackground.java
  * -------------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2006-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
- * Contributor(s):   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
+ * Contributor(s):   -;
  *
  * Changes
  * -------
  * 03-Nov-2006 : Version 1 (DG);
  * 16-Oct-2007 : The equals() method needs to call super.equals() (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.plot.dial;
@@ -139,7 +145,7 @@ public class DialBackground extends AbstractDialLayer implements DialLayer,
      *
      * @return The transformer (never <code>null</code>).
      *
-     * @see #setGradientPaintTransformer(GradientPaintTransformer)
+     * @see #setGradientShaderFactory(GradientShaderFactory)
      */
     public GradientShaderFactory getGradientShaderFactory() {
         return this.gradientShaderFactory;
@@ -152,7 +158,7 @@ public class DialBackground extends AbstractDialLayer implements DialLayer,
      *
      * @param factory  the transformer (<code>null</code> not permitted).
      *
-     * @see #getGradientPaintTransformer()
+     * @see #getGradientShaderFactory()
      */
     public void setGradientShaderFactory(GradientShaderFactory factory) {
         if (factory == null) {
@@ -181,7 +187,7 @@ public class DialBackground extends AbstractDialLayer implements DialLayer,
      * @param plot  the plot (ignored here).
      * @param frame  the dial frame (ignored here).
      * @param view  the view RectShape (<code>null</code> not permitted).
-     */public void addChangeListener(DialLayerChangeListener listener) {};
+     */
     public void draw(Canvas canvas, DialPlot plot, RectShape frame,
             Shape view) {
         canvas.save();
@@ -196,6 +202,8 @@ public class DialBackground extends AbstractDialLayer implements DialLayer,
         canvas.restore();
     }
 
+    public void addChangeListener(DialLayerChangeListener listener) {};
+    
     /**
      * Tests this instance for equality with an arbitrary object.
      *

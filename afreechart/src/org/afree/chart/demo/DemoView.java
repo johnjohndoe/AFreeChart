@@ -7,24 +7,22 @@
  * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
@@ -39,19 +37,16 @@
  * Changes
  * -------
  * 19-Nov-2010 : Version 0.0.1 (NM);
+ * 14-Jan-2011 : renamed method name
+ * 14-Jan-2011 : Updated API docs
  */ 
 
 package org.afree.chart.demo;
 
-import java.io.File;
-import java.util.List;
-
 import org.afree.ui.RectangleInsets;
-import org.afree.chart.ChartMouseEvent;
-import org.afree.chart.ChartMouseListener;
+import org.afree.chart.ChartTouchListener;
 import org.afree.chart.ChartRenderingInfo;
 import org.afree.chart.AFreeChart;
-import org.afree.chart.entity.ChartEntity;
 import org.afree.chart.entity.EntityCollection;
 //import org.afree.chart.event.EventListenerList;
 import org.afree.chart.plot.Movable;
@@ -61,13 +56,10 @@ import org.afree.chart.plot.PlotRenderingInfo;
 import org.afree.chart.plot.Zoomable;
 import org.afree.graphics.geom.Dimension;
 import org.afree.graphics.geom.RectShape;
-import org.afree.graphics.PaintType;
 import org.afree.graphics.SolidColor;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -98,20 +90,14 @@ public class DemoView extends View {
      */
     private void initialize() {
         this.info = new ChartRenderingInfo();
-        this.useBuffer = DEFAULT_BUFFER_USED;
-        this.refreshBuffer = false;
         this.minimumDrawWidth = DEFAULT_MINIMUM_DRAW_WIDTH;
         this.minimumDrawHeight = DEFAULT_MINIMUM_DRAW_HEIGHT;
         this.maximumDrawWidth = DEFAULT_MAXIMUM_DRAW_WIDTH;
         this.maximumDrawHeight = DEFAULT_MAXIMUM_DRAW_HEIGHT;
-        this.zoomTriggerDistance = DEFAULT_ZOOM_TRIGGER_DISTANCE;
         this.moveTriggerDistance = DEFAULT_MOVE_TRIGGER_DISTANCE;
-        this.defaultDirectoryForSaveAs = null;
-        this.enforceFileExtensions = true;
-        this.zoomAroundAnchor = false;
-        this.zoomOutlinePaintType = new SolidColor(Color.BLUE);
-        this.zoomFillPaintType = new SolidColor(Color.argb(0, 0, 255, 63));
-        this.overlays = new java.util.ArrayList();
+        new SolidColor(Color.BLUE);
+        new SolidColor(Color.argb(0, 0, 255, 63));
+        new java.util.ArrayList();
     }
     
     /**
@@ -149,7 +135,7 @@ public class DemoView extends View {
     /** The chart that is displayed in the panel. */
     private AFreeChart chart;
     
-    /** Storage for registered (chart) mouse listeners. */
+    /** Storage for registered (chart) touch listeners. */
 //    private transient EventListenerList chartMotionListeners = new EventListenerList();
 //    private transient EventListenerList chartMotionListeners = null;
 
@@ -165,43 +151,20 @@ public class DemoView extends View {
     /** The plot orientation. */
     private PlotOrientation orientation = PlotOrientation.VERTICAL;
 
-    /** A flag that controls whether or not domain zooming is enabled. */
-    private boolean domainZoomable = false;
-
-    /** A flag that controls whether or not range zooming is enabled. */
-    private boolean rangeZoomable = false;
-
     /**
-     * The zoom RectShape starting point (selected by the user with a mouse
-     * click).  This is a point on the screen, not the chart (which may have
+     * The zoom RectShape starting point (selected by the user with touch).
+     * This is a point on the screen, not the chart (which may have
      * been scaled up or down to fit the panel).
      */
     private PointF zoomPoint = null;
     
     /** Controls if the zoom RectShape is drawn as an outline or filled. */
-    private boolean fillZoomRectShape = true;
+//    private boolean fillZoomRectShape = true;
 
-    /** The minimum distance required to drag the mouse to trigger a zoom. */
-    private int zoomTriggerDistance;
-    
     private int moveTriggerDistance;
 
-    /**
-     * The paint used to draw the zoom RectShape outline.
-     *
-     * @since JFreeChart 1.0.13
-     */
-    private transient PaintType zoomOutlinePaintType;
-
-    /**
-     * The zoom fill paint (should use transparency).
-     *
-     * @since JFreeChart 1.0.13
-     */
-    private transient PaintType zoomFillPaintType;
-
-    /** The last mouse position during panning. */
-    private Point panLast;
+    /** The last touch position during panning. */
+//    private Point panLast;
     
     private RectangleInsets insets = null;
     
@@ -231,40 +194,6 @@ public class DemoView extends View {
 
     private Dimension size = null;
 
-    /** A flag that controls whether or not the off-screen buffer is used. */
-    private boolean useBuffer;
-
-    /** A flag that indicates that the buffer should be refreshed. */
-    private boolean refreshBuffer;
-    
-    /**
-     * The default directory for saving charts to file.
-     *
-     * @since JFreeChart 1.0.7
-     */
-    private File defaultDirectoryForSaveAs;
-    
-    /** A flag that controls whether or not file extensions are enforced. */
-    private boolean enforceFileExtensions;
-    
-    /**
-     * A flag that controls whether zoom operations are centred on the
-     * current anchor point, or the centre point of the relevant axis.
-     *
-     * @since JFreeChart 1.0.7
-     */
-    private boolean zoomAroundAnchor;
-    
-    /**
-     * A list of overlays for the panel.
-     *
-     * @since JFreeChart 1.0.13
-     */
-    private List overlays;
-    
-    /** A buffer for the rendered chart. */
-    //private transient Image chartBuffer;
-    
     /** The chart anchor point. */
     private PointF anchor;
     
@@ -281,6 +210,9 @@ public class DemoView extends View {
     
     private float mScale = 1.0f;
     
+    private long mPrevTimeMillis = 0;
+    private long mNowTimeMillis = System.currentTimeMillis();
+    
     /**
      * touch event
      */
@@ -292,18 +224,11 @@ public class DemoView extends View {
         
         this.anchor = new PointF(ev.getX(), ev.getY());
         
-        ChartEntity entity = null;
         if (this.info != null) {
             EntityCollection entities = this.info.getEntityCollection();
             if (entities != null) {
-                entity = entities.getEntity(anchor.x, anchor.y);
             }
         }
-        
-//        Object[] listeners = this.chartMotionListeners.getListeners(
-//                ChartMouseListener.class);
-        ChartMouseEvent chartEvent = new ChartMouseEvent(getChart(), ev,
-                entity);
         
         switch (action & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
@@ -316,7 +241,7 @@ public class DemoView extends View {
                 }
 
 //                for (int i = listeners.length - 1; i >= 0; i -= 1) {
-//                    ((ChartMouseListener) listeners[i]).chartMouseClicked(chartEvent);
+//                    ((ChartTouchListener) listeners[i]).chartTouchClicked(chartEvent);
 //                }
                 
                 chart.handleClick((int)ev.getX(), (int)ev.getY(), info);
@@ -331,9 +256,6 @@ public class DemoView extends View {
                     //scaleAdjustment(ev);    
                     zoomAdjustment(ev);
                 }
-//                for (int i = listeners.length - 1; i >= 0; i -= 1) {
-//                    ((ChartMouseListener) listeners[i]).chartMouseMoved(chartEvent);
-//                }
                 
                 inertialMovedFlag = false;
                 
@@ -348,7 +270,18 @@ public class DemoView extends View {
                 if (count <= 1) {
                     this.singleTouchStartInfo = null;
                 }
-                inertialMovedFlag = true;
+
+                // double click check
+                mNowTimeMillis = System.currentTimeMillis();
+                if(mNowTimeMillis - mPrevTimeMillis < 400) {
+                    if(chart.getPlot() instanceof Movable) {
+                        restoreAutoBounds();
+                        inertialMovedFlag = false;
+                    }
+                } else {
+                    inertialMovedFlag = true;
+                }
+                mPrevTimeMillis = mNowTimeMillis;
                 break;
             default:
                 break;
@@ -390,7 +323,7 @@ public class DemoView extends View {
 
     
     /**
-     * Translate MotionEvent as MouseEvent
+     * Translate MotionEvent as TouchEvent
      * @param ev
      */
     private void moveAdjustment(MotionEvent ev) {
@@ -417,7 +350,7 @@ public class DemoView extends View {
             double dataAreaWidth = dataArea.getWidth();
             double dataAreaHeight = dataArea.getHeight();
             
-            // for mouseReleased event, (horizontalZoom || verticalZoom)
+            // for touchReleased event, (horizontalZoom || verticalZoom)
             // will be true, so we can just test for either being false;
             // otherwise both are true
 
@@ -589,12 +522,9 @@ public class DemoView extends View {
 //            this.chart.addChangeListener(this);
 //            this.chart.addProgressListener(this);
             Plot plot = chart.getPlot();
-            this.domainZoomable = false;
-            this.rangeZoomable = false;
             if (plot instanceof Zoomable) {
                 Zoomable z = (Zoomable) plot;
-                this.domainZoomable = z.isDomainZoomable();
-                this.rangeZoomable = z.isRangeZoomable();
+                z.isRangeZoomable();
                 this.orientation = z.getOrientation();
             }
             
@@ -608,9 +538,6 @@ public class DemoView extends View {
             }
         }
         else {
-            this.domainZoomable = false;
-            this.rangeZoomable = false;
-            
             this.domainMovable = false;
             this.rangeMovable = false;
         }
@@ -750,15 +677,9 @@ public class DemoView extends View {
      * set for this component).  To increase performance (at the expense of
      * memory), an off-screen buffer image can be used.
      *
-     * @param g  the graphics device for drawing on.
+     * @param canvas  the graphics device for drawing on.
      */
     public void paintComponent(Canvas canvas) {
-        
-//        super.paintComponent(g);
-//        if (this.chart == null) {
-//            return;
-//        }
-//        Graphics2D canvas = (Graphics2D) g.create();
 
         // first determine the size of the chart rendering area...
         Dimension size = getSize();
@@ -767,8 +688,6 @@ public class DemoView extends View {
                 size.getWidth() - insets.getLeft() - insets.getRight(),
                 size.getHeight() - insets.getTop() - insets.getBottom());
 
-        // work out if scaling is required...
-        boolean scale = false;
         double drawWidth = available.getWidth();
         double drawHeight = available.getHeight();
         this.scaleX = 1.0;
@@ -777,23 +696,19 @@ public class DemoView extends View {
         if (drawWidth < this.minimumDrawWidth) {
             this.scaleX = drawWidth / this.minimumDrawWidth;
             drawWidth = this.minimumDrawWidth;
-            scale = true;
         }
         else if (drawWidth > this.maximumDrawWidth) {
             this.scaleX = drawWidth / this.maximumDrawWidth;
             drawWidth = this.maximumDrawWidth;
-            scale = true;
         }
 
         if (drawHeight < this.minimumDrawHeight) {
             this.scaleY = drawHeight / this.minimumDrawHeight;
             drawHeight = this.minimumDrawHeight;
-            scale = true;
         }
         else if (drawHeight > this.maximumDrawHeight) {
             this.scaleY = drawHeight / this.maximumDrawHeight;
             drawHeight = this.maximumDrawHeight;
-            scale = true;
         }
 
         RectShape chartArea = new RectShape(0.0, 0.0, drawWidth,
@@ -1026,13 +941,13 @@ public class DemoView extends View {
             }
         }
     }    /**
-     * Receives notification of mouse clicks on the panel. These are
-     * translated and passed on to any registered {@link ChartMouseListener}s.
+     * Receives notification of touch on the panel. These are
+     * translated and passed on to any registered {@link ChartTouchListener}s.
      *
-     * @param event  Information about the mouse event.
+     * @param event  Information about the touch event.
      */
-    public void mouseClicked(MotionEvent event) {
-
+    public void touched(MotionEvent event) {
+        
         int x = (int) (event.getX() / this.scaleX);
         int y = (int) (event.getY() / this.scaleY);
 
@@ -1041,25 +956,19 @@ public class DemoView extends View {
             return;
         }
         this.chart.setNotify(true);  // force a redraw
+        
         // new entity code...
 //        Object[] listeners = this.chartMotionListeners.getListeners(
-//                ChartMouseListener.class);
+//                ChartTouchListener.class);
 //        if (listeners.length == 0) {
 //            return;
 //        }
 
-        ChartEntity entity = null;
         if (this.info != null) {
             EntityCollection entities = this.info.getEntityCollection();
             if (entities != null) {
-                entity = entities.getEntity(x, y);
             }
         }
-        ChartMouseEvent chartEvent = new ChartMouseEvent(getChart(), event,
-                entity);
-//        for (int i = listeners.length - 1; i >= 0; i -= 1) {
-//            ((ChartMouseListener) listeners[i]).chartMouseClicked(chartEvent);
-//        }
     }
 
     /**
@@ -1072,25 +981,25 @@ public class DemoView extends View {
     }
     
     /**
-     * Adds a listener to the list of objects listening for chart mouse events.
+     * Adds a listener to the list of objects listening for chart touch events.
      *
      * @param listener  the listener (<code>null</code> not permitted).
      */
-    public void addChartMouseListener(ChartMouseListener listener) {
+    public void addChartTouchListener(ChartTouchListener listener) {
         if (listener == null) {
             throw new IllegalArgumentException("Null 'listener' argument.");
         }
-//        this.chartMotionListeners.add(ChartMouseListener.class, listener);
+//        this.chartMotionListeners.add(ChartTouchListener.class, listener);
     }
 
     /**
-     * Removes a listener from the list of objects listening for chart mouse
+     * Removes a listener from the list of objects listening for chart touch
      * events.
      *
      * @param listener  the listener.
      */
-    public void removeChartMouseListener(ChartMouseListener listener) {
-//        this.chartMotionListeners.remove(ChartMouseListener.class, listener);
+    public void removeChartTouchListener(ChartTouchListener listener) {
+//        this.chartMotionListeners.remove(ChartTouchListener.class, listener);
     }
 
     /**

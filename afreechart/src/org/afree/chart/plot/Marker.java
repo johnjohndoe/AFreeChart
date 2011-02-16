@@ -7,37 +7,45 @@
  * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * -----------
  * Marker.java
  * -----------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 14-Jan-2011 : Updated API docs
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2002-2008, by Object Refinery Limited.
  *
  * Original Author:  David Gilbert (for Object Refinery Limited);
  * Contributor(s):   Nicolas Brodu;
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -63,8 +71,6 @@
  * 05-Sep-2006 : Added MarkerChangeListener support (DG);
  * 26-Sep-2007 : Fix for serialization bug 1802195 (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.chart.plot;
@@ -79,7 +85,6 @@ import org.afree.graphics.geom.Font;
 import org.afree.graphics.PaintType;
 import org.afree.graphics.SolidColor;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PathEffect;
 import android.graphics.Typeface;
 
@@ -101,6 +106,7 @@ public abstract class Marker implements Cloneable, Serializable {
     /** The stroke (null is not allowed). */
     private transient float stroke;
     
+    /** The effect (null is not allowed). */
     private transient PathEffect effect;
 
     /** The outline paint. */
@@ -109,6 +115,7 @@ public abstract class Marker implements Cloneable, Serializable {
     /** The outline stroke. */
     private transient float outlineStroke;
     
+    /** The outline effect. */
     private transient PathEffect outlineEffect;
 
     /** The alpha transparency. */
@@ -194,9 +201,9 @@ public abstract class Marker implements Cloneable, Serializable {
     /**
      * Returns the paint.
      * 
-     * @return The paint (never <code>null</code>).
+     * @return The paint type (never <code>null</code>).
      * 
-     * @see #setPaintType(Paint)
+     * @see #setPaintType(PaintType paintType)
      */
     public PaintType getPaintType() {
         return this.paintType;
@@ -223,27 +230,32 @@ public abstract class Marker implements Cloneable, Serializable {
      * 
      * @return The stroke (never <code>null</code>).
      * 
-     * @see #setStroke(Stroke)
+     * @see #setStroke(float stroke)
      */
     public float getStroke() {
         return this.stroke;
     }
 
     /**
-     * Sets the stroke and sends a {@link MarkerChangeEvent} to all registered
+     * Sets the effect and sends a {@link MarkerChangeEvent} to all registered
      * listeners.
      * 
-     * @param stroke
-     *            the stroke (<code>null</code> not permitted).
+     * @param effect
+     *            the effect (<code>null</code> not permitted).
      * 
-     * @see #getStroke()
+     * @see #getEffect()
      */
     public void setEffect(PathEffect effect) {
-
         this.effect = effect;
     }
     
-
+    /**
+     * Returns the effect.
+     * 
+     * @return The effect (never <code>null</code>).
+     * 
+     * @see #setEffect(PathEffect effect)
+     */
     public PathEffect getEffect() {
         return this.effect;
     }
@@ -267,7 +279,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * 
      * @return The outline paint (possibly <code>null</code>).
      * 
-     * @see #setOutlinePaintType(Paint)
+     * @see #setOutlinePaintType(PaintType paintType)
      */
     public PaintType getOutlinePaintType() {
         return this.outlinePaintType;
@@ -291,7 +303,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * 
      * @return The outline stroke (possibly <code>null</code>).
      * 
-     * @see #setOutlineStroke(Stroke)
+     * @see #setOutlineStroke(float stroke)
      */
     public Float getOutlineStroke() {
         return this.outlineStroke;
@@ -310,10 +322,26 @@ public abstract class Marker implements Cloneable, Serializable {
         this.outlineStroke = stroke;
     }
 
+    /**
+     * Returns the outline effect.
+     * 
+     * @return The outline effect (possibly <code>null</code>).
+     * 
+     * @see #setOutlineEffect(PathEffect outlineEffect)
+     */
     public PathEffect getOutlineEffect() {
         return outlineEffect;
     }
 
+    /**
+     * Sets the outline effect and sends a {@link MarkerChangeEvent} to all
+     * registered listeners.
+     * 
+     * @param effect
+     *            the effect (<code>null</code> permitted).
+     * 
+     * @see #getOutlineEffect()
+     */
     public void setOutlineEffect(PathEffect outlineEffect) {
         this.outlineEffect = outlineEffect;
     }
@@ -323,7 +351,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * 
      * @return The alpha transparency.
      * 
-     * @see #setAlpha(float)
+     * @see #setAlpha(int)
      */
     public int getAlpha() {
         return this.alpha;
@@ -404,7 +432,7 @@ public abstract class Marker implements Cloneable, Serializable {
      * 
      * @return The label paint (never </code>null</code>).
      * 
-     * @see #setLabelPaintType(Paint)
+     * @see #setLabelPaintType(PaintType paintType)
      */
     public PaintType getLabelPaintType() {
         return this.labelPaintType;

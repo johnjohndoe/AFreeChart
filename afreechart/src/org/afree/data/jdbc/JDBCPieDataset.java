@@ -7,38 +7,45 @@
  * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
  *
  * Project Info:
+ *    AFreeChart: http://code.google.com/p/afreechart/
  *    JFreeChart: http://www.jfree.org/jfreechart/index.html
  *    JCommon   : http://www.jfree.org/jcommon/index.html
- *    AFreeChart: http://code.google.com/p/afreechart/
  *
- * This library is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2.1 of the License, or
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
- * USA.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * [Android is a trademark of Google Inc.]
  *
  * -------------------
  * JDBCPieDataset.java
  * -------------------
+ * 
  * (C) Copyright 2010, by Icom Systech Co., Ltd.
+ *
+ * Original Author:  shiraki  (for Icom Systech Co., Ltd);
+ * Contributor(s):   Sato Yoshiaki ;
+ *                   Niwano Masayoshi;
+ *
+ * Changes (from 19-Nov-2010)
+ * --------------------------
+ * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 
+ * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2002-2008, by Bryan Scott and Contributors.
  *
  * Original Author:  Bryan Scott; Andy
  * Contributor(s):   David Gilbert (for Object Refinery Limited);
  *                   Thomas Morgner;
- *                   Sato Yoshiaki (for Icom Systech Co., Ltd);
- *                   Niwano Masayoshi;
  *
  * Changes
  * -------
@@ -60,8 +67,6 @@
  * ------------- JFREECHART 1.0.x ---------------------------------------------
  * 02-Feb-2007 : Removed author tags all over JFreeChart sources (DG);
  *
- * ------------- AFREECHART 0.0.1 ---------------------------------------------
- * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
  */
 
 package org.afree.data.jdbc;
@@ -72,6 +77,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.sql.Types;
 
 import org.afree.data.general.DefaultPieDataset;
 import org.afree.data.general.PieDataset;
@@ -180,46 +187,55 @@ public class JDBCPieDataset extends DefaultPieDataset {
             resultSet = statement.executeQuery(query);
             ResultSetMetaData metaData = resultSet.getMetaData();
 
-            //TODO The logic that uses meta data has been temporarily deleted.
-//            int columnCount = metaData.getColumnCount();
-//            if (columnCount != 2) {
-//                throw new SQLException(
-//                    "Invalid sql generated.  PieDataSet requires 2 columns only"
-//                );
-//            }
+            int columnCount;
+            if (metaData != null) {
+                columnCount = metaData.getColumnCount();
+            } else {
+                columnCount = 2;
+            }
+            
+            if (columnCount != 2) {
+                throw new SQLException(
+                    "Invalid sql generated.  PieDataSet requires 2 columns only"
+                );
+            }
 
-            //int columnType = metaData.getColumnType(2);
+            int columnType;
+            if (metaData != null) {
+                columnType = metaData.getColumnType(2);
+            } else {
+                columnType = Types.REAL;
+            }
+            
             double value = Double.NaN;
             while (resultSet.next()) {
                 Comparable key = resultSet.getString(1);
-//                switch (columnType) {
-//                    case Types.NUMERIC:
-//                    case Types.REAL:
-//                    case Types.INTEGER:
-//                    case Types.DOUBLE:
-//                    case Types.FLOAT:
-//                    case Types.DECIMAL:
-//                    case Types.BIGINT:
-//                        value = resultSet.getDouble(2);
-//                        setValue(key, value);
-//                        break;
-//
-//                    case Types.DATE:
-//                    case Types.TIME:
-//                    case Types.TIMESTAMP:
-//                        Timestamp date = resultSet.getTimestamp(2);
-//                        value = date.getTime();
-//                        setValue(key, value);
-//                        break;
-//
-//                    default:
-//                        System.err.println(
-//                            "JDBCPieDataset - unknown data type"
-//                        );
-//                        break;
-//                }
-                value = resultSet.getDouble(2);
-                setValue(key, value);
+                switch (columnType) {
+                    case Types.NUMERIC:
+                    case Types.REAL:
+                    case Types.INTEGER:
+                    case Types.DOUBLE:
+                    case Types.FLOAT:
+                    case Types.DECIMAL:
+                    case Types.BIGINT:
+                        value = resultSet.getDouble(2);
+                        setValue(key, value);
+                        break;
+
+                    case Types.DATE:
+                    case Types.TIME:
+                    case Types.TIMESTAMP:
+                        Timestamp date = resultSet.getTimestamp(2);
+                        value = date.getTime();
+                        setValue(key, value);
+                        break;
+
+                    default:
+                        System.err.println(
+                            "JDBCPieDataset - unknown data type"
+                        );
+                        break;
+                }
             }
 
             fireDatasetChanged();
@@ -234,15 +250,14 @@ public class JDBCPieDataset extends DefaultPieDataset {
                     System.err.println("JDBCPieDataset: swallowing exception.");
                 }
             }
-            //TODO The logic that uses statement#close has been temporarily deleted.
-//            if (statement != null) {
-//                try {
-//                    statement.close();
-//                }
-//                catch (Exception e) {
-//                    System.err.println("JDBCPieDataset: swallowing exception.");
-//                }
-//            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                }
+                catch (Exception e) {
+                    System.err.println("JDBCPieDataset: swallowing exception.");
+                }
+            }
         }
     }
 
