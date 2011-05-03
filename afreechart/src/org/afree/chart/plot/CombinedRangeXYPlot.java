@@ -240,7 +240,7 @@ public class CombinedRangeXYPlot extends XYPlot
         subplot.addChangeListener(this);
         this.subplots.add(subplot);
         configureRangeAxes();
-        // fireChangeEvent();
+        fireChangeEvent();
 
     }
 
@@ -267,7 +267,7 @@ public class CombinedRangeXYPlot extends XYPlot
             subplot.setParent(null);
             subplot.removeChangeListener(this);
             configureRangeAxes();
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 

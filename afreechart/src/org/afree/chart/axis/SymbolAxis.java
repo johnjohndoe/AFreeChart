@@ -207,7 +207,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
     public void setGridBandsVisible(boolean flag) {
         if (this.gridBandsVisible != flag) {
             this.gridBandsVisible = flag;
-//            notifyListeners(new AxisChangeEvent(this));
+            notifyListeners(new AxisChangeEvent(this));
         }
     }
 
@@ -236,7 +236,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.gridBandPaintType = paintType;
-//        notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -269,7 +269,7 @@ public class SymbolAxis extends NumberAxis implements Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.gridBandAlternatePaintType = paintType;
-//        notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**

@@ -440,7 +440,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             this.timeZone = zone;
             setStandardTickUnits(createStandardDateTickUnits(zone,
                     this.locale));
-            //notifyListeners(new AxisChangeEvent(this));
+            notifyListeners(new AxisChangeEvent(this));
         }
     }
 
@@ -464,7 +464,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
     public void setTimeline(Timeline timeline) {
         if (this.timeline != timeline) {
             this.timeline = timeline;
-            //notifyListeners(new AxisChangeEvent(this));
+            notifyListeners(new AxisChangeEvent(this));
         }
     }
 
@@ -516,7 +516,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             setAutoTickUnitSelection(false, false);
         }
         if (notify) {
-            //notifyListeners(new AxisChangeEvent(this));
+            notifyListeners(new AxisChangeEvent(this));
         }
 
     }
@@ -539,7 +539,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
      */
     public void setDateFormatOverride(DateFormat formatter) {
         this.dateFormatOverride = formatter;
-        //notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -653,7 +653,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             maxDate = new Date(newMinMillis + length);
         }
         setRange(new DateRange(date, maxDate), true, false);
-        //notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -704,7 +704,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             minDate = new Date(newMaxMillis - length);
         }
         setRange(new DateRange(minDate, maximumDate), true, false);
-        //notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -727,7 +727,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'position' argument.");
         }
         this.tickMarkPosition = position;
-        //notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**

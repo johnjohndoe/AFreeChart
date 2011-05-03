@@ -319,7 +319,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     public void setBaseShapesVisible(boolean flag) {
         if (this.baseShapesVisible != flag) {
             this.baseShapesVisible = flag;
-            //fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -372,7 +372,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      */
     public void setShapesFilled(Boolean filled) {
         this.shapesFilled = filled;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -398,7 +398,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      */
     public void setSeriesShapesFilled(int series, Boolean flag) {
         this.seriesShapesFilled.setBoolean(series, flag);
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -447,7 +447,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     public void setPlotLines(boolean flag) {
         if (this.plotLines != flag) {
             this.plotLines = flag;
-            //fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -476,7 +476,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
                     "Null 'thresholdType' argument.");
         }
         this.gapThresholdType = thresholdType;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -500,7 +500,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
      */
     public void setGapThreshold(double t) {
         this.gapThreshold = t;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -526,7 +526,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     public void setPlotImages(boolean flag) {
         if (this.plotImages != flag) {
             this.plotImages = flag;
-            //fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -552,7 +552,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
     public void setPlotDiscontinuous(boolean flag) {
         if (this.plotDiscontinuous != flag) {
             this.plotDiscontinuous = flag;
-            //fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -604,7 +604,7 @@ public class StandardXYItemRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'line' argument.");
         }
         this.legendLine = line;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**

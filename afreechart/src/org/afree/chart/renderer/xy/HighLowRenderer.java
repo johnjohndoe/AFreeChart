@@ -186,7 +186,7 @@ public class HighLowRenderer extends AbstractXYItemRenderer
      */
     public void setDrawOpenTicks(boolean draw) {
         this.drawOpenTicks = draw;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -211,7 +211,7 @@ public class HighLowRenderer extends AbstractXYItemRenderer
      */
     public void setDrawCloseTicks(boolean draw) {
         this.drawCloseTicks = draw;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -238,7 +238,7 @@ public class HighLowRenderer extends AbstractXYItemRenderer
      */
     public void setOpenTickPaintType(PaintType paintType) {
         this.openTickPaintType = paintType;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -265,7 +265,7 @@ public class HighLowRenderer extends AbstractXYItemRenderer
      */
     public void setCloseTickPaintType(PaintType paintType) {
         this.closeTickPaintType = paintType;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -293,7 +293,7 @@ public class HighLowRenderer extends AbstractXYItemRenderer
      */
     public void setTickLength(double length) {
         this.tickLength = length;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**

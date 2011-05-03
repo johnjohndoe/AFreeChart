@@ -246,6 +246,7 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'rangeType' argument.");
         }
         this.rangeType = rangeType;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -278,6 +279,7 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
             if (isAutoRange()) {
                 autoAdjustRange();
             }
+            notifyListeners(new AxisChangeEvent(this));
         }
     }
 
@@ -308,6 +310,7 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
             if (isAutoRange()) {
                 autoAdjustRange();
             }
+            notifyListeners(new AxisChangeEvent(this));
         }
     }
 
@@ -369,7 +372,9 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
         if (turnOffAutoSelect) {
             setAutoTickUnitSelection(false, false);
         }
-
+        if (notify) {
+            notifyListeners(new AxisChangeEvent(this));
+        }
     }
 
     /**
@@ -395,6 +400,7 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
      */
     public void setNumberFormatOverride(NumberFormat formatter) {
         this.numberFormatOverride = formatter;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -421,6 +427,7 @@ public class NumberAxis extends ValueAxis implements Cloneable, Serializable {
      */
     public void setMarkerBand(MarkerAxisBand band) {
         this.markerBand = band;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**

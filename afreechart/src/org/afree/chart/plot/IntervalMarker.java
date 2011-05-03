@@ -61,8 +61,10 @@ package org.afree.chart.plot;
 
 import java.io.Serializable;
 
+import org.afree.chart.event.MarkerChangeEvent;
 import org.afree.ui.GradientShaderFactory;
 import org.afree.ui.LengthAdjustmentType;
+
 import android.graphics.Color;
 
 /**
@@ -161,6 +163,7 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      */
     public void setStartValue(double value) {
         this.startValue = value;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
     /**
@@ -183,6 +186,7 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      */
     public void setEndValue(double value) {
         this.endValue = value;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
     /**
@@ -203,6 +207,7 @@ public class IntervalMarker extends Marker implements Cloneable, Serializable {
      */
     public void setGradientPaintTransformer(GradientShaderFactory gradientShaderFactory) {
         this.gradientShaderFactory = gradientShaderFactory;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
 }

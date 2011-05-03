@@ -71,8 +71,8 @@ package org.afree.data.general;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
-
-//import org.afree.chart.event.EventListenerList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 /**
@@ -97,7 +97,7 @@ public abstract class Series implements Cloneable, Serializable {
     private String description;
 
     /** Storage for registered change listeners. */
-//    private EventListenerList listeners;
+    private List<SeriesChangeListener> listeners;
 
     /** Object to support property change notification. */
     private PropertyChangeSupport propertyChangeSupport;
@@ -126,7 +126,7 @@ public abstract class Series implements Cloneable, Serializable {
         }
         this.key = key;
         this.description = description;
-//        this.listeners = new EventListenerList();
+        this.listeners = new CopyOnWriteArrayList<SeriesChangeListener>();
         this.propertyChangeSupport = new PropertyChangeSupport(this);
         this.notify = true;
     }
@@ -156,7 +156,7 @@ public abstract class Series implements Cloneable, Serializable {
         }
         Comparable old = this.key;
         this.key = key;
-//        this.listeners = new EventListenerList();
+        this.listeners = new CopyOnWriteArrayList<SeriesChangeListener>();
         this.propertyChangeSupport.firePropertyChange("Key", old, key);
         this.notify = true;
     }
@@ -277,15 +277,12 @@ public abstract class Series implements Cloneable, Serializable {
      *               notification.
      */
     protected void notifyListeners(SeriesChangeEvent event) {
-
-//        Object[] listenerList = this.listeners.getListenerList();
-//        for (int i = listenerList.length - 2; i >= 0; i -= 2) {
-//            if (listenerList[i] == SeriesChangeListener.class) {
-//                ((SeriesChangeListener) listenerList[i + 1]).seriesChanged(
-//                        event);
-//            }
-//        }
-
+        if(listeners.size() == 0) {
+            return;
+        }
+        for (int i = listeners.size() - 1; i >= 0; i--) {
+            listeners.get(i).seriesChanged(event);
+        }
     }
 
     /**
@@ -330,7 +327,7 @@ public abstract class Series implements Cloneable, Serializable {
      * @param listener  the listener to register.
      */
     public void addChangeListener(SeriesChangeListener listener) {
-//        this.listeners.add(SeriesChangeListener.class, listener);
+        this.listeners.add(listener);
     }
 
     /**
@@ -340,6 +337,6 @@ public abstract class Series implements Cloneable, Serializable {
      * @param listener  the listener to deregister.
      */
     public void removeChangeListener(SeriesChangeListener listener) {
-//        this.listeners.remove(SeriesChangeListener.class, listener);
+        this.listeners.remove(listener);
     }
 }

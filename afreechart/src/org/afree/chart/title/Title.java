@@ -76,6 +76,8 @@
 package org.afree.chart.title;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.afree.ui.HorizontalAlignment;
 import org.afree.util.ObjectUtilities;
@@ -85,7 +87,9 @@ import org.afree.ui.VerticalAlignment;
 import org.afree.chart.block.AbstractBlock;
 import org.afree.chart.block.Block;
 import org.afree.chart.event.TitleChangeEvent;
+import org.afree.chart.event.TitleChangeListener;
 import org.afree.graphics.geom.RectShape;
+
 import android.graphics.Canvas;
 
 /**
@@ -130,6 +134,9 @@ public abstract class Title extends AbstractBlock implements Block, Cloneable,
     /** The vertical alignment of the title content. */
     private VerticalAlignment verticalAlignment;
 
+    /** Storage for registered change listeners. */
+    private transient List<TitleChangeListener> listenerList;
+    
     /**
      * A flag that can be used to temporarily disable the listener mechanism.
      */
@@ -205,6 +212,7 @@ public abstract class Title extends AbstractBlock implements Block, Cloneable,
         this.horizontalAlignment = horizontalAlignment;
         this.verticalAlignment = verticalAlignment;
         setPadding(padding);
+        this.listenerList = new CopyOnWriteArrayList<TitleChangeListener>();
         this.notify = true;
 
     }
@@ -236,6 +244,7 @@ public abstract class Title extends AbstractBlock implements Block, Cloneable,
      */
     public void setVisible(boolean visible) {
         this.visible = visible;
+        notifyListeners(new TitleChangeEvent(this));
     }
 
     /**
@@ -260,6 +269,7 @@ public abstract class Title extends AbstractBlock implements Block, Cloneable,
         }
         if (this.position != position) {
             this.position = position;
+            notifyListeners(new TitleChangeEvent(this));
         }
     }
 
@@ -285,6 +295,7 @@ public abstract class Title extends AbstractBlock implements Block, Cloneable,
         }
         if (this.horizontalAlignment != alignment) {
             this.horizontalAlignment = alignment;
+            notifyListeners(new TitleChangeEvent(this));
         }
     }
 
@@ -311,7 +322,8 @@ public abstract class Title extends AbstractBlock implements Block, Cloneable,
         }
         if (this.verticalAlignment != alignment) {
             this.verticalAlignment = alignment;
-        }
+            notifyListeners(new TitleChangeEvent(this));
+       }
     }
 
     /**
@@ -325,6 +337,20 @@ public abstract class Title extends AbstractBlock implements Block, Cloneable,
     }
 
     /**
+     * Sets the flag that indicates whether or not the notification mechanism
+     * is enabled.  There are certain situations (such as cloning) where you
+     * want to turn notification off temporarily.
+     *
+     * @param flag  the new value of the flag.
+     */
+    public void setNotify(boolean flag) {
+        this.notify = flag;
+        if (flag) {
+            notifyListeners(new TitleChangeEvent(this));
+        }
+    }
+
+    /**
      * Draws the title on a graphics device (such as the screen or a
      * printer).
      * 
@@ -335,6 +361,62 @@ public abstract class Title extends AbstractBlock implements Block, Cloneable,
      *            outside this area).
      */
     public abstract void draw(Canvas canvas, RectShape area);
+    
+    /**
+     * Returns a clone of the title.
+     * <P>
+     * One situation when this is useful is when editing the title properties -
+     * you can edit a clone, and then it is easier to cancel the changes if
+     * necessary.
+     *
+     * @return A clone of the title.
+     *
+     * @throws CloneNotSupportedException not thrown by this class, but it may
+     *         be thrown by subclasses.
+     */
+    public Object clone() throws CloneNotSupportedException {
+        Title duplicate = (Title) super.clone();
+        duplicate.listenerList = new CopyOnWriteArrayList<TitleChangeListener>();
+        // RectangleInsets is immutable => same reference in clone OK
+        return duplicate;
+    }
+
+    /**
+     * Registers an object for notification of changes to the title.
+     *
+     * @param listener  the object that is being registered.
+     */
+    public void addChangeListener(TitleChangeListener listener) {
+        this.listenerList.add(listener);
+    }
+
+    /**
+     * Unregisters an object for notification of changes to the chart title.
+     *
+     * @param listener  the object that is being unregistered.
+     */
+    public void removeChangeListener(TitleChangeListener listener) {
+        this.listenerList.remove(listener);
+    }
+
+    /**
+     * Notifies all registered listeners that the chart title has changed in
+     * some way.
+     *
+     * @param event  an object that contains information about the change to
+     *               the title.
+     */
+    protected void notifyListeners(TitleChangeEvent event) {
+        if(listenerList.size() == 0) {
+            return;
+        }
+        if(notify){
+            for (int i = listenerList.size() - 1; i >= 0; i--) {
+                listenerList.get(i).titleChanged(event);
+            }
+        }
+    }
+    
     /**
      * Tests an object for equality with this title.
      *

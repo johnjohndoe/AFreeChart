@@ -283,7 +283,7 @@ public class PeriodAxis extends ValueAxis
         }
         this.first = first;
         this.first.peg(this.calendar);
-//        notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -307,7 +307,7 @@ public class PeriodAxis extends ValueAxis
         }
         this.last = last;
         this.last.peg(this.calendar);
-//        notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -334,7 +334,7 @@ public class PeriodAxis extends ValueAxis
         this.calendar = Calendar.getInstance(zone, this.locale);
         this.first.peg(this.calendar);
         this.last.peg(this.calendar);
-//        notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -370,7 +370,7 @@ public class PeriodAxis extends ValueAxis
             throw new IllegalArgumentException("Null 'c' argument.");
         }
         this.autoRangeTimePeriodClass = c;
-//        notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -394,7 +394,7 @@ public class PeriodAxis extends ValueAxis
             throw new IllegalArgumentException("Null 'c' argument.");
         }
         this.majorTickTimePeriodClass = c;
-//        notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -416,7 +416,7 @@ public class PeriodAxis extends ValueAxis
      */
     public void setMinorTickMarksVisible(boolean visible) {
         this.minorTickMarksVisible = visible;
-//        notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -440,7 +440,7 @@ public class PeriodAxis extends ValueAxis
             throw new IllegalArgumentException("Null 'c' argument.");
         }
         this.minorTickTimePeriodClass = c;
-//        notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -465,7 +465,7 @@ public class PeriodAxis extends ValueAxis
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.minorTickMarkStroke = stroke;
-//        notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -490,7 +490,7 @@ public class PeriodAxis extends ValueAxis
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.minorTickMarkPaintType = paintType;
-//        notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -511,6 +511,7 @@ public class PeriodAxis extends ValueAxis
      */
     public void setMinorTickMarkEffect(PathEffect pathEffect) {
         this.minorTickMarkEffect = pathEffect;
+        notifyListeners(new AxisChangeEvent(this));
 
     }
 
@@ -531,7 +532,7 @@ public class PeriodAxis extends ValueAxis
      */
     public void setMinorTickMarkInsideLength(float length) {
         this.minorTickMarkInsideLength = length;
-//        notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -551,7 +552,7 @@ public class PeriodAxis extends ValueAxis
      */
     public void setMinorTickMarkOutsideLength(float length) {
         this.minorTickMarkOutsideLength = length;
-//        notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -571,7 +572,7 @@ public class PeriodAxis extends ValueAxis
      */
     public void setLabelInfo(PeriodAxisLabelInfo[] info) {
         this.labelInfo = info;
-//        notifyListeners(new AxisChangeEvent(this));
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**

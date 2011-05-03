@@ -1,3 +1,4 @@
+
 /* ===========================================================
  * AFreeChart : a free chart library for Android(tm) platform.
  *              (based on JFreeChart and JCommon)
@@ -662,14 +663,14 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         this.renderers.set(0, renderer);
         if (renderer != null) {
             renderer.setPlot(this);
-            //renderer.addChangeListener(this);
+            renderer.addChangeListener(this);
         }
 
         this.domainAxes.set(0, domainAxis);
         this.mapDatasetToDomainAxis(0, 0);
         if (domainAxis != null) {
             domainAxis.setPlot(this);
-            // domainAxis.addChangeListener(this);
+             domainAxis.addChangeListener(this);
         }
         this.domainAxisLocations.set(0, AxisLocation.BOTTOM_OR_LEFT);
 
@@ -677,7 +678,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         this.mapDatasetToRangeAxis(0, 0);
         if (rangeAxis != null) {
             rangeAxis.setPlot(this);
-            // rangeAxis.addChangeListener(this);
+             rangeAxis.addChangeListener(this);
         }
         this.rangeAxisLocations.set(0, AxisLocation.BOTTOM_OR_LEFT);
 
@@ -761,7 +762,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         }
         if (orientation != this.orientation) {
             this.orientation = orientation;
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -790,7 +791,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'offset' argument.");
         }
         this.axisOffset = offset;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -878,7 +879,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     public void setDomainAxis(int index, ValueAxis axis, boolean notify) {
         ValueAxis existing = getDomainAxis(index);
         if (existing != null) {
-            // existing.removeChangeListener(this);
+            existing.removeChangeListener(this);
         }
         if (axis != null) {
             axis.setPlot(this);
@@ -886,10 +887,10 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         this.domainAxes.set(index, axis);
         if (axis != null) {
             axis.configure();
-            // axis.addChangeListener(this);
+            axis.addChangeListener(this);
         }
         if (notify) {
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -906,7 +907,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         for (int i = 0; i < axes.length; i++) {
             setDomainAxis(i, axes[i], false);
         }
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -985,11 +986,11 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         for (int i = 0; i < this.domainAxes.size(); i++) {
             ValueAxis axis = (ValueAxis) this.domainAxes.get(i);
             if (axis != null) {
-                // axis.removeChangeListener(this);
+                axis.removeChangeListener(this);
             }
         }
         this.domainAxes.clear();
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -1068,7 +1069,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         }
         this.domainAxisLocations.set(index, location);
         if (notify) {
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -1125,15 +1126,15 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         // plot is likely registered as a listener with the existing axis...
         ValueAxis existing = getRangeAxis();
         if (existing != null) {
-            // existing.removeChangeListener(this);
+            existing.removeChangeListener(this);
         }
 
         this.rangeAxes.set(0, axis);
         if (axis != null) {
             axis.configure();
-            // axis.addChangeListener(this);
+            axis.addChangeListener(this);
         }
-        // fireChangeEvent();
+        fireChangeEvent();
 
     }
 
@@ -1247,7 +1248,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     public void setRangeAxis(int index, ValueAxis axis, boolean notify) {
         ValueAxis existing = getRangeAxis(index);
         if (existing != null) {
-            // existing.removeChangeListener(this);
+            existing.removeChangeListener(this);
         }
         if (axis != null) {
             axis.setPlot(this);
@@ -1255,10 +1256,10 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         this.rangeAxes.set(index, axis);
         if (axis != null) {
             axis.configure();
-            // axis.addChangeListener(this);
+            axis.addChangeListener(this);
         }
         if (notify) {
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -1275,7 +1276,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         for (int i = 0; i < axes.length; i++) {
             setRangeAxis(i, axes[i], false);
         }
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -1299,11 +1300,11 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         for (int i = 0; i < this.rangeAxes.size(); i++) {
             ValueAxis axis = (ValueAxis) this.rangeAxes.get(i);
             if (axis != null) {
-                // axis.removeChangeListener(this);
+                axis.removeChangeListener(this);
             }
         }
         this.rangeAxes.clear();
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -1384,7 +1385,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         }
         this.rangeAxisLocations.set(index, location);
         if (notify) {
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -1705,17 +1706,17 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     public void setRenderer(int index, XYItemRenderer renderer, boolean notify) {
         XYItemRenderer existing = getRenderer(index);
         if (existing != null) {
-            //existing.removeChangeListener(this);
+            existing.removeChangeListener(this);
         }
         this.renderers.set(index, renderer);
         if (renderer != null) {
             renderer.setPlot(this);
-            //renderer.addChangeListener(this);
+            renderer.addChangeListener(this);
         }
         configureDomainAxes();
         configureRangeAxes();
         if (notify) {
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -1730,7 +1731,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         for (int i = 0; i < renderers.length; i++) {
             setRenderer(i, renderers[i], false);
         }
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -1760,7 +1761,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'order' argument.");
         }
         this.datasetRenderingOrder = order;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -1790,7 +1791,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'order' argument.");
         }
         this.seriesRenderingOrder = order;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -1853,7 +1854,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      */
     public void setWeight(int weight) {
         this.weight = weight;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -1883,7 +1884,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     public void setDomainGridlinesVisible(boolean visible) {
         if (this.domainGridlinesVisible != visible) {
             this.domainGridlinesVisible = visible;
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -1918,7 +1919,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     public void setDomainMinorGridlinesVisible(boolean visible) {
         if (this.domainMinorGridlinesVisible != visible) {
             this.domainMinorGridlinesVisible = visible;
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -1951,7 +1952,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.domainGridlineStroke = stroke;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -1988,7 +1989,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.domainMinorGridlineStroke = stroke;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2020,7 +2021,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.domainGridlinePaintType = paint;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2056,7 +2057,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.domainMinorGridlinePaint = paint;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2086,7 +2087,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     public void setRangeGridlinesVisible(boolean visible) {
         if (this.rangeGridlinesVisible != visible) {
             this.rangeGridlinesVisible = visible;
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -2116,7 +2117,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.rangeGridlineStroke = stroke;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2145,7 +2146,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.rangeGridlinePaintType = paint;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2179,7 +2180,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     public void setRangeMinorGridlinesVisible(boolean visible) {
         if (this.rangeMinorGridlinesVisible != visible) {
             this.rangeMinorGridlinesVisible = visible;
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -2213,7 +2214,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.rangeMinorGridlineStroke = stroke;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2246,7 +2247,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.rangeMinorGridlinePaint = paint;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2277,7 +2278,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      */
     public void setDomainZeroBaselineVisible(boolean visible) {
         this.domainZeroBaselineVisible = visible;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2309,7 +2310,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.domainZeroBaselineStroke = stroke;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2342,7 +2343,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.domainZeroBaselinePaint = paint;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2369,7 +2370,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      */
     public void setRangeZeroBaselineVisible(boolean visible) {
         this.rangeZeroBaselineVisible = visible;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2397,7 +2398,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.rangeZeroBaselineStroke = stroke;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2426,7 +2427,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.rangeZeroBaselinePaint = paint;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2451,7 +2452,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      */
     public void setDomainTickBandPaint(PaintType paint) {
         this.domainTickBandPaint = paint;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2476,7 +2477,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      */
     public void setRangeTickBandPaintType(PaintType paint) {
         this.rangeTickBandPaint = paint;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2505,7 +2506,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'origin' argument.");
         }
         this.quadrantOrigin = origin;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2543,7 +2544,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
                     + ") should be in the range 0 to 3.");
         }
         this.quadrantPaint[index] = paint;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2607,7 +2608,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             }
             this.foregroundDomainMarkers.clear();
         }
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2627,8 +2628,8 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             if (markers != null) {
                 Iterator iterator = markers.iterator();
                 while (iterator.hasNext()) {
-                    //Marker m = (Marker) iterator.next();
-                    // m.removeChangeListener(this);
+                    Marker m = (Marker) iterator.next();
+                    m.removeChangeListener(this);
                 }
                 markers.clear();
             }
@@ -2639,13 +2640,13 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             if (markers != null) {
                 Iterator iterator = markers.iterator();
                 while (iterator.hasNext()) {
-                    //Marker m = (Marker) iterator.next();
-                    // m.removeChangeListener(this);
+                    Marker m = (Marker) iterator.next();
+                    m.removeChangeListener(this);
                 }
                 markers.clear();
             }
         }
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2715,9 +2716,9 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             }
             markers.add(marker);
         }
-        // marker.addChangeListener(this);
+         marker.addChangeListener(this);
         if (notify) {
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -2808,7 +2809,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         }
         boolean removed = markers.remove(marker);
         if (removed && notify) {
-            // fireChangeEvent();
+            fireChangeEvent();
         }
         return removed;
     }
@@ -2872,7 +2873,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             }
             this.foregroundRangeMarkers.clear();
         }
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -2934,9 +2935,9 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             }
             markers.add(marker);
         }
-        // marker.addChangeListener(this);
+        marker.addChangeListener(this);
         if (notify) {
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -2955,8 +2956,8 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             if (markers != null) {
                 Iterator iterator = markers.iterator();
                 while (iterator.hasNext()) {
-                    //Marker m = (Marker) iterator.next();
-                    // m.removeChangeListener(this);
+                    Marker m = (Marker) iterator.next();
+                    m.removeChangeListener(this);
                 }
                 markers.clear();
             }
@@ -2967,13 +2968,13 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             if (markers != null) {
                 Iterator iterator = markers.iterator();
                 while (iterator.hasNext()) {
-                    //Marker m = (Marker) iterator.next();
-                    // m.removeChangeListener(this);
+                    Marker m = (Marker) iterator.next();
+                    m.removeChangeListener(this);
                 }
                 markers.clear();
             }
         }
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -3066,7 +3067,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         }
         boolean removed = markers.remove(marker);
         if (removed && notify) {
-            // fireChangeEvent();
+            fireChangeEvent();
         }
         return removed;
     }
@@ -3102,7 +3103,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         }
         this.annotations.add(annotation);
         if (notify) {
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -3141,7 +3142,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         }
         boolean removed = this.annotations.remove(annotation);
         if (removed && notify) {
-            // fireChangeEvent();
+            fireChangeEvent();
         }
         return removed;
     }
@@ -3167,7 +3168,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      */
     public void clearAnnotations() {
         this.annotations.clear();
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -4772,7 +4773,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             configureDomainAxes();
             configureRangeAxes();
         }
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -4799,7 +4800,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     public void setDomainCrosshairVisible(boolean flag) {
         if (this.domainCrosshairVisible != flag) {
             this.domainCrosshairVisible = flag;
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -4828,7 +4829,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     public void setDomainCrosshairLockedOnData(boolean flag) {
         if (this.domainCrosshairLockedOnData != flag) {
             this.domainCrosshairLockedOnData = flag;
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -4871,7 +4872,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     public void setDomainCrosshairValue(double value, boolean notify) {
         this.domainCrosshairValue = value;
         if (isDomainCrosshairVisible() && notify) {
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -4903,7 +4904,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.domainCrosshairStroke = stroke;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -4934,7 +4935,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.domainCrosshairPaintType = paintType;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -4965,7 +4966,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.domainCrosshairEffect = pathEffect;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -4993,7 +4994,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     public void setRangeCrosshairVisible(boolean flag) {
         if (this.rangeCrosshairVisible != flag) {
             this.rangeCrosshairVisible = flag;
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -5022,7 +5023,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     public void setRangeCrosshairLockedOnData(boolean flag) {
         if (this.rangeCrosshairLockedOnData != flag) {
             this.rangeCrosshairLockedOnData = flag;
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -5066,7 +5067,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     public void setRangeCrosshairValue(double value, boolean notify) {
         this.rangeCrosshairValue = value;
         if (isRangeCrosshairVisible() && notify) {
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -5098,7 +5099,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.rangeCrosshairStroke = stroke;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
     
     /**
@@ -5125,11 +5126,8 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @see #getRangeCrosshairEffect()
      */
     public void setRangeCrosshairEffect(PathEffect effect) {
-        if (effect == null) {
-            throw new IllegalArgumentException("Null 'effect' argument.");
-        }
         this.rangeCrosshairEffect = effect;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -5160,7 +5158,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.rangeCrosshairPaintType = paintType;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -5203,7 +5201,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     public void setFixedDomainAxisSpace(AxisSpace space, boolean notify) {
         this.fixedDomainAxisSpace = space;
         if (notify) {
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -5247,7 +5245,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
     public void setFixedRangeAxisSpace(AxisSpace space, boolean notify) {
         this.fixedRangeAxisSpace = space;
         if (notify) {
-            // fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -5592,7 +5590,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      */
     public void setFixedLegendItems(LegendItemCollection items) {
         this.fixedLegendItems = items;
-        // fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -5723,6 +5721,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      */
     public void setDomainGridlineEffect(PathEffect domainGridlineEffect) {
         this.domainGridlineEffect = domainGridlineEffect;
+        fireChangeEvent();
     }
 
     /**
@@ -5748,6 +5747,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      */
     public void setRangeGridlineEffect(PathEffect rangeGridlineEffect) {
         this.rangeGridlineEffect = rangeGridlineEffect;
+        fireChangeEvent();
     }
 
     /**
@@ -5775,6 +5775,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      */
     public void setDomainMinorGridlineEffect(PathEffect domainMinorGridlineEffect) {
         this.domainMinorGridlineEffect = domainMinorGridlineEffect;
+        fireChangeEvent();
     }
 
     /**
@@ -5802,6 +5803,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      */
     public void setRangeMinorGridlineEffect(PathEffect rangeMinorGridlineEffect) {
         this.rangeMinorGridlineEffect = rangeMinorGridlineEffect;
+        fireChangeEvent();
     }
     
     

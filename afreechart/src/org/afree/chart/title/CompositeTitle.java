@@ -141,7 +141,7 @@ public class CompositeTitle extends Title implements Cloneable, Serializable {
      */
     public void setBackgroundPaintType(PaintType paintType) {
         this.backgroundPaintType = paintType;
-//        notifyListeners(new TitleChangeEvent(this));
+        notifyListeners(new TitleChangeEvent(this));
     }
 
     /**

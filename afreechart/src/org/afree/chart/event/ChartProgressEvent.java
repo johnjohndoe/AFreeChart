@@ -96,6 +96,7 @@ public class ChartProgressEvent extends java.util.EventObject {
         super(source);
         this.chart = chart;
         this.type = type;
+        this.percent = percent;
     }
 
     /**

@@ -299,7 +299,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setLinesVisible(Boolean visible) {
         this.linesVisible = visible;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -347,7 +347,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setSeriesLinesVisible(int series, Boolean flag) {
         this.seriesLinesVisible.setBoolean(series, flag);
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -387,7 +387,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setBaseLinesVisible(boolean flag) {
         this.baseLinesVisible = flag;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     // SHAPES VISIBLE
@@ -429,7 +429,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setShapesVisible(Boolean visible) {
         this.shapesVisible = visible;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -491,7 +491,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setSeriesShapesVisible(int series, Boolean flag) {
         this.seriesShapesVisible.setBoolean(series, flag);
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -516,7 +516,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setBaseShapesVisible(boolean flag) {
         this.baseShapesVisible = flag;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -545,7 +545,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setDrawOutlines(boolean flag) {
         this.drawOutlines = flag;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -572,7 +572,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setUseOutlinePaint(boolean use) {
         this.useOutlinePaintType = use;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     // SHAPES FILLED
@@ -669,7 +669,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setShapesFilled(Boolean filled) {
         this.shapesFilled = filled;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -685,7 +685,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setSeriesShapesFilled(int series, Boolean filled) {
         this.seriesShapesFilled.setBoolean(series, filled);
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -726,7 +726,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setBaseShapesFilled(boolean flag) {
         this.baseShapesFilled = flag;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -754,7 +754,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setUseFillPaint(boolean flag) {
         this.useFillPaint = flag;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -785,7 +785,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
      */
     public void setUseSeriesOffset(boolean offset) {
         this.useSeriesOffset = offset;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -823,7 +823,7 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
             throw new IllegalArgumentException("Requires 0.0 <= margin < 1.0.");
         }
         this.itemMargin = margin;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -1055,16 +1055,6 @@ public class LineAndShapeRenderer extends AbstractCategoryItemRenderer
                 addItemEntity(entities, dataset, row, column, shape);
             }
         }
-
-    }
-
-    public void addChangeListener(RendererChangeListener listener) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void removeChangeListener(RendererChangeListener listener) {
-        // TODO Auto-generated method stub
 
     }
 }

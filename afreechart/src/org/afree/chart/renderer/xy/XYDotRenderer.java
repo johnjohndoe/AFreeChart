@@ -154,7 +154,7 @@ public class XYDotRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Requires w > 0.");
         }
         this.dotWidth = w;
-//        fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -185,7 +185,7 @@ public class XYDotRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Requires h > 0.");
         }
         this.dotHeight = h;
-//        fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -216,7 +216,7 @@ public class XYDotRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'shape' argument.");
         }
         this.legendShape = shape;
-//        fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**

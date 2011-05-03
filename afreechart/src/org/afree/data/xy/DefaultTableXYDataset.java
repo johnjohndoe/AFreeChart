@@ -416,7 +416,7 @@ public class DefaultTableXYDataset extends AbstractIntervalXYDataset
     public void removeSeries(int series) {
 
         // check arguments...
-        if ((series < 0) || (series > getSeriesCount())) {
+        if ((series < 0) || (series >= getSeriesCount())) {
             throw new IllegalArgumentException("Index outside valid range.");
         }
 

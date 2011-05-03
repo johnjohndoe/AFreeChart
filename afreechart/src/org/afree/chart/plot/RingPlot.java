@@ -178,7 +178,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
      */
     public void setSeparatorsVisible(boolean visible) {
         this.separatorsVisible = visible;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -205,7 +205,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'stroke' argument.");
         }
         this.separatorStroke = stroke;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -232,7 +232,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.separatorPaintType = paintType;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -256,7 +256,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
      */
     public void setSeparatorEffect(PathEffect effect) {
         this.separatorEffect = effect;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -285,7 +285,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
      */
     public void setInnerSeparatorExtension(double percent) {
         this.innerSeparatorExtension = percent;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -313,7 +313,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
      */
     public void setOuterSeparatorExtension(double percent) {
         this.outerSeparatorExtension = percent;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -340,7 +340,7 @@ public class RingPlot extends PiePlot implements Cloneable, Serializable {
      */
     public void setSectionDepth(double sectionDepth) {
         this.sectionDepth = sectionDepth;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**

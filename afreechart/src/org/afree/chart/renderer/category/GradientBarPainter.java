@@ -258,16 +258,15 @@ public class GradientBarPainter implements BarPainter, Serializable {
         // draw the outline...
         if (renderer.isDrawBarOutline()) {
             //Stroke stroke = renderer.getItemOutlineStroke(row, column);
-            float stroke = renderer.getItemOutlineStroke(row, column);
+            Float stroke = renderer.getItemOutlineStroke(row, column);
 
             PaintType paintType = renderer.getItemOutlinePaintType(row, column);
 
-            if (stroke != 0.0f && paintType != null) {
+            if (stroke != null && paintType != null) {
                 Paint paint = PaintUtility.createPaint(paintType, 
                         stroke, 
                         renderer.getItemOutlineEffect(row, column));
-                canvas.drawRect((float) bar.getMinX(), (float) bar.getMinY(),
-                        (float) bar.getMaxX(), (float) bar.getMaxY(), paint);
+                bar.draw(canvas, paint);
             }
         }
 

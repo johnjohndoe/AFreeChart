@@ -160,7 +160,7 @@ public class AreaRenderer extends AbstractCategoryItemRenderer
             throw new IllegalArgumentException("Null 'type' argument.");
         }
         this.endType = type;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -374,15 +374,5 @@ public class AreaRenderer extends AbstractCategoryItemRenderer
      */
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
-    }
-
-    public void addChangeListener(RendererChangeListener listener) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void removeChangeListener(RendererChangeListener listener) {
-        // TODO Auto-generated method stub
-        
     }
 }
