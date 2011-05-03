@@ -399,7 +399,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setBase(double base) {
         this.base = base;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -426,7 +426,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     public void setUseYInterval(boolean use) {
         if (this.useYInterval != use) {
             this.useYInterval = use;
-            //fireChangeEvent();
+            fireChangeEvent();
         }
     }
 
@@ -452,7 +452,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setMargin(double margin) {
         this.margin = margin;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -476,7 +476,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setDrawBarOutline(boolean draw) {
         this.drawBarOutline = draw;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -502,7 +502,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     public void setGradientShaderFactory(
             GradientShaderFactory factory) {
         this.gradientShaderFactory = factory;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -530,7 +530,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'bar' argument.");
         }
         this.legendBar = bar;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -559,7 +559,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     public void setPositiveItemLabelPositionFallback(
             ItemLabelPosition position) {
         this.positiveItemLabelPositionFallback = position;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -588,7 +588,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
     public void setNegativeItemLabelPositionFallback(
             ItemLabelPosition position) {
         this.negativeItemLabelPositionFallback = position;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -615,7 +615,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'painter' argument.");
         }
         this.barPainter = painter;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -641,7 +641,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setShadowVisible(boolean visible) {
         this.shadowsVisible = visible;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -665,7 +665,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setShadowXOffset(double offset) {
         this.shadowXOffset = offset;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -689,7 +689,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setShadowYOffset(double offset) {
         this.shadowYOffset = offset;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -714,7 +714,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
      */
     public void setBarAlignmentFactor(double factor) {
         this.barAlignmentFactor = factor;
-        //fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**

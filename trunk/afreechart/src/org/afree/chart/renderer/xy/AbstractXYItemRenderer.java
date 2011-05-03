@@ -350,7 +350,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
      */
     public void setSeriesItemLabelGenerator(int series, XYItemLabelGenerator generator) {
         this.itemLabelGeneratorList.set(series, generator);
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -371,7 +371,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
      */
     public void setBaseItemLabelGenerator(XYItemLabelGenerator generator) {
         this.baseItemLabelGenerator = generator;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -433,10 +433,10 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
         }
         if (layer.equals(Layer.FOREGROUND)) {
             this.foregroundAnnotations.add(annotation);
-            // fireChangeEvent();
+             fireChangeEvent();
         } else if (layer.equals(Layer.BACKGROUND)) {
             this.backgroundAnnotations.add(annotation);
-            // fireChangeEvent();
+             fireChangeEvent();
         } else {
             // should never get here
             throw new RuntimeException("Unknown layer.");
@@ -456,7 +456,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
     public boolean removeAnnotation(XYAnnotation annotation) {
         boolean removed = this.foregroundAnnotations.remove(annotation);
         removed = removed & this.backgroundAnnotations.remove(annotation);
-        // fireChangeEvent();
+         fireChangeEvent();
         return removed;
     }
 
@@ -467,7 +467,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
     public void removeAnnotations() {
         this.foregroundAnnotations.clear();
         this.backgroundAnnotations.clear();
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -510,7 +510,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
             throw new IllegalArgumentException("Null 'generator' argument.");
         }
         this.legendItemLabelGenerator = generator;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -1565,4 +1565,101 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer implements
         return super.equals(obj);
     }
 
+//    /**
+//     * Sets the tool tip generator for a series and sends a
+//     * {@link RendererChangeEvent} to all registered listeners.
+//     *
+//     * @param series  the series index (zero based).
+//     * @param generator  the generator (<code>null</code> permitted).
+//     */
+//    public void setSeriesToolTipGenerator(int series,
+//                                          XYToolTipGenerator generator) {
+//        this.toolTipGeneratorList.set(series, generator);
+//        fireChangeEvent();
+//    }
+    
+//    /**
+//     * Sets the base tool tip generator and sends a {@link RendererChangeEvent}
+//     * to all registered listeners.
+//     *
+//     * @param generator  the generator (<code>null</code> permitted).
+//     *
+//     * @see #getBaseToolTipGenerator()
+//     */
+//    public void setBaseToolTipGenerator(XYToolTipGenerator generator) {
+//        this.baseToolTipGenerator = generator;
+//        fireChangeEvent();
+//    }
+    
+//    /**
+//     * Sets the URL generator for HTML image maps and sends a
+//     * {@link RendererChangeEvent} to all registered listeners.
+//     *
+//     * @param urlGenerator  the URL generator (<code>null</code> permitted).
+//     */
+//    public void setURLGenerator(XYURLGenerator urlGenerator) {
+//        this.urlGenerator = urlGenerator;
+//        fireChangeEvent();
+//    }
+    
+//    /**
+//     * Sets the legend item tool tip generator and sends a
+//     * {@link RendererChangeEvent} to all registered listeners.
+//     *
+//     * @param generator  the generator (<code>null</code> permitted).
+//     *
+//     * @see #getLegendItemToolTipGenerator()
+//     */
+//    public void setLegendItemToolTipGenerator(
+//            XYSeriesLabelGenerator generator) {
+//        this.legendItemToolTipGenerator = generator;
+//        fireChangeEvent();
+//    }
+    
+//    /**
+//     * Sets the legend item URL generator and sends a
+//     * {@link RendererChangeEvent} to all registered listeners.
+//     *
+//     * @param generator  the generator (<code>null</code> permitted).
+//     *
+//     * @see #getLegendItemURLGenerator()
+//     */
+//    public void setLegendItemURLGenerator(XYSeriesLabelGenerator generator) {
+//        this.legendItemURLGenerator = generator;
+//        fireChangeEvent();
+//    }
+    
+//    /**
+//     * Sets the item label generator for ALL series and sends a
+//     * {@link RendererChangeEvent} to all registered listeners.
+//     *
+//     * @param generator  the generator (<code>null</code> permitted).
+//     *
+//     * @see #getItemLabelGenerator()
+//     *
+//     * @deprecated As of version 1.0.6, this override setting should not be
+//     *     used.  You can use the base setting instead
+//     *     ({@link #setBaseItemLabelGenerator(XYItemLabelGenerator)}).
+//     */
+//    public void setItemLabelGenerator(XYItemLabelGenerator generator) {
+//        this.itemLabelGenerator = generator;
+//        fireChangeEvent();
+//    }
+    
+//    /**
+//     * Sets the tool tip generator for ALL series and sends a
+//     * {@link RendererChangeEvent} to all registered listeners.
+//     *
+//     * @param generator  the generator (<code>null</code> permitted).
+//     *
+//     * @see #getToolTipGenerator()
+//     *
+//     * @deprecated As of version 1.0.6, this override setting should not be
+//     *     used.  You can use the base setting instead
+//     *     ({@link #setBaseToolTipGenerator(XYToolTipGenerator)}).
+//     */
+//    public void setToolTipGenerator(XYToolTipGenerator generator) {
+//        this.toolTipGenerator = generator;
+//        fireChangeEvent();
+//    }
 }

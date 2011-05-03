@@ -318,7 +318,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     public void setSeriesItemLabelGenerator(int series,
             CategoryItemLabelGenerator generator) {
         this.itemLabelGeneratorList.set(series, generator);
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -343,7 +343,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      */
     public void setBaseItemLabelGenerator(CategoryItemLabelGenerator generator) {
         this.baseItemLabelGenerator = generator;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -1310,7 +1310,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
             throw new IllegalArgumentException("Null 'generator' argument.");
         }
         this.legendItemLabelGenerator = generator;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -1336,6 +1336,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
     public void setLegendItemToolTipGenerator(
             CategorySeriesLabelGenerator generator) {
         this.legendItemToolTipGenerator = generator;
+        fireChangeEvent();
     }
 
     /**
@@ -1360,6 +1361,7 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
      */
     public void setLegendItemURLGenerator(CategorySeriesLabelGenerator generator) {
         this.legendItemURLGenerator = generator;
+        fireChangeEvent();
     }
 
     /**
@@ -1434,6 +1436,113 @@ public abstract class AbstractCategoryItemRenderer extends AbstractRenderer
         entities.add(entity);
     }
 
+//    /**
+//     * Sets the tool tip generator for a series and sends a
+//     * {@link RendererChangeEvent} to all registered listeners.
+//     *
+//     * @param series  the series index (zero-based).
+//     * @param generator  the generator (<code>null</code> permitted).
+//     *
+//     * @see #getSeriesToolTipGenerator(int)
+//     */
+//    public void setSeriesToolTipGenerator(int series,
+//                                          CategoryToolTipGenerator generator) {
+//        this.toolTipGeneratorList.set(series, generator);
+//        fireChangeEvent();
+//    }
+    
+//    /**
+//     * Sets the base tool tip generator and sends a {@link RendererChangeEvent}
+//     * to all registered listeners.
+//     *
+//     * @param generator  the generator (<code>null</code> permitted).
+//     *
+//     * @see #getBaseToolTipGenerator()
+//     */
+//    public void setBaseToolTipGenerator(CategoryToolTipGenerator generator) {
+//        this.baseToolTipGenerator = generator;
+//        fireChangeEvent();
+//    }
+    
+//    /**
+//     * Sets the URL generator for a series and sends a
+//     * {@link RendererChangeEvent} to all registered listeners.
+//     *
+//     * @param series  the series index (zero based).
+//     * @param generator  the generator.
+//     *
+//     * @see #getSeriesItemURLGenerator(int)
+//     */
+//    public void setSeriesItemURLGenerator(int series,
+//                                          CategoryURLGenerator generator) {
+//        this.itemURLGeneratorList.set(series, generator);
+//        fireChangeEvent();
+//    }
+    
+//    /**
+//     * Sets the base item URL generator and sends a
+//     * {@link RendererChangeEvent} to all registered listeners.
+//     *
+//     * @param generator  the item URL generator (<code>null</code> permitted).
+//     *
+//     * @see #getBaseItemURLGenerator()
+//     */
+//    public void setBaseItemURLGenerator(CategoryURLGenerator generator) {
+//        this.baseItemURLGenerator = generator;
+//        fireChangeEvent();
+//    }
+    
+//    /**
+//     * Sets the item label generator for ALL series and sends a
+//     * {@link RendererChangeEvent} to all registered listeners.
+//     *
+//     * @param generator  the generator (<code>null</code> permitted).
+//     *
+//     * @deprecated This method should no longer be used (as of version 1.0.6).
+//     *     It is sufficient to rely on {@link #setSeriesItemLabelGenerator(int,
+//     *     CategoryItemLabelGenerator)} and
+//     *     {@link #setBaseItemLabelGenerator(CategoryItemLabelGenerator)}.
+//     */
+//    public void setItemLabelGenerator(CategoryItemLabelGenerator generator) {
+//        this.itemLabelGenerator = generator;
+//        fireChangeEvent();
+//    }
+    
+//    /**
+//     * Sets the tool tip generator for ALL series and sends a
+//     * {@link org.jfree.chart.event.RendererChangeEvent} to all registered
+//     * listeners.
+//     *
+//     * @param generator  the generator (<code>null</code> permitted).
+//     *
+//     * @see #getToolTipGenerator()
+//     *
+//     * @deprecated This method should no longer be used (as of version 1.0.6).
+//     *     It is sufficient to rely on {@link #setSeriesToolTipGenerator(int,
+//     *     CategoryToolTipGenerator)} and
+//     *     {@link #setBaseToolTipGenerator(CategoryToolTipGenerator)}.
+//     */
+//    public void setToolTipGenerator(CategoryToolTipGenerator generator) {
+//        this.toolTipGenerator = generator;
+//        fireChangeEvent();
+//    }
+    
+//    /**
+//     * Sets the item URL generator for ALL series and sends a
+//     * {@link RendererChangeEvent} to all registered listeners.
+//     *
+//     * @param generator  the generator.
+//     *
+//     * @deprecated This method should no longer be used (as of version 1.0.6).
+//     *     It is sufficient to rely on {@link #setSeriesItemURLGenerator(int,
+//     *     CategoryURLGenerator)} and
+//     *     {@link #setBaseItemURLGenerator(CategoryURLGenerator)}.
+//     */
+//    public void setItemURLGenerator(CategoryURLGenerator generator) {
+//        this.itemURLGenerator = generator;
+//        fireChangeEvent();
+//    }
+    
     // === DEPRECATED CODE ===
 
     /**

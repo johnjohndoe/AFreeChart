@@ -202,8 +202,6 @@ public class DialBackground extends AbstractDialLayer implements DialLayer,
         canvas.restore();
     }
 
-    public void addChangeListener(DialLayerChangeListener listener) {};
-    
     /**
      * Tests this instance for equality with an arbitrary object.
      *

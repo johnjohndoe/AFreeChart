@@ -67,6 +67,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 
+import org.afree.util.PublicCloneable;
 import org.afree.util.ShapeUtilities;
 import org.afree.chart.ChartColor;
 import org.afree.graphics.geom.OvalShape;
@@ -75,6 +76,7 @@ import org.afree.graphics.geom.RectShape;
 import org.afree.graphics.geom.Shape;
 import org.afree.graphics.PaintType;
 import org.afree.graphics.SolidColor;
+
 import android.graphics.Color;
 import android.graphics.PathEffect;
 
@@ -84,7 +86,7 @@ import android.graphics.PathEffect;
  * default.
  */
 public class DefaultDrawingSupplier implements DrawingSupplier, Cloneable,
-        Serializable {
+        PublicCloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -7339847061039422538L;

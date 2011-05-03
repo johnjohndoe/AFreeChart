@@ -59,13 +59,13 @@ package org.afree.chart.plot.dial;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.EventListener;
-
-//import org.afree.chart.event.EventListenerList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * A base class that can be used to implement a {@link DialLayer}.  It includes
+ * A base class that can be used to implement a {@link DialLayer}. It includes
  * an event notification mechanism.
- *
+ * 
  * @since JFreeChart 1.0.7
  */
 public abstract class AbstractDialLayer implements DialLayer {
@@ -74,22 +74,21 @@ public abstract class AbstractDialLayer implements DialLayer {
     private boolean visible;
 
     /** Storage for registered listeners. */
-//    private transient EventListenerList listenerList;
+    private transient List<DialLayerChangeListener> listenerList;
 
     /**
      * Creates a new instance.
      */
     protected AbstractDialLayer() {
         this.visible = true;
-//        this.listenerList = new EventListenerList();
+        this.listenerList = new CopyOnWriteArrayList<DialLayerChangeListener>();
     }
 
     /**
      * Returns <code>true</code> if this layer is visible (should be displayed),
      * and <code>false</code> otherwise.
-     *
+     * 
      * @return A boolean.
-     *
      * @see #setVisible(boolean)
      */
     public boolean isVisible() {
@@ -97,12 +96,11 @@ public abstract class AbstractDialLayer implements DialLayer {
     }
 
     /**
-     * Sets the flag that determines whether or not this layer is drawn by
-     * the plot, and sends a {@link DialLayerChangeEvent} to all registered
+     * Sets the flag that determines whether or not this layer is drawn by the
+     * plot, and sends a {@link DialLayerChangeEvent} to all registered
      * listeners.
-     *
-     * @param visible  the flag.
-     *
+     * 
+     * @param visible the flag.
      * @see #isVisible()
      */
     public void setVisible(boolean visible) {
@@ -112,9 +110,8 @@ public abstract class AbstractDialLayer implements DialLayer {
 
     /**
      * Tests this instance for equality with an arbitrary object.
-     *
-     * @param obj  the object (<code>null</code> permitted).
-     *
+     * 
+     * @param obj the object (<code>null</code> permitted).
      * @return A boolean.
      */
     public boolean equals(Object obj) {
@@ -128,97 +125,89 @@ public abstract class AbstractDialLayer implements DialLayer {
         return this.visible == that.visible;
     }
 
-//    /**
-//     * Returns a hash code for this instance.
-//     *
-//     * @return A hash code.
-//     */
-//    public int hashCode() {
-//        int result = 23;
-//        result = HashUtilities.hashCode(result, this.visible);
-//        return result;
-//    }
+    // /**
+    // * Returns a hash code for this instance.
+    // *
+    // * @return A hash code.
+    // */
+    // public int hashCode() {
+    // int result = 23;
+    // result = HashUtilities.hashCode(result, this.visible);
+    // return result;
+    // }
 
     /**
      * Returns a clone of this instance.
-     *
+     * 
      * @return A clone.
-     *
      * @throws CloneNotSupportedException if there is a problem cloning this
-     *     instance.
+     *             instance.
      */
     public Object clone() throws CloneNotSupportedException {
         AbstractDialLayer clone = (AbstractDialLayer) super.clone();
         // we don't clone the listeners
-//        clone.listenerList = new EventListenerList();
+        clone.listenerList = new CopyOnWriteArrayList<DialLayerChangeListener>();
         return clone;
     }
 
     /**
      * Registers an object for notification of changes to the dial layer.
-     *
-     * @param listener  the object that is being registered.
-     *
+     * 
+     * @param listener the object that is being registered.
      * @see #removeChangeListener(DialLayerChangeListener)
      */
     public void addChangeListener(DialLayerChangeListener listener) {
-//        this.listenerList.add(DialLayerChangeListener.class, listener);
+        this.listenerList.add(listener);
     }
 
     /**
      * Deregisters an object for notification of changes to the dial layer.
-     *
-     * @param listener  the object to deregister.
-     *
+     * 
+     * @param listener the object to deregister.
      * @see #addChangeListener(DialLayerChangeListener)
      */
     public void removeChangeListener(DialLayerChangeListener listener) {
-//        this.listenerList.remove(DialLayerChangeListener.class, listener);
+        this.listenerList.remove(listener);
     }
 
     /**
-     * Returns <code>true</code> if the specified object is registered with
-     * the dataset as a listener.  Most applications won't need to call this
-     * method, it exists mainly for use by unit testing code.
-     *
-     * @param listener  the listener.
-     *
+     * Returns <code>true</code> if the specified object is registered with the
+     * dataset as a listener. Most applications won't need to call this method,
+     * it exists mainly for use by unit testing code.
+     * 
+     * @param listener the listener.
      * @return A boolean.
      */
     public boolean hasListener(EventListener listener) {
-//        List list = Arrays.asList(this.listenerList.getListenerList());
-//        return list.contains(listener);
-        return false;
+        return listenerList.contains(listener);
     }
 
     /**
-     * Notifies all registered listeners that the dial layer has changed.
-     * The {@link DialLayerChangeEvent} provides information about the change.
-     *
-     * @param event  information about the change to the axis.
+     * Notifies all registered listeners that the dial layer has changed. The
+     * {@link DialLayerChangeEvent} provides information about the change.
+     * 
+     * @param event information about the change to the axis.
      */
     protected void notifyListeners(DialLayerChangeEvent event) {
-//        Object[] listeners = this.listenerList.getListenerList();
-//        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-//            if (listeners[i] == DialLayerChangeListener.class) {
-//                ((DialLayerChangeListener) listeners[i + 1]).dialLayerChanged(
-//                        event);
-//            }
-//        }
+        if(listenerList.size() == 0) {
+            return;
+        }
+        for (int i = listenerList.size() - 1; i >= 0; i--) {
+            listenerList.get(i).dialLayerChanged(event);
+        }
+
     }
 
     /**
      * Provides serialization support.
-     *
-     * @param stream  the input stream.
-     *
-     * @throws IOException  if there is an I/O error.
-     * @throws ClassNotFoundException  if there is a classpath problem.
+     * 
+     * @param stream the input stream.
+     * @throws IOException if there is an I/O error.
+     * @throws ClassNotFoundException if there is a classpath problem.
      */
-    private void readObject(ObjectInputStream stream)
-        throws IOException, ClassNotFoundException {
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
-//        this.listenerList = new EventListenerList();
+        // this.listenerList = new EventListenerList();
     }
 
 }

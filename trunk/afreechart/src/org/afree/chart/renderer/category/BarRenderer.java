@@ -361,6 +361,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
      */
     public void setBase(double base) {
         this.base = base;
+        fireChangeEvent();
     }
 
     /**
@@ -388,6 +389,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
      */
     public void setItemMargin(double percent) {
         this.itemMargin = percent;
+        fireChangeEvent();
     }
 
     /**
@@ -412,6 +414,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
      */
     public void setDrawBarOutline(boolean draw) {
         this.drawBarOutline = draw;
+        fireChangeEvent();
     }
 
     /**
@@ -438,6 +441,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
      */
     public void setMaximumBarWidth(double percent) {
         this.maximumBarWidth = percent;
+        fireChangeEvent();
     }
 
     /**
@@ -472,6 +476,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
             throw new IllegalArgumentException("Requires 'min' >= 0.0");
         }
         this.minimumBarLength = min;
+        fireChangeEvent();
     }
 
     /**
@@ -523,6 +528,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
      */
     public void setPositiveItemLabelPositionFallback(ItemLabelPosition position) {
         this.positiveItemLabelPositionFallback = position;
+        fireChangeEvent();
     }
 
     /**
@@ -549,6 +555,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
      */
     public void setNegativeItemLabelPositionFallback(ItemLabelPosition position) {
         this.negativeItemLabelPositionFallback = position;
+        fireChangeEvent();
     }
 
     /**
@@ -583,6 +590,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
     public void setIncludeBaseInRange(boolean include) {
         if (this.includeBaseInRange != include) {
             this.includeBaseInRange = include;
+            fireChangeEvent();
         }
     }
 
@@ -615,6 +623,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
             throw new IllegalArgumentException("Null 'painter' argument.");
         }
         this.barPainter = painter;
+        fireChangeEvent();
     }
 
     /**
@@ -640,6 +649,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
      */
     public void setShadowVisible(boolean visible) {
         this.shadowsVisible = visible;
+        fireChangeEvent();
     }
 
     /**
@@ -695,6 +705,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
      */
     public void setShadowXOffset(double offset) {
         this.shadowXOffset = offset;
+        fireChangeEvent();
     }
 
     /**
@@ -719,6 +730,7 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
      */
     public void setShadowYOffset(double offset) {
         this.shadowYOffset = offset;
+        fireChangeEvent();
     }
 
     /**
@@ -1329,14 +1341,36 @@ public class BarRenderer extends AbstractCategoryItemRenderer implements
                 || anchor == ItemLabelAnchor.INSIDE11
                 || anchor == ItemLabelAnchor.INSIDE12;
     }
-
-    public void addChangeListener(RendererChangeListener listener) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void removeChangeListener(RendererChangeListener listener) {
-        // TODO Auto-generated method stub
-        
-    }
+    
+//    /**
+//     * Sets the gradient paint transformer and sends a
+//     * {@link RendererChangeEvent} to all registered listeners.
+//     *
+//     * @param transformer  the transformer (<code>null</code> permitted).
+//     *
+//     * @see #getGradientPaintTransformer()
+//     */
+//    public void setGradientPaintTransformer(
+//            GradientPaintTransformer transformer) {
+//        this.gradientPaintTransformer = transformer;
+//        fireChangeEvent();
+//    }
+    
+//    /**
+//     * Sets the shadow paint and sends a {@link RendererChangeEvent} to all
+//     * registered listeners.
+//     *
+//     * @param paint  the paint (<code>null</code> not permitted).
+//     *
+//     * @see #getShadowPaint()
+//     *
+//     * @since 1.0.11
+//     */
+//    public void setShadowPaint(Paint paint) {
+//        if (paint == null) {
+//            throw new IllegalArgumentException("Null 'paint' argument.");
+//        }
+//        this.shadowPaint = paint;
+//        fireChangeEvent();
+//    }
 }

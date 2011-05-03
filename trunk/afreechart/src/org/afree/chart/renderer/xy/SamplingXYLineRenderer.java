@@ -121,7 +121,7 @@ public class SamplingXYLineRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'line' argument.");
         }
         this.legendLine = line;
-//        fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**

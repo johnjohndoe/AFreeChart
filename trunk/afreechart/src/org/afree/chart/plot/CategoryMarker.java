@@ -59,6 +59,7 @@ package org.afree.chart.plot;
 
 import java.io.Serializable;
 
+import org.afree.chart.event.MarkerChangeEvent;
 import org.afree.ui.LengthAdjustmentType;
 
 /**
@@ -154,6 +155,7 @@ public class CategoryMarker extends Marker implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'key' argument.");
         }
         this.key = key;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
     /**
@@ -176,6 +178,7 @@ public class CategoryMarker extends Marker implements Cloneable, Serializable {
      */
     public void setDrawAsLine(boolean drawAsLine) {
         this.drawAsLine = drawAsLine;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
     /**

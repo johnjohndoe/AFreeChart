@@ -368,6 +368,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
     public void setVerticalTickLabels(boolean flag) {
         if (this.verticalTickLabels != flag) {
             this.verticalTickLabels = flag;
+            notifyListeners(new AxisChangeEvent(this));
         }
     }
 
@@ -395,6 +396,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      */
     public void setPositiveArrowVisible(boolean visible) {
         this.positiveArrowVisible = visible;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -421,6 +423,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      */
     public void setNegativeArrowVisible(boolean visible) {
         this.negativeArrowVisible = visible;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -450,6 +453,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
             throw new IllegalArgumentException("Null 'arrow' argument.");
         }
         this.upArrow = arrow;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -479,6 +483,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
             throw new IllegalArgumentException("Null 'arrow' argument.");
         }
         this.downArrow = arrow;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -508,6 +513,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
             throw new IllegalArgumentException("Null 'arrow' argument.");
         }
         this.leftArrow = arrow;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -537,6 +543,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
             throw new IllegalArgumentException("Null 'arrow' argument.");
         }
         this.rightArrow = arrow;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -991,6 +998,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
 
         if (this.mInverted != flag) {
             this.mInverted = flag;
+            notifyListeners(new AxisChangeEvent(this));
         }
 
     }
@@ -1038,7 +1046,9 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
             if (this.autoRange) {
                 autoAdjustRange();
             }
-
+            if (notify) {
+                notifyListeners(new AxisChangeEvent(this));
+            }
         }
     }
 
@@ -1089,7 +1099,9 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
             if (this.autoRange) {
                 autoAdjustRange();
             }
-
+            if (notify) {
+                notifyListeners(new AxisChangeEvent(this));
+            }
         }
 
     }
@@ -1123,6 +1135,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
             throw new IllegalArgumentException("Null 'range' argument.");
         }
         this.defaultAutoRange = range;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -1156,6 +1169,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
         if (isAutoRange()) {
             autoAdjustRange();
         }
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -1189,6 +1203,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
         if (isAutoRange()) {
             autoAdjustRange();
         }
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -1215,6 +1230,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
         if (isAutoRange()) {
             autoAdjustRange();
         }
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -1321,9 +1337,10 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
         if (turnOffAutoRange) {
             this.autoRange = false;
         }
-        
         this.mRange = range;
-
+        if (notify) {
+            notifyListeners(new AxisChangeEvent(this));
+        }
     }
 
     /**
@@ -1448,7 +1465,9 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
 
         if (this.autoTickUnitSelection != flag) {
             this.autoTickUnitSelection = flag;
-
+            if (notify) {
+                notifyListeners(new AxisChangeEvent(this));
+            }
         }
     }
 
@@ -1478,6 +1497,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      */
     public void setStandardTickUnits(TickUnitSource source) {
         this.standardTickUnits = source;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -1506,6 +1526,7 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
      */
     public void setMinorTickCount(int count) {
         this.minorTickCount = count;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     public boolean isLimitAble() {
@@ -1651,7 +1672,8 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
             lower = anchorValue - halfLength;
             upper = anchorValue + halfLength;
             
-            if (isLimitAble()) {
+            if (isLimitAble()
+                    && limitRange != null) {
                 double tmp = limitRange.getUpperBound();
                 if (upper > tmp) {
                     upper = tmp;
@@ -1783,7 +1805,8 @@ public abstract class ValueAxis extends Axis implements Cloneable, Serializable 
             upper = end + moveBound;
         }
 
-        if(isLimitAble()) {
+        if(isLimitAble()
+                && limitRange != null) {
             double tmp = limitRange.getLowerBound();
             if(lower < tmp) {
                 lower = tmp;

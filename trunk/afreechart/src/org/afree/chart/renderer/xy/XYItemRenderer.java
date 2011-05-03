@@ -109,6 +109,7 @@ import org.afree.chart.axis.ValueAxis;
 import org.afree.data.Range;
 import org.afree.data.xy.XYDataset;
 import org.afree.chart.event.RendererChangeEvent;
+import org.afree.chart.event.RendererChangeListener;
 import org.afree.chart.labels.ItemLabelPosition;
 import org.afree.chart.labels.XYItemLabelGenerator;
 import org.afree.chart.labels.XYSeriesLabelGenerator;
@@ -187,7 +188,7 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @see #removeChangeListener(RendererChangeListener)
      */
-    //public void addChangeListener(RendererChangeListener listener);
+    public void addChangeListener(RendererChangeListener listener);
 
     /**
      * Removes a change listener.
@@ -196,7 +197,7 @@ public interface XYItemRenderer extends LegendItemSource {
      *
      * @see #addChangeListener(RendererChangeListener)
      */
-    //public void removeChangeListener(RendererChangeListener listener);
+    public void removeChangeListener(RendererChangeListener listener);
 
 
     //// VISIBLE //////////////////////////////////////////////////////////////

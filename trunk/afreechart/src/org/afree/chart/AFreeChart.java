@@ -171,6 +171,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.afree.ui.Align;
 import org.afree.ui.Drawable;
@@ -190,7 +191,9 @@ import org.afree.data.Range;
 import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.entity.AFreeChartEntity;
 import org.afree.chart.event.ChartChangeEvent;
-//import org.afree.chart.event.EventListenerList;
+import org.afree.chart.event.ChartChangeListener;
+import org.afree.chart.event.ChartProgressEvent;
+import org.afree.chart.event.ChartProgressListener;
 import org.afree.chart.event.PlotChangeEvent;
 import org.afree.chart.event.PlotChangeListener;
 import org.afree.chart.event.TitleChangeEvent;
@@ -207,7 +210,6 @@ import org.afree.graphics.geom.RectShape;
 import org.afree.graphics.PaintType;
 import org.afree.graphics.PaintUtility;
 import org.afree.graphics.SolidColor;
-
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -289,7 +291,10 @@ public class AFreeChart implements Drawable, TitleChangeListener,
     private transient PaintType backgroundPaintType;
 
     /** Storage for registered change listeners. */
-//    private transient EventListenerList changeListeners;
+    private transient List<ChartChangeListener> changeListeners;
+
+    /** Storage for registered progress listeners. */
+    private transient List<ChartProgressListener> progressListeners;
     
     /**
      * A flag that can be used to enable/disable notification of chart change
@@ -325,8 +330,8 @@ public class AFreeChart implements Drawable, TitleChangeListener,
             throw new NullPointerException("Null 'plot' argument.");
         }
         // create storage for listeners...
-//        this.progressListeners = new EventListenerList();
-//        this.changeListeners = new EventListenerList();
+        this.progressListeners = new CopyOnWriteArrayList<ChartProgressListener>();
+        this.changeListeners = new CopyOnWriteArrayList<ChartChangeListener>();
         this.notify = true; // default is to notify listeners when the
 
         this.borderVisible = true;
@@ -335,6 +340,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
         this.borderEffect = DEFAULT_BORDER_EFFECT;
 
         this.plot = plot;
+        plot.addChangeListener(this);
 
         this.subtitles = new ArrayList();
 
@@ -347,6 +353,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
             legend.setBackgroundPaintType(paintType);
             legend.setPosition(RectangleEdge.BOTTOM);
             this.subtitles.add(legend);
+            legend.addChangeListener(this);
         }
 
         // add the chart title, if one has been specified...
@@ -355,6 +362,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
                 titleFont = DEFAULT_TITLE_FONT;
             }
             this.title = new TextTitle(title, titleFont);
+            this.title.addChangeListener(this);
         }
 
         this.backgroundPaintType = DEFAULT_BACKGROUND_PAINT;
@@ -392,6 +400,35 @@ public class AFreeChart implements Drawable, TitleChangeListener,
         this(null, null, plot, true);
     }
     
+//    /**
+//     * Returns the collection of rendering hints for the chart.
+//     *
+//     * @return The rendering hints for the chart (never <code>null</code>).
+//     *
+//     * @see #setRenderingHints(RenderingHints)
+//     */
+//    public RenderingHints getRenderingHints() {
+//        return this.renderingHints;
+//    }
+//
+//    /**
+//     * Sets the rendering hints for the chart.  These will be added (using the
+//     * Graphics2D.addRenderingHints() method) near the start of the
+//     * JFreeChart.draw() method.
+//     *
+//     * @param renderingHints  the rendering hints (<code>null</code> not
+//     *                        permitted).
+//     *
+//     * @see #getRenderingHints()
+//     */
+//    public void setRenderingHints(RenderingHints renderingHints) {
+//        if (renderingHints == null) {
+//            throw new NullPointerException("RenderingHints given are null");
+//        }
+//        this.renderingHints = renderingHints;
+//        fireChartChanged();
+//    }
+    
     /**
      * Returns a flag that controls whether or not a border is drawn around the
      * outside of the chart.
@@ -415,6 +452,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
      */
     public void setBorderVisible(boolean visible) {
         this.borderVisible = visible;
+        fireChartChanged();
     }
 
     /**
@@ -438,6 +476,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
      */
     public void setBorderStroke(float stroke) {
         this.borderStroke = stroke;
+        fireChartChanged();
     }
 
     /**
@@ -461,6 +500,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
      */
     public void setBorderPaintType(PaintType paintType) {
         this.borderPaintType = paintType;
+        fireChartChanged();
     }
 
     /**
@@ -488,6 +528,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
             throw new IllegalArgumentException("Null 'padding' argument.");
         }
         this.padding = padding;
+        notifyListeners(new ChartChangeEvent(this));
     }
 
     /**
@@ -516,9 +557,14 @@ public class AFreeChart implements Drawable, TitleChangeListener,
      * @see #getTitle()
      */
     public void setTitle(TextTitle title) {
-
+        if (this.title != null) {
+            this.title.removeChangeListener(this);
+        }
         this.title = title;
-
+        if (title != null) {
+            title.addChangeListener(this);
+        }
+        fireChartChanged();
     }
 
     /**
@@ -531,6 +577,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
      */
     public void setBorderEffect(PathEffect effect) {
         this.borderEffect = effect;
+        fireChartChanged();
     }
     
     /**
@@ -576,6 +623,30 @@ public class AFreeChart implements Drawable, TitleChangeListener,
             throw new IllegalArgumentException("Null 'subtitle' argument.");
         }
         this.subtitles.add(subtitle);
+        subtitle.addChangeListener(this);
+        fireChartChanged();
+    }
+
+    /**
+     * Adds a subtitle at a particular position in the subtitle list, and sends
+     * a {@link ChartChangeEvent} to all registered listeners.
+     *
+     * @param index  the index (in the range 0 to {@link #getSubtitleCount()}).
+     * @param subtitle  the subtitle to add (<code>null</code> not permitted).
+     *
+     * @since 1.0.6
+     */
+    public void addSubtitle(int index, Title subtitle) {
+        if (index < 0 || index > getSubtitleCount()) {
+            throw new IllegalArgumentException(
+                    "The 'index' argument is out of range.");
+        }
+        if (subtitle == null) {
+            throw new IllegalArgumentException("Null 'subtitle' argument.");
+        }
+        this.subtitles.add(index, subtitle);
+        subtitle.addChangeListener(this);
+        fireChartChanged();
     }
 
     /**
@@ -628,6 +699,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
 
     public void removeSubtitle(Title title) {
         this.subtitles.remove(title);
+        fireChartChanged();
     }
 
     /**
@@ -666,7 +738,13 @@ public class AFreeChart implements Drawable, TitleChangeListener,
     }
 
     public void clearSubtitles() {
+        Iterator iterator = this.subtitles.iterator();
+        while (iterator.hasNext()) {
+            Title t = (Title) iterator.next();
+            t.removeChangeListener(this);
+        }
         this.subtitles.clear();
+        fireChartChanged();
     }
 
     /**
@@ -782,7 +860,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
      * this.renderingHints.put(RenderingHints.KEY_ANTIALIASING,
      * RenderingHints.VALUE_ANTIALIAS_ON); } else {
      * this.renderingHints.put(RenderingHints.KEY_ANTIALIASING,
-     * RenderingHints.VALUE_ANTIALIAS_OFF); } fireChartChanged();
+     * RenderingHints.VALUE_ANTIALIAS_OFF); fireChartChanged(); }
      * 
      * }
      */
@@ -799,7 +877,7 @@ public class AFreeChart implements Drawable, TitleChangeListener,
      */
     /*
      * public Object getTextAntiAlias() { return
-     * this.renderingHints.get(RenderingHints.KEY_TEXT_ANTIALIASING); }
+     * this.renderingHints.get(RenderingHints.KEY_TEXT_ANTIALIASING);
      *//**
      * Sets the value in the rendering hints table for
      * {@link RenderingHints#KEY_TEXT_ANTIALIASING} to either
@@ -863,15 +941,111 @@ public class AFreeChart implements Drawable, TitleChangeListener,
         if (this.backgroundPaintType != null) {
             if (!this.backgroundPaintType.equals(paintType)) {
                 this.backgroundPaintType = paintType;
+                fireChartChanged();
             }
         } else {
             if (paintType != null) {
                 this.backgroundPaintType = paintType;
+                fireChartChanged();
             }
         }
 
     }
 
+
+//    /**
+//     * Returns the background image for the chart, or <code>null</code> if
+//     * there is no image.
+//     *
+//     * @return The image (possibly <code>null</code>).
+//     *
+//     * @see #setBackgroundImage(Image)
+//     */
+//    public Image getBackgroundImage() {
+//        return this.backgroundImage;
+//    }
+//
+//    /**
+//     * Sets the background image for the chart and sends a
+//     * {@link ChartChangeEvent} to all registered listeners.
+//     *
+//     * @param image  the image (<code>null</code> permitted).
+//     *
+//     * @see #getBackgroundImage()
+//     */
+//    public void setBackgroundImage(Image image) {
+//
+//        if (this.backgroundImage != null) {
+//            if (!this.backgroundImage.equals(image)) {
+//                this.backgroundImage = image;
+//                fireChartChanged();
+//            }
+//        }
+//        else {
+//            if (image != null) {
+//                this.backgroundImage = image;
+//                fireChartChanged();
+//            }
+//        }
+//
+//    }
+//
+//    /**
+//     * Returns the background image alignment. Alignment constants are defined
+//     * in the <code>org.jfree.ui.Align</code> class in the JCommon class
+//     * library.
+//     *
+//     * @return The alignment.
+//     *
+//     * @see #setBackgroundImageAlignment(int)
+//     */
+//    public int getBackgroundImageAlignment() {
+//        return this.backgroundImageAlignment;
+//    }
+//
+//    /**
+//     * Sets the background alignment.  Alignment options are defined by the
+//     * {@link org.jfree.ui.Align} class.
+//     *
+//     * @param alignment  the alignment.
+//     *
+//     * @see #getBackgroundImageAlignment()
+//     */
+//    public void setBackgroundImageAlignment(int alignment) {
+//        if (this.backgroundImageAlignment != alignment) {
+//            this.backgroundImageAlignment = alignment;
+//            fireChartChanged();
+//        }
+//    }
+//
+//    /**
+//     * Returns the alpha-transparency for the chart's background image.
+//     *
+//     * @return The alpha-transparency.
+//     *
+//     * @see #setBackgroundImageAlpha(float)
+//     */
+//    public float getBackgroundImageAlpha() {
+//        return this.backgroundImageAlpha;
+//    }
+//
+//    /**
+//     * Sets the alpha-transparency for the chart's background image.
+//     * Registered listeners are notified that the chart has been changed.
+//     *
+//     * @param alpha  the alpha value.
+//     *
+//     * @see #getBackgroundImageAlpha()
+//     */
+//    public void setBackgroundImageAlpha(float alpha) {
+//
+//        if (this.backgroundImageAlpha != alpha) {
+//            this.backgroundImageAlpha = alpha;
+//            fireChartChanged();
+//        }
+//
+//    }
+    
     /**
      * Draws the chart on a graphics device (such as the screen or a
      * printer).
@@ -921,6 +1095,9 @@ public class AFreeChart implements Drawable, TitleChangeListener,
     public void draw(Canvas canvas, RectShape chartArea, PointF anchor,
             ChartRenderingInfo info) {
         EntityCollection entities = null;
+        
+        notifyListeners(new ChartProgressEvent(this, this,
+                ChartProgressEvent.DRAWING_STARTED, 0));
         
         // record the chart area, if info is requested...
         if (info != null) {
@@ -991,6 +1168,8 @@ public class AFreeChart implements Drawable, TitleChangeListener,
 
         canvas.clipRect(savedClip, Op.REPLACE);
 
+        notifyListeners(new ChartProgressEvent(this, this,
+                ChartProgressEvent.DRAWING_FINISHED, 100));
     }
 
     /**
@@ -1137,15 +1316,121 @@ public class AFreeChart implements Drawable, TitleChangeListener,
         this.plot.handleClick(x, y, info.getPlotInfo());
 
     }
-    
-    public void titleChanged(TitleChangeEvent event) {
-        // TODO Auto-generated method stub
 
+    /**
+     * Registers an object for notification of changes to the chart.
+     *
+     * @param listener  the listener (<code>null</code> not permitted).
+     *
+     * @see #removeChangeListener(ChartChangeListener)
+     */
+    public void addChangeListener(ChartChangeListener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("Null 'listener' argument.");
+        }
+        this.changeListeners.add(listener);
     }
 
-    public void plotChanged(PlotChangeEvent event) {
-        // TODO Auto-generated method stub
+    /**
+     * Deregisters an object for notification of changes to the chart.
+     *
+     * @param listener  the listener (<code>null</code> not permitted)
+     *
+     * @see #addChangeListener(ChartChangeListener)
+     */
+    public void removeChangeListener(ChartChangeListener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("Null 'listener' argument.");
+        }
+        this.changeListeners.remove(listener);
+    }
 
+    /**
+     * Sends a default {@link ChartChangeEvent} to all registered listeners.
+     * <P>
+     * This method is for convenience only.
+     */
+    public void fireChartChanged() {
+        ChartChangeEvent event = new ChartChangeEvent(this);
+        notifyListeners(event);
+    }
+
+    /**
+     * Sends a {@link ChartChangeEvent} to all registered listeners.
+     *
+     * @param event  information about the event that triggered the
+     *               notification.
+     */
+    protected void notifyListeners(ChartChangeEvent event) {
+        if(changeListeners.size() == 0) {
+            return;
+        }
+        if (this.notify) {
+            for (int i = changeListeners.size() - 1; i >= 0; i--) {
+                changeListeners.get(i).chartChanged(event);
+            }
+
+        }
+    }
+
+    /**
+     * Registers an object for notification of progress events relating to the
+     * chart.
+     *
+     * @param listener  the object being registered.
+     *
+     * @see #removeProgressListener(ChartProgressListener)
+     */
+    public void addProgressListener(ChartProgressListener listener) {
+        this.progressListeners.add(listener);
+    }
+
+    /**
+     * Deregisters an object for notification of changes to the chart.
+     *
+     * @param listener  the object being deregistered.
+     *
+     * @see #addProgressListener(ChartProgressListener)
+     */
+    public void removeProgressListener(ChartProgressListener listener) {
+        this.progressListeners.remove(listener);
+    }
+
+    /**
+     * Sends a {@link ChartProgressEvent} to all registered listeners.
+     *
+     * @param event  information about the event that triggered the
+     *               notification.
+     */
+    protected void notifyListeners(ChartProgressEvent event) {
+        if(progressListeners.size() == 0) {
+            return;
+        }
+        for (int i = progressListeners.size() - 1; i >= 0; i--) {
+            progressListeners.get(i).chartProgress(event);
+        }
+    }
+
+    /**
+     * Receives notification that a chart title has changed, and passes this
+     * on to registered listeners.
+     *
+     * @param event  information about the chart title change.
+     */
+    public void titleChanged(TitleChangeEvent event) {
+        event.setChart(this);
+        notifyListeners(event);
+    }
+
+    /**
+     * Receives notification that the plot has changed, and passes this on to
+     * registered listeners.
+     *
+     * @param event  information about the plot change.
+     */
+    public void plotChanged(PlotChangeEvent event) {
+        event.setChart(this);
+        notifyListeners(event);
     }
     
     /**
@@ -1167,14 +1452,14 @@ public class AFreeChart implements Drawable, TitleChangeListener,
 
         if (this.title != null) {
             chart.title = (TextTitle) this.title.clone();
-//            chart.title.addChangeListener(chart);
+            chart.title.addChangeListener(chart);
         }
 
         chart.subtitles = new ArrayList();
         for (int i = 0; i < getSubtitleCount(); i++) {
             Title subtitle = (Title) getSubtitle(i).clone();
             chart.subtitles.add(subtitle);
-//            subtitle.addChangeListener(chart);
+            subtitle.addChangeListener(chart);
         }
 
         if (this.plot != null) {
@@ -1182,8 +1467,8 @@ public class AFreeChart implements Drawable, TitleChangeListener,
             chart.plot.addChangeListener(chart);
         }
 
-//        chart.progressListeners = new EventListenerList();
-//        chart.changeListeners = new EventListenerList();
+        chart.progressListeners = new CopyOnWriteArrayList<ChartProgressListener>();
+        chart.changeListeners = new CopyOnWriteArrayList<ChartChangeListener>();
         return chart;
     }
 
@@ -1201,23 +1486,6 @@ public class AFreeChart implements Drawable, TitleChangeListener,
         // if the flag is being set to true, there may be queued up changes...
         if (notify) {
             notifyListeners(new ChartChangeEvent(this));
-        }
-    }
-
-    /**
-     * Sends a {@link ChartChangeEvent} to all registered listeners.
-     * 
-     * @param event
-     *            information about the event that triggered the notification.
-     */
-    protected void notifyListeners(ChartChangeEvent event) {
-        if (this.notify) {
-//            Object[] listeners = this.changeListeners.getListenerList();
-//            for (int i = listeners.length - 2; i >= 0; i -= 2) {
-//                if (listeners[i] == ChartChangeListener.class) {
-//                    ((ChartChangeListener) listeners[i + 1]).chartChanged(event);
-//                }
-//            }
         }
     }
     
@@ -1280,5 +1548,37 @@ public class AFreeChart implements Drawable, TitleChangeListener,
         }
         return true;
     }
+    
+//    /**
+//     * Provides serialization support.
+//     *
+//     * @param stream  the input stream.
+//     *
+//     * @throws IOException  if there is an I/O error.
+//     * @throws ClassNotFoundException  if there is a classpath problem.
+//     */
+//    private void readObject(ObjectInputStream stream)
+//        throws IOException, ClassNotFoundException {
+//        stream.defaultReadObject();
+//        this.borderStroke = SerialUtilities.readStroke(stream);
+//        this.borderPaint = SerialUtilities.readPaint(stream);
+//        this.backgroundPaint = SerialUtilities.readPaint(stream);
+//        this.progressListeners = new EventListenerList();
+//        this.changeListeners = new EventListenerList();
+//        this.renderingHints = new RenderingHints(
+//                RenderingHints.KEY_ANTIALIASING,
+//                RenderingHints.VALUE_ANTIALIAS_ON);
+//
+//        // register as a listener with sub-components...
+//        if (this.title != null) {
+//            this.title.addChangeListener(this);
+//        }
+//
+//        for (int i = 0; i < getSubtitleCount(); i++) {
+//            getSubtitle(i).addChangeListener(this);
+//        }
+//        this.plot.addChangeListener(this);
+//    }
 
+    
 }

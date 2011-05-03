@@ -854,4 +854,21 @@ public class BarRenderer3D extends BarRenderer
         */
         return super.equals(obj);
     }
+    
+//    /**
+//     * Sets the paint used to hightlight the left and bottom walls in the plot
+//     * background, and sends a {@link RendererChangeEvent} to all registered
+//     * listeners.
+//     *
+//     * @param paint  the paint (<code>null</code> not permitted).
+//     *
+//     * @see #getWallPaint()
+//     */
+//    public void setWallPaint(Paint paint) {
+//        if (paint == null) {
+//            throw new IllegalArgumentException("Null 'paint' argument.");
+//        }
+//        this.wallPaint = paint;
+//        fireChangeEvent();
+//    }
 }

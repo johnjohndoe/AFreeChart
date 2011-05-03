@@ -226,6 +226,7 @@ import org.afree.data.category.CategoryDataset;
 import org.afree.data.Range;
 import org.afree.data.general.DatasetChangeEvent;
 import org.afree.data.general.DatasetUtilities;
+import org.afree.chart.event.ChartChangeEventType;
 import org.afree.chart.event.PlotChangeEvent;
 import org.afree.chart.event.RendererChangeEvent;
 import org.afree.chart.event.RendererChangeListener;
@@ -238,6 +239,7 @@ import org.afree.graphics.geom.RectShape;
 import org.afree.graphics.PaintType;
 import org.afree.graphics.PaintUtility;
 import org.afree.graphics.SolidColor;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -251,7 +253,7 @@ import android.graphics.Typeface;
  * renders each data item using a {@link CategoryItemRenderer}.
  */
 public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
-        Zoomable, Movable, RendererChangeListener, Cloneable, Serializable {
+        Zoomable, RendererChangeListener, Movable, Cloneable, Serializable {
 
     /** For serialization. */
     private static final long serialVersionUID = -3537691700434728188L;
@@ -596,6 +598,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
 
         this.datasets = new ObjectList();
         this.datasets.set(0, dataset);
+        if (dataset != null) {
+            dataset.addChangeListener(this);
+        }
 
         this.axisOffset = RectangleInsets.ZERO_INSETS;
 
@@ -612,6 +617,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         this.mapDatasetToDomainAxis(0, 0);
         if (domainAxis != null) {
             domainAxis.setPlot(this);
+            domainAxis.addChangeListener(this);
         }
         this.drawSharedDomainAxis = false;
 
@@ -619,6 +625,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         this.mapDatasetToRangeAxis(0, 0);
         if (rangeAxis != null) {
             rangeAxis.setPlot(this);
+            rangeAxis.addChangeListener(this);
         }
 
         configureDomainAxes();
@@ -702,6 +709,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             throw new IllegalArgumentException("Null 'orientation' argument.");
         }
         this.orientation = orientation;
+        fireChangeEvent();
     }
 
     /**
@@ -729,6 +737,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             throw new IllegalArgumentException("Null 'offset' argument.");
         }
         this.axisOffset = offset;
+        fireChangeEvent();
     }
 
     /**
@@ -809,14 +818,21 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      *            notify listeners?
      */
     public void setDomainAxis(int index, CategoryAxis axis, boolean notify) {
+        CategoryAxis existing = (CategoryAxis) this.domainAxes.get(index);
+        if (existing != null) {
+            existing.removeChangeListener(this);
+        }
         if (axis != null) {
             axis.setPlot(this);
         }
         this.domainAxes.set(index, axis);
         if (axis != null) {
             axis.configure();
+            axis.addChangeListener(this);
         }
-
+        if (notify) {
+            fireChangeEvent();
+        }
     }
 
     /**
@@ -832,7 +848,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         for (int i = 0; i < axes.length; i++) {
             setDomainAxis(i, axes[i], false);
         }
-        ;
+        fireChangeEvent();
     }
 
     /**
@@ -957,7 +973,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
                     "Null 'location' for index 0 not permitted.");
         }
         this.domainAxisLocations.set(index, location);
-
+        if (notify) {
+            fireChangeEvent();
+        }
     }
 
     /**
@@ -1003,7 +1021,14 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * to all registered listeners.
      */
     public void clearDomainAxes() {
+        for (int i = 0; i < this.domainAxes.size(); i++) {
+            CategoryAxis axis = (CategoryAxis) this.domainAxes.get(i);
+            if (axis != null) {
+                axis.removeChangeListener(this);
+            }
+        }
         this.domainAxes.clear();
+        fireChangeEvent();
     }
 
     /**
@@ -1088,15 +1113,21 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      *            notify listeners?
      */
     public void setRangeAxis(int index, ValueAxis axis, boolean notify) {
-
+        ValueAxis existing = (ValueAxis) this.rangeAxes.get(index);
+        if (existing != null) {
+            existing.removeChangeListener(this);
+        }
         if (axis != null) {
             axis.setPlot(this);
         }
         this.rangeAxes.set(index, axis);
         if (axis != null) {
             axis.configure();
+            axis.addChangeListener(this);
         }
-
+        if (notify) {
+            fireChangeEvent();
+        }
     }
 
     /**
@@ -1112,7 +1143,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         for (int i = 0; i < axes.length; i++) {
             setRangeAxis(i, axes[i], false);
         }
-
+        fireChangeEvent();
     }
 
     /**
@@ -1241,7 +1272,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
                     "Null 'location' for index 0 not permitted.");
         }
         this.rangeAxisLocations.set(index, location);
-
+        if (notify) {
+            fireChangeEvent();
+        }
     }
 
     /**
@@ -1285,7 +1318,14 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * to all registered listeners.
      */
     public void clearRangeAxes() {
+        for (int i = 0; i < this.rangeAxes.size(); i++) {
+            ValueAxis axis = (ValueAxis) this.rangeAxes.get(i);
+            if (axis != null) {
+                axis.removeChangeListener(this);
+            }
+        }
         this.rangeAxes.clear();
+        fireChangeEvent();
     }
 
     /**
@@ -1356,7 +1396,19 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * @see #getDataset(int)
      */
     public void setDataset(int index, CategoryDataset dataset) {
+
+        CategoryDataset existing = (CategoryDataset) this.datasets.get(index);
+        if (existing != null) {
+            existing.removeChangeListener(this);
+        }
         this.datasets.set(index, dataset);
+        if (dataset != null) {
+            dataset.addChangeListener(this);
+        }
+
+        // send a dataset change event to self...
+        DatasetChangeEvent event = new DatasetChangeEvent(this, dataset);
+        datasetChanged(event);
     }
 
     /**
@@ -1668,8 +1720,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             boolean notify) {
 
         // stop listening to the existing renderer...
-        CategoryItemRenderer existing = (CategoryItemRenderer) this.renderers
-                .get(index);
+        CategoryItemRenderer existing
+            = (CategoryItemRenderer) this.renderers.get(index);
         if (existing != null) {
             existing.removeChangeListener(this);
         }
@@ -1684,6 +1736,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         configureDomainAxes();
         configureRangeAxes();
 
+        if (notify) {
+            fireChangeEvent();
+        }
     }
 
     /**
@@ -1697,6 +1752,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         for (int i = 0; i < renderers.length; i++) {
             setRenderer(i, renderers[i], false);
         }
+        fireChangeEvent();
     }
 
     /**
@@ -1759,6 +1815,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             throw new IllegalArgumentException("Null 'order' argument.");
         }
         this.renderingOrder = order;
+        fireChangeEvent();
     }
 
     /**
@@ -1790,6 +1847,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             throw new IllegalArgumentException("Null 'order' argument.");
         }
         this.columnRenderingOrder = order;
+        fireChangeEvent();
     }
 
     /**
@@ -1821,6 +1879,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             throw new IllegalArgumentException("Null 'order' argument.");
         }
         this.rowRenderingOrder = order;
+        fireChangeEvent();
     }
 
     /**
@@ -1849,6 +1908,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     public void setDomainGridlinesVisible(boolean visible) {
         if (this.domainGridlinesVisible != visible) {
             this.domainGridlinesVisible = visible;
+            fireChangeEvent();
         }
     }
 
@@ -1877,6 +1937,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             throw new IllegalArgumentException("Null 'position' argument.");
         }
         this.domainGridlinePosition = position;
+        fireChangeEvent();
     }
 
     /**
@@ -1902,6 +1963,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     public void setDomainGridlineStroke(float stroke) {
 
         this.domainGridlineStroke = stroke;
+        fireChangeEvent();
     }
 
     /**
@@ -1929,6 +1991,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             throw new IllegalArgumentException("Null 'paintType' argument.");
         }
         this.domainGridlinePaintType = paintType;
+        fireChangeEvent();
     }
     
 
@@ -1953,10 +2016,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * @see #getDomainGridlineEffect()
      */
     public void setDomainGridlineEffect(PathEffect effect) {
-        if (effect == null) {
-            throw new IllegalArgumentException("Null 'effect' argument.");
-        }
         this.domainGridlineEffect = effect;
+        notifyListeners(new PlotChangeEvent(this));
     }
 
     /**
@@ -1987,6 +2048,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     public void setRangeZeroBaselineVisible(boolean visible) {
         this.rangeZeroBaselineVisible = visible;
+        fireChangeEvent();
     }
 
     /**
@@ -2016,6 +2078,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     public void setRangeZeroBaselineStroke(float stroke) {
 
         this.rangeZeroBaselineStroke = stroke;
+        fireChangeEvent();
     }
 
     /**
@@ -2048,6 +2111,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.rangeZeroBaselinePaintType = paintType;
+        fireChangeEvent();
     }
 
     /**
@@ -2074,6 +2138,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     public void setRangeGridlinesVisible(boolean visible) {
         if (this.rangeGridlinesVisible != visible) {
             this.rangeGridlinesVisible = visible;
+            fireChangeEvent();
         }
     }
 
@@ -2100,6 +2165,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     public void setRangeGridlineStroke(float stroke) {
 
         this.rangeGridlineStroke = stroke;
+        fireChangeEvent();
     }
 
     /**
@@ -2127,6 +2193,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.rangeGridlinePaintType = paintType;
+        fireChangeEvent();
     }
     
     /**
@@ -2150,10 +2217,8 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      * @see #getRangeGridlineEffect()
      */
     public void setRangeGridlineEffect(PathEffect effect) {
-        if (effect == null) {
-            throw new IllegalArgumentException("Null 'effect' argument.");
-        }
         this.rangeGridlineEffect = effect;
+        notifyListeners(new PlotChangeEvent(this));
     }
 
     /**
@@ -2187,6 +2252,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     public void setRangeMinorGridlinesVisible(boolean visible) {
         if (this.rangeMinorGridlinesVisible != visible) {
             this.rangeMinorGridlinesVisible = visible;
+            fireChangeEvent();
         }
     }
 
@@ -2218,6 +2284,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     public void setRangeMinorGridlineStroke(float stroke) {
 
         this.rangeMinorGridlineStroke = stroke;
+        fireChangeEvent();
     }
 
     /**
@@ -2244,6 +2311,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     public void setRangeMinorGridlineEffect(PathEffect effect) {
 
         this.rangeMinorGridlineEffect = effect;
+        notifyListeners(new PlotChangeEvent(this));
     }
 
     /**
@@ -2276,6 +2344,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.rangeMinorGridlinePaintType = paintType;
+        fireChangeEvent();
     }
 
     /**
@@ -2301,6 +2370,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     public void setFixedLegendItems(LegendItemCollection items) {
         this.fixedLegendItems = items;
+        fireChangeEvent();
     }
 
     /**
@@ -2392,6 +2462,60 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     }
 
     /**
+     * Receives notification of a change to the plot's dataset.
+     * <P>
+     * The range axis bounds will be recalculated if necessary.
+     *
+     * @param event  information about the event (not used here).
+     */
+    public void datasetChanged(DatasetChangeEvent event) {
+
+        int count = this.rangeAxes.size();
+        for (int axisIndex = 0; axisIndex < count; axisIndex++) {
+            ValueAxis yAxis = getRangeAxis(axisIndex);
+            if (yAxis != null) {
+                yAxis.configure();
+            }
+        }
+        if (getParent() != null) {
+            getParent().datasetChanged(event);
+        }
+        else {
+            PlotChangeEvent e = new PlotChangeEvent(this);
+            e.setType(ChartChangeEventType.DATASET_UPDATED);
+            notifyListeners(e);
+        }
+
+    }
+
+    /**
+     * Receives notification of a renderer change event.
+     *
+     * @param event  the event.
+     */
+    public void rendererChanged(RendererChangeEvent event) {
+        Plot parent = getParent();
+        if (parent != null) {
+            if (parent instanceof RendererChangeListener) {
+                RendererChangeListener rcl = (RendererChangeListener) parent;
+                rcl.rendererChanged(event);
+            }
+            else {
+                // this should never happen with the existing code, but throw
+                // an exception in case future changes make it possible...
+                throw new RuntimeException(
+                    "The renderer has changed and I don't know what to do!");
+            }
+        }
+        else {
+            configureRangeAxes();
+            PlotChangeEvent e = new PlotChangeEvent(this);
+            notifyListeners(e);
+        }
+    }
+
+
+    /**
      * Adds a marker for display (in the foreground) against the domain axis and
      * sends a {@link PlotChangeEvent} to all registered listeners. Typically a
      * marker will be drawn by the renderer as a line perpendicular to the
@@ -2474,23 +2598,27 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
         }
         Collection markers;
         if (layer == Layer.FOREGROUND) {
-            markers = (Collection) this.foregroundDomainMarkers
-                    .get(new Integer(index));
+            markers = (Collection) this.foregroundDomainMarkers.get(
+                    new Integer(index));
             if (markers == null) {
                 markers = new java.util.ArrayList();
                 this.foregroundDomainMarkers.put(new Integer(index), markers);
             }
             markers.add(marker);
-        } else if (layer == Layer.BACKGROUND) {
-            markers = (Collection) this.backgroundDomainMarkers
-                    .get(new Integer(index));
+        }
+        else if (layer == Layer.BACKGROUND) {
+            markers = (Collection) this.backgroundDomainMarkers.get(
+                    new Integer(index));
             if (markers == null) {
                 markers = new java.util.ArrayList();
                 this.backgroundDomainMarkers.put(new Integer(index), markers);
             }
             markers.add(marker);
         }
-
+        marker.addChangeListener(this);
+        if (notify) {
+            fireChangeEvent();
+        }
     }
 
     /**
@@ -2518,6 +2646,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             }
             this.foregroundDomainMarkers.clear();
         }
+        fireChangeEvent();
     }
 
     /**
@@ -2568,19 +2697,30 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     public void clearDomainMarkers(int index) {
         Integer key = new Integer(index);
         if (this.backgroundDomainMarkers != null) {
-            Collection markers = (Collection) this.backgroundDomainMarkers
-                    .get(key);
+            Collection markers
+                = (Collection) this.backgroundDomainMarkers.get(key);
             if (markers != null) {
+                Iterator iterator = markers.iterator();
+                while (iterator.hasNext()) {
+                    Marker m = (Marker) iterator.next();
+                    m.removeChangeListener(this);
+                }
                 markers.clear();
             }
         }
         if (this.foregroundDomainMarkers != null) {
-            Collection markers = (Collection) this.foregroundDomainMarkers
-                    .get(key);
+            Collection markers
+                = (Collection) this.foregroundDomainMarkers.get(key);
             if (markers != null) {
+                Iterator iterator = markers.iterator();
+                while (iterator.hasNext()) {
+                    Marker m = (Marker) iterator.next();
+                    m.removeChangeListener(this);
+                }
                 markers.clear();
             }
         }
+        fireChangeEvent();
     }
 
     /**
@@ -2669,7 +2809,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             return false;
         }
         boolean removed = markers.remove(marker);
-
+        if (removed && notify) {
+            fireChangeEvent();
+        }
         return removed;
     }
 
@@ -2766,7 +2908,10 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             }
             markers.add(marker);
         }
-
+        marker.addChangeListener(this);
+        if (notify) {
+            fireChangeEvent();
+        }
     }
 
     /**
@@ -2794,6 +2939,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             }
             this.foregroundRangeMarkers.clear();
         }
+        fireChangeEvent();
     }
 
     /**
@@ -2846,19 +2992,30 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     public void clearRangeMarkers(int index) {
         Integer key = new Integer(index);
         if (this.backgroundRangeMarkers != null) {
-            Collection markers = (Collection) this.backgroundRangeMarkers
-                    .get(key);
+            Collection markers
+                = (Collection) this.backgroundRangeMarkers.get(key);
             if (markers != null) {
+                Iterator iterator = markers.iterator();
+                while (iterator.hasNext()) {
+                    Marker m = (Marker) iterator.next();
+                    m.removeChangeListener(this);
+                }
                 markers.clear();
             }
         }
         if (this.foregroundRangeMarkers != null) {
-            Collection markers = (Collection) this.foregroundRangeMarkers
-                    .get(key);
+            Collection markers
+                = (Collection) this.foregroundRangeMarkers.get(key);
             if (markers != null) {
+                Iterator iterator = markers.iterator();
+                while (iterator.hasNext()) {
+                    Marker m = (Marker) iterator.next();
+                    m.removeChangeListener(this);
+                }
                 markers.clear();
             }
         }
+        fireChangeEvent();
     }
 
     /**
@@ -2958,7 +3115,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             return false;
         }
         boolean removed = markers.remove(marker);
-
+        if (removed && notify) {
+            fireChangeEvent();
+        }
         return removed;
     }
 
@@ -2992,6 +3151,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     public void setDomainCrosshairVisible(boolean flag) {
         if (this.domainCrosshairVisible != flag) {
             this.domainCrosshairVisible = flag;
+            fireChangeEvent();
         }
     }
 
@@ -3032,7 +3192,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     public void setDomainCrosshairRowKey(Comparable key, boolean notify) {
         this.domainCrosshairRowKey = key;
-
+        if (notify) {
+            fireChangeEvent();
+        }
     }
 
     /**
@@ -3072,7 +3234,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     public void setDomainCrosshairColumnKey(Comparable key, boolean notify) {
         this.domainCrosshairColumnKey = key;
-
+        if (notify) {
+            fireChangeEvent();
+        }
     }
 
     /**
@@ -3112,7 +3276,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     public void setCrosshairDatasetIndex(int index, boolean notify) {
         this.crosshairDatasetIndex = index;
-
+        if (notify) {
+            fireChangeEvent();
+        }
     }
 
     /**
@@ -3144,6 +3310,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.domainCrosshairPaintType = paintType;
+        fireChangeEvent();
     }
     
     /**
@@ -3169,6 +3336,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     public void setDomainCrosshairEffect(PathEffect effect) {
         this.domainCrosshairEffect = effect;
+        notifyListeners(new PlotChangeEvent(this));
     }
 
     /**
@@ -3223,6 +3391,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     public void setRangeCrosshairVisible(boolean flag) {
         if (this.rangeCrosshairVisible != flag) {
             this.rangeCrosshairVisible = flag;
+            fireChangeEvent();
         }
     }
 
@@ -3251,6 +3420,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     public void setRangeCrosshairLockedOnData(boolean flag) {
         if (this.rangeCrosshairLockedOnData != flag) {
             this.rangeCrosshairLockedOnData = flag;
+            fireChangeEvent();
         }
     }
 
@@ -3292,7 +3462,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     public void setRangeCrosshairValue(double value, boolean notify) {
         this.rangeCrosshairValue = value;
-
+        if (isRangeCrosshairVisible() && notify) {
+            fireChangeEvent();
+        }
     }
 
     /**
@@ -3322,6 +3494,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
     public void setRangeCrosshairStroke(float stroke) {
 
         this.rangeCrosshairStroke = stroke;
+        fireChangeEvent();
     }
 
     /**
@@ -3351,6 +3524,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.rangeCrosshairPaintType = paintType;
+        fireChangeEvent();
     }
     
     /**
@@ -3378,6 +3552,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     public void setRangeCrosshairEffect(PathEffect effect) {
         this.rangeCrosshairEffect = effect;
+        notifyListeners(new PlotChangeEvent(this));
     }
 
     /**
@@ -3421,7 +3596,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             throw new IllegalArgumentException("Null 'annotation' argument.");
         }
         this.annotations.add(annotation);
-
+        if (notify) {
+            fireChangeEvent();
+        }
     }
 
     /**
@@ -3458,7 +3635,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
             throw new IllegalArgumentException("Null 'annotation' argument.");
         }
         boolean removed = this.annotations.remove(annotation);
-
+        if (removed && notify) {
+            fireChangeEvent();
+        }
         return removed;
     }
 
@@ -3468,6 +3647,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     public void clearAnnotations() {
         this.annotations.clear();
+        fireChangeEvent();
     }
 
     /**
@@ -4470,6 +4650,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     public void setWeight(int weight) {
         this.weight = weight;
+        fireChangeEvent();
     }
 
     /**
@@ -4511,7 +4692,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     public void setFixedDomainAxisSpace(AxisSpace space, boolean notify) {
         this.fixedDomainAxisSpace = space;
-
+        if (notify) {
+            fireChangeEvent();
+        }
     }
 
     /**
@@ -4553,7 +4736,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     public void setFixedRangeAxisSpace(AxisSpace space, boolean notify) {
         this.fixedRangeAxisSpace = space;
-
+        if (notify) {
+            fireChangeEvent();
+        }
     }
 
     /**
@@ -4623,6 +4808,7 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     public void setDrawSharedDomainAxis(boolean draw) {
         this.drawSharedDomainAxis = draw;
+        fireChangeEvent();
     }
 
     /**
@@ -4907,12 +5093,9 @@ public class CategoryPlot extends Plot implements ValueAxisPlot, Pannable,
      */
     public void setAnchorValue(double value, boolean notify) {
         this.anchorValue = value;
-
-    }
-
-    public void rendererChanged(RendererChangeEvent event) {
-        // TODO Auto-generated method stub
-
+        if (notify) {
+            fireChangeEvent();
+        }
     }
 
     public boolean isDomainMovable() {

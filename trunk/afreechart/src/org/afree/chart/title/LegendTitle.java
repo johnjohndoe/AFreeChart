@@ -240,6 +240,7 @@ public class LegendTitle extends Title implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'sources' argument.");
         }
         this.sources = sources;
+        notifyListeners(new TitleChangeEvent(this));
     }
 
     /**
@@ -260,6 +261,7 @@ public class LegendTitle extends Title implements Cloneable, Serializable {
      */
     public void setBackgroundPaintType(PaintType paintType) {
         this.backgroundPaintType = paintType;
+        notifyListeners(new TitleChangeEvent(this));
     }
 
     /**
@@ -282,6 +284,7 @@ public class LegendTitle extends Title implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'edge' argument.");
         }
         this.legendItemGraphicEdge = edge;
+        notifyListeners(new TitleChangeEvent(this));
     }
 
     /**
@@ -346,7 +349,8 @@ public class LegendTitle extends Title implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'padding' argument.");
         }
         this.legendItemGraphicPadding = padding;
-    }
+        notifyListeners(new TitleChangeEvent(this));
+}
 
     /**
      * Returns the item font.
@@ -369,6 +373,7 @@ public class LegendTitle extends Title implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'font' argument.");
         }
         this.itemFont = font;
+        notifyListeners(new TitleChangeEvent(this));
     }
 
     /**
@@ -391,6 +396,7 @@ public class LegendTitle extends Title implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.itemPaintType = paintType;
+        notifyListeners(new TitleChangeEvent(this));
     }
 
     /**
@@ -413,6 +419,7 @@ public class LegendTitle extends Title implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'padding' argument.");
         }
         this.itemLabelPadding = padding;
+        notifyListeners(new TitleChangeEvent(this));
     }
 
     /**

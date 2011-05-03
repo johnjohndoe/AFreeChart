@@ -76,14 +76,20 @@
 package org.afree.chart.plot;
 
 import java.io.Serializable;
+import java.util.EventListener;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.afree.ui.LengthAdjustmentType;
 import org.afree.ui.RectangleAnchor;
 import org.afree.ui.RectangleInsets;
 import org.afree.ui.TextAnchor;
+import org.afree.chart.event.MarkerChangeEvent;
+import org.afree.chart.event.MarkerChangeListener;
 import org.afree.graphics.geom.Font;
 import org.afree.graphics.PaintType;
 import org.afree.graphics.SolidColor;
+
 import android.graphics.Color;
 import android.graphics.PathEffect;
 import android.graphics.Typeface;
@@ -144,6 +150,9 @@ public abstract class Marker implements Cloneable, Serializable {
      */
     private LengthAdjustmentType labelOffsetType;
 
+    /** Storage for registered change listeners. */
+    private transient List<MarkerChangeListener> listenerList;
+
     /**
      * Creates a new marker with default attributes.
      */
@@ -196,6 +205,7 @@ public abstract class Marker implements Cloneable, Serializable {
         this.labelOffsetType = LengthAdjustmentType.CONTRACT;
         this.labelTextAnchor = TextAnchor.CENTER;
 
+        this.listenerList = new CopyOnWriteArrayList<MarkerChangeListener>();
     }
 
     /**
@@ -223,6 +233,7 @@ public abstract class Marker implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.paintType = paintType;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
     /**
@@ -247,6 +258,7 @@ public abstract class Marker implements Cloneable, Serializable {
      */
     public void setEffect(PathEffect effect) {
         this.effect = effect;
+        notifyListeners(new MarkerChangeEvent(this));
     }
     
     /**
@@ -272,6 +284,7 @@ public abstract class Marker implements Cloneable, Serializable {
     public void setStroke(float stroke) {
 
         this.stroke = stroke;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
     /**
@@ -296,6 +309,7 @@ public abstract class Marker implements Cloneable, Serializable {
      */
     public void setOutlinePaintType(PaintType paintType) {
         this.outlinePaintType = paintType;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
     /**
@@ -344,6 +358,7 @@ public abstract class Marker implements Cloneable, Serializable {
      */
     public void setOutlineEffect(PathEffect outlineEffect) {
         this.outlineEffect = outlineEffect;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
     /**
@@ -372,8 +387,8 @@ public abstract class Marker implements Cloneable, Serializable {
      * @see #getAlpha()
      */
     public void setAlpha(int alpha) {
-        
         this.alpha = alpha;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
     /**
@@ -398,6 +413,7 @@ public abstract class Marker implements Cloneable, Serializable {
      */
     public void setLabel(String label) {
         this.label = label;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
     /**
@@ -425,6 +441,7 @@ public abstract class Marker implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'font' argument.");
         }
         this.labelFont = font;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
     /**
@@ -452,6 +469,7 @@ public abstract class Marker implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.labelPaintType = paintType;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
     /**
@@ -481,6 +499,7 @@ public abstract class Marker implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'anchor' argument.");
         }
         this.labelAnchor = anchor;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
     /**
@@ -508,6 +527,7 @@ public abstract class Marker implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'offset' argument.");
         }
         this.labelOffset = offset;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
     /**
@@ -535,6 +555,7 @@ public abstract class Marker implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'adj' argument.");
         }
         this.labelOffsetType = adj;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
     /**
@@ -562,6 +583,60 @@ public abstract class Marker implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'anchor' argument.");
         }
         this.labelTextAnchor = anchor;
+        notifyListeners(new MarkerChangeEvent(this));
+    }
+
+    /**
+     * Registers an object for notification of changes to the marker.
+     *
+     * @param listener  the object to be registered.
+     *
+     * @see #removeChangeListener(MarkerChangeListener)
+     *
+     * @since 1.0.3
+     */
+    public void addChangeListener(MarkerChangeListener listener) {
+        this.listenerList.add(listener);
+    }
+
+    /**
+     * Unregisters an object for notification of changes to the marker.
+     *
+     * @param listener  the object to be unregistered.
+     *
+     * @see #addChangeListener(MarkerChangeListener)
+     *
+     * @since 1.0.3
+     */
+    public void removeChangeListener(MarkerChangeListener listener) {
+        this.listenerList.remove(listener);
+    }
+
+    /**
+     * Notifies all registered listeners that the marker has been modified.
+     *
+     * @param event  information about the change event.
+     *
+     * @since 1.0.3
+     */
+    public void notifyListeners(MarkerChangeEvent event) {
+        if(listenerList.size() == 0) {
+            return;
+        }
+        for (int i = listenerList.size() - 1; i >= 0; i--) {
+            listenerList.get(i).markerChanged(event);
+        }
+    }
+
+    /**
+     * Returns an array containing all the listeners.
+     *
+     * @return The array of listeners.
+     *
+     * @since 1.0.3
+     */
+    public EventListener[] getListeners() {
+        return this.listenerList.toArray(new EventListener[0]);
     }
     
     /**

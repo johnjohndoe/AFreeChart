@@ -258,7 +258,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
     public void setDrawSeriesLineAsPath(boolean flag) {
         if (this.drawSeriesLineAsPath != flag) {
             this.drawSeriesLineAsPath = flag;
-            // fireChangeEvent();
+             fireChangeEvent();
         }
     }
 
@@ -297,6 +297,23 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
             return this.baseLinesVisible;
         }
     }
+
+//    /**
+//     * Sets a flag that controls whether or not lines are drawn between the
+//     * items in ALL series, and sends a {@link RendererChangeEvent} to all
+//     * registered listeners.  You need to set this to <code>null</code> if you
+//     * want the "per series" settings to apply.
+//     *
+//     * @param visible  the flag (<code>null</code> permitted).
+//     *
+//     * @see #getLinesVisible()
+//     *
+//     * @deprecated As of 1.0.7, use the per-series and base level settings.
+//     */
+//    public void setLinesVisible(Boolean visible) {
+//        this.linesVisible = visible;
+//        fireChangeEvent();
+//    }
 
     /**
      * Sets a flag that controls whether or not lines are drawn between the
@@ -343,7 +360,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      */
     public void setSeriesLinesVisible(int series, Boolean flag) {
         this.seriesLinesVisible.setBoolean(series, flag);
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -383,7 +400,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      */
     public void setBaseLinesVisible(boolean flag) {
         this.baseLinesVisible = flag;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -411,7 +428,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
             throw new IllegalArgumentException("Null 'line' argument.");
         }
         this.legendLine = line;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     // SHAPES VISIBLE
@@ -442,6 +459,21 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
             return this.baseShapesVisible;
         }
     }
+    
+//    /**
+//     * Sets the 'shapes visible' for ALL series and sends a
+//     * {@link RendererChangeEvent} to all registered listeners.
+//     *
+//     * @param visible  the flag (<code>null</code> permitted).
+//     *
+//     * @see #getShapesVisible()
+//     *
+//     * @deprecated As of 1.0.7, use the per-series and base level settings.
+//     */
+//    public void setShapesVisible(Boolean visible) {
+//        this.shapesVisible = visible;
+//        fireChangeEvent();
+//    }
 
     /**
      * Sets the 'shapes visible' for ALL series and sends a
@@ -501,7 +533,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      */
     public void setSeriesShapesVisible(int series, Boolean flag) {
         this.seriesShapesVisible.setBoolean(series, flag);
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -526,7 +558,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      */
     public void setBaseShapesVisible(boolean flag) {
         this.baseShapesVisible = flag;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     // SHAPES FILLED
@@ -569,7 +601,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      */
     public void setShapesFilled(Boolean filled) {
         this.shapesFilled = filled;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -615,7 +647,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      */
     public void setSeriesShapesFilled(int series, Boolean flag) {
         this.seriesShapesFilled.setBoolean(series, flag);
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -640,7 +672,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      */
     public void setBaseShapesFilled(boolean flag) {
         this.baseShapesFilled = flag;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -669,7 +701,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      */
     public void setDrawOutlines(boolean flag) {
         this.drawOutlines = flag;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -701,7 +733,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      */
     public void setUseFillPaint(boolean flag) {
         this.useFillPaintType = flag;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -733,7 +765,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      */
     public void setUseOutlinePaint(boolean flag) {
         this.useOutlinePaintType = flag;
-        // fireChangeEvent();
+         fireChangeEvent();
     }
 
     /**
@@ -1253,12 +1285,7 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
         return result;
 
     }
-    /*
-     * @Override public void addChangeListener(RendererChangeListener listener)
-     * { // TODO Auto-generated method stub
-     * 
-     * }
-     * 
+    /* 
      * @Override public Font getItemLabelFont() { // TODO Auto-generated method
      * stub return null; }
      * 
@@ -1276,11 +1303,6 @@ public class XYLineAndShapeRenderer extends AbstractXYItemRenderer implements XY
      * 
      * @Override public Boolean getSeriesVisibleInLegend() { // TODO
      * Auto-generated method stub return null; }
-     * 
-     * @Override public void removeChangeListener(RendererChangeListener
-     * listener) { // TODO Auto-generated method stub
-     * 
-     * }
      * 
      * @Override public void setBaseOutlineStroke(Float stroke) { // TODO
      * Auto-generated method stub

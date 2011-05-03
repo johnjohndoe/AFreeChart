@@ -254,6 +254,7 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
      */
     public void setLowerMargin(double margin) {
         this.lowerMargin = margin;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -280,6 +281,7 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
      */
     public void setUpperMargin(double margin) {
         this.upperMargin = margin;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -306,6 +308,7 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
      */
     public void setCategoryMargin(double margin) {
         this.categoryMargin = margin;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -330,6 +333,7 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
      */
     public void setMaximumCategoryLabelLines(int lines) {
         this.maximumCategoryLabelLines = lines;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -354,6 +358,7 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
      */
     public void setMaximumCategoryLabelWidthRatio(float ratio) {
         this.maximumCategoryLabelWidthRatio = ratio;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -379,6 +384,7 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
      */
     public void setCategoryLabelPositionOffset(int offset) {
         this.categoryLabelPositionOffset = offset;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -407,6 +413,7 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'positions' argument.");
         }
         this.categoryLabelPositions = positions;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -451,6 +458,7 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
         } else {
             this.tickLabelFontMap.put(category, font);
         }
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -495,6 +503,7 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
         } else {
             this.tickLabelPaintTypeMap.put(category, paintType);
         }
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -513,6 +522,7 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'category' argument.");
         }
         this.categoryLabelToolTips.put(category, tooltip);
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -549,6 +559,7 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'category' argument.");
         }
         this.categoryLabelToolTips.remove(category);
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -560,6 +571,7 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
      */
     public void clearCategoryLabelToolTips() {
         this.categoryLabelToolTips.clear();
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**

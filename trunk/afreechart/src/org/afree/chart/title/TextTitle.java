@@ -289,6 +289,7 @@ public class TextTitle extends Title implements Serializable, Cloneable {
         }
         if (!this.text.equals(text)) {
             this.text = text;
+            notifyListeners(new TitleChangeEvent(this));
         }
     }
 
@@ -315,6 +316,7 @@ public class TextTitle extends Title implements Serializable, Cloneable {
             throw new IllegalArgumentException("Null 'alignment' argument.");
         }
         this.textAlignment = alignment;
+        notifyListeners(new TitleChangeEvent(this));
     }
 
     /**
@@ -343,6 +345,7 @@ public class TextTitle extends Title implements Serializable, Cloneable {
         }
         if (!this.font.equals(font)) {
             this.font = font;
+            notifyListeners(new TitleChangeEvent(this));
         }
     }
 
@@ -372,6 +375,7 @@ public class TextTitle extends Title implements Serializable, Cloneable {
         }
         if (!this.paintType.equals(paintType)) {
             this.paintType = paintType;
+            notifyListeners(new TitleChangeEvent(this));
         }
     }
 
@@ -394,6 +398,7 @@ public class TextTitle extends Title implements Serializable, Cloneable {
      */
     public void setBackgroundPaint(Paint paint) {
         this.backgroundPaint = paint;
+        notifyListeners(new TitleChangeEvent(this));
     }
 
     /**
@@ -414,6 +419,7 @@ public class TextTitle extends Title implements Serializable, Cloneable {
      */
     public void setToolTipText(String text) {
         this.toolTipText = text;
+        notifyListeners(new TitleChangeEvent(this));
     }
 
     /**
@@ -434,6 +440,7 @@ public class TextTitle extends Title implements Serializable, Cloneable {
      */
     public void setURLText(String text) {
         this.urlText = text;
+        notifyListeners(new TitleChangeEvent(this));
     }
 
     /**
@@ -456,6 +463,7 @@ public class TextTitle extends Title implements Serializable, Cloneable {
      */
     public void setExpandToFitSpace(boolean expand) {
         this.expandToFitSpace = expand;
+        notifyListeners(new TitleChangeEvent(this));
     }
 
     /**
@@ -484,6 +492,7 @@ public class TextTitle extends Title implements Serializable, Cloneable {
      */
     public void setMaximumLinesToDisplay(int max) {
         this.maximumLinesToDisplay = max;
+        notifyListeners(new TitleChangeEvent(this));
     }
 
     /**

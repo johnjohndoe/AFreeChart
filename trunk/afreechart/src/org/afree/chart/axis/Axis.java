@@ -103,7 +103,9 @@
 package org.afree.chart.axis;
 
 import java.io.Serializable;
+import java.util.EventListener;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.afree.ui.RectangleEdge;
 import org.afree.ui.RectangleInsets;
@@ -111,6 +113,7 @@ import org.afree.ui.TextAnchor;
 import org.afree.chart.entity.AxisEntity;
 import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.event.AxisChangeEvent;
+import org.afree.chart.event.AxisChangeListener;
 import org.afree.chart.plot.Plot;
 import org.afree.chart.plot.PlotRenderingInfo;
 import org.afree.chart.text.TextUtilities;
@@ -295,6 +298,9 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     private transient Plot plot;
 
+    /** Storage for registered listeners. */
+    private transient List<AxisChangeListener> listenerList;
+
     /**
      * Constructs an axis, using default values where necessary.
      * 
@@ -333,6 +339,8 @@ public abstract class Axis implements Cloneable, Serializable {
 
         this.plot = null;
 
+        this.listenerList = new CopyOnWriteArrayList<AxisChangeListener>();
+
     }
 
     /**
@@ -359,6 +367,7 @@ public abstract class Axis implements Cloneable, Serializable {
     public void setVisible(boolean flag) {
         if (flag != this.visible) {
             this.visible = flag;
+            fireChangeEvent();
         }
     }
 
@@ -392,10 +401,12 @@ public abstract class Axis implements Cloneable, Serializable {
         if (existing != null) {
             if (!existing.equals(label)) {
                 this.label = label;
+                fireChangeEvent();
             }
         } else {
             if (label != null) {
                 this.label = label;
+                fireChangeEvent();
             }
         }
 
@@ -427,6 +438,7 @@ public abstract class Axis implements Cloneable, Serializable {
         }
         if (!this.labelFont.equals(font)) {
             this.labelFont = font;
+            fireChangeEvent();
         }
     }
 
@@ -455,6 +467,7 @@ public abstract class Axis implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.labelPaintType = paintType;
+        fireChangeEvent();
     }
 
     /**
@@ -499,7 +512,9 @@ public abstract class Axis implements Cloneable, Serializable {
         }
         if (!insets.equals(this.labelInsets)) {
             this.labelInsets = insets;
-
+            if (notify) {
+                fireChangeEvent();
+            }
         }
     }
 
@@ -525,6 +540,7 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setLabelAngle(double angle) {
         this.labelAngle = angle;
+        fireChangeEvent();
     }
 
     /**
@@ -553,6 +569,7 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setAxisLineVisible(boolean visible) {
         this.axisLineVisible = visible;
+        fireChangeEvent();
     }
 
     /**
@@ -580,6 +597,7 @@ public abstract class Axis implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.axisLinePaintType = paintType;
+        fireChangeEvent();
     }
 
     /**
@@ -605,6 +623,7 @@ public abstract class Axis implements Cloneable, Serializable {
     public void setAxisLineStroke(float stroke) {
 
         this.axisLineStroke = stroke;
+        fireChangeEvent();
     }
 
     /**
@@ -630,6 +649,7 @@ public abstract class Axis implements Cloneable, Serializable {
     public void setAxisLineEffect(PathEffect pathEffect) {
 
         this.axisLineEffect = pathEffect;
+        notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -660,6 +680,7 @@ public abstract class Axis implements Cloneable, Serializable {
 
         if (flag != this.tickLabelsVisible) {
             this.tickLabelsVisible = flag;
+            fireChangeEvent();
         }
 
     }
@@ -693,6 +714,7 @@ public abstract class Axis implements Cloneable, Serializable {
     public void setMinorTickMarksVisible(boolean flag) {
         if (flag != this.minorTickMarksVisible) {
             this.minorTickMarksVisible = flag;
+            fireChangeEvent();
         }
     }
 
@@ -724,6 +746,7 @@ public abstract class Axis implements Cloneable, Serializable {
 
         if (!this.tickLabelFont.equals(font)) {
             this.tickLabelFont = font;
+            fireChangeEvent();
         }
 
     }
@@ -753,6 +776,7 @@ public abstract class Axis implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.tickLabelPaintType = paintType;
+        fireChangeEvent();
     }
 
     /**
@@ -781,6 +805,7 @@ public abstract class Axis implements Cloneable, Serializable {
         }
         if (!this.tickLabelInsets.equals(insets)) {
             this.tickLabelInsets = insets;
+            fireChangeEvent();
         }
     }
 
@@ -809,6 +834,7 @@ public abstract class Axis implements Cloneable, Serializable {
     public void setTickMarksVisible(boolean flag) {
         if (flag != this.tickMarksVisible) {
             this.tickMarksVisible = flag;
+            fireChangeEvent();
         }
     }
 
@@ -835,6 +861,7 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setTickMarkInsideLength(float length) {
         this.tickMarkInsideLength = length;
+        fireChangeEvent();
     }
 
     /**
@@ -860,6 +887,7 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setTickMarkOutsideLength(float length) {
         this.tickMarkOutsideLength = length;
+        fireChangeEvent();
     }
 
     /**
@@ -885,7 +913,7 @@ public abstract class Axis implements Cloneable, Serializable {
     public void setTickMarkStroke(int stroke) {
 
         this.tickMarkStroke = stroke;
-
+        fireChangeEvent();
     }
 
     /**
@@ -911,6 +939,7 @@ public abstract class Axis implements Cloneable, Serializable {
     public void setTickMarkEffect(PathEffect pathEffect) {
 
         this.tickMarkEffect = pathEffect;
+        notifyListeners(new AxisChangeEvent(this));
 
     }
 
@@ -939,6 +968,7 @@ public abstract class Axis implements Cloneable, Serializable {
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.tickMarkPaintType = paintType;
+        fireChangeEvent();
     }
 
     /**
@@ -968,6 +998,7 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setMinorTickMarkInsideLength(float length) {
         this.minorTickMarkInsideLength = length;
+        fireChangeEvent();
     }
 
     /**
@@ -997,6 +1028,7 @@ public abstract class Axis implements Cloneable, Serializable {
      */
     public void setMinorTickMarkOutsideLength(float length) {
         this.minorTickMarkOutsideLength = length;
+        fireChangeEvent();
     }
 
     /**
@@ -1172,6 +1204,57 @@ public abstract class Axis implements Cloneable, Serializable {
             e.add(new AxisEntity(hotspot, this));
         }
     }
+
+    /**
+     * Registers an object for notification of changes to the axis.
+     *
+     * @param listener  the object that is being registered.
+     *
+     * @see #removeChangeListener(AxisChangeListener)
+     */
+    public void addChangeListener(AxisChangeListener listener) {
+        this.listenerList.add(listener);
+    }
+
+    /**
+     * Deregisters an object for notification of changes to the axis.
+     *
+     * @param listener  the object to deregister.
+     *
+     * @see #addChangeListener(AxisChangeListener)
+     */
+    public void removeChangeListener(AxisChangeListener listener) {
+        this.listenerList.remove(listener);
+    }
+
+    /**
+     * Returns <code>true</code> if the specified object is registered with
+     * the dataset as a listener.  Most applications won't need to call this
+     * method, it exists mainly for use by unit testing code.
+     *
+     * @param listener  the listener.
+     *
+     * @return A boolean.
+     */
+    public boolean hasListener(EventListener listener) {
+        return listenerList.contains(listener);
+    }
+
+    /**
+     * Notifies all registered listeners that the axis has changed.
+     * The AxisChangeEvent provides information about the change.
+     *
+     * @param event  information about the change to the axis.
+     */
+    protected void notifyListeners(AxisChangeEvent event) {
+        if(listenerList.size() == 0) {
+            return;
+        }
+        for (int i = listenerList.size() - 1; i >= 0; i--) {
+            listenerList.get(i).axisChanged(event);
+        }
+    }
+
 
     /**
      * Returns a RectShape that encloses the axis label. This is typically used
@@ -1379,4 +1462,12 @@ public abstract class Axis implements Cloneable, Serializable {
 
     }
 
+    /**
+     * Sends an {@link AxisChangeEvent} to all registered listeners.
+     *
+     * @since JFreeChart 1.0.12
+     */
+    protected void fireChangeEvent() {
+        notifyListeners(new AxisChangeEvent(this));
+    }
 }

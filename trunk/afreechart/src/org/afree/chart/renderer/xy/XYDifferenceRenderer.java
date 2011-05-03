@@ -223,7 +223,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.positivePaint = paint;
-//        fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -249,8 +249,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.negativePaint = paint;
-        // TODO: implement notifyListeners
-//        notifyListeners(new RendererChangeEvent(this));
+        notifyListeners(new RendererChangeEvent(this));
     }
 
     /**
@@ -276,7 +275,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
      */
     public void setShapesVisible(boolean flag) {
         this.shapesVisible = flag;
-//        fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -303,7 +302,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Null 'line' argument.");
         }
         this.legendLine = line;
-//        fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**
@@ -333,7 +332,7 @@ public class XYDifferenceRenderer extends AbstractXYItemRenderer
      */
     public void setRoundXCoordinates(boolean round) {
         this.roundXCoordinates = round;
-//        fireChangeEvent();
+        fireChangeEvent();
     }
 
     /**

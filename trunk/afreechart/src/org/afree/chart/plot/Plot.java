@@ -146,6 +146,8 @@
 package org.afree.chart.plot;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.afree.chart.AFreeChart;
 import org.afree.chart.LegendItemCollection;
@@ -158,6 +160,10 @@ import org.afree.chart.entity.EntityCollection;
 import org.afree.chart.entity.PlotEntity;
 import org.afree.chart.event.ChartChangeEventType;
 //import org.afree.chart.event.EventListenerList;
+import org.afree.chart.event.AxisChangeEvent;
+import org.afree.chart.event.AxisChangeListener;
+import org.afree.chart.event.MarkerChangeEvent;
+import org.afree.chart.event.MarkerChangeListener;
 import org.afree.chart.event.PlotChangeEvent;
 import org.afree.chart.event.PlotChangeListener;
 import org.afree.chart.text.G2TextMeasurer;
@@ -189,7 +195,7 @@ import android.graphics.drawable.BitmapDrawable;
  * delegates the drawing of axes and data to the plot. This base class provides
  * facilities common to most plot types.
  */
-public abstract class Plot implements LegendItemSource, Cloneable, Serializable,DatasetChangeListener {
+public abstract class Plot implements AxisChangeListener, LegendItemSource, Cloneable, Serializable,DatasetChangeListener, MarkerChangeListener {
 
     /** For serialization. */
     private static final long serialVersionUID = -8831571430103671324L;
@@ -280,7 +286,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
     private DrawingSupplier drawingSupplier;
 
     /** Storage for registered change listeners. */
-//    private transient EventListenerList listenerList;
+    private transient List<PlotChangeListener> listenerList;
     
     /**
      * A flag that controls whether or not the plot will notify listeners of
@@ -313,7 +319,9 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
         this.noDataMessagePaintType = new SolidColor(Color.argb(0, 255, 255, 255));
 
         this.drawingSupplier = new DefaultDrawingSupplier();
-//        this.listenerList = new EventListenerList();
+
+        this.notify = true;
+        this.listenerList = new CopyOnWriteArrayList<PlotChangeListener>();
     }
 
     /**
@@ -365,6 +373,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
      */
     public void setNoDataMessage(String message) {
         this.noDataMessage = message;
+        fireChangeEvent();
     }
 
     /**
@@ -393,6 +402,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
             throw new IllegalArgumentException("Null 'font' argument.");
         }
         this.noDataMessageFont = font;
+        fireChangeEvent();
     }
 
     /**
@@ -421,6 +431,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
             throw new IllegalArgumentException("Null 'paint' argument.");
         }
         this.noDataMessagePaintType = paintType;
+        fireChangeEvent();
     }
 
     /**
@@ -536,7 +547,9 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
         }
         if (!this.insets.equals(insets)) {
             this.insets = insets;
-
+            if (notify) {
+                fireChangeEvent();
+            }
         }
 
     }
@@ -566,6 +579,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
         if (paintType == null) {
             if (this.backgroundPaintType != null) {
                 this.backgroundPaintType = null;
+                fireChangeEvent();
             }
         } else {
             if (this.backgroundPaintType != null) {
@@ -574,6 +588,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
                 }
             }
             this.backgroundPaintType = paintType;
+            fireChangeEvent();
         }
 
     }
@@ -601,6 +616,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
     public void setBackgroundAlpha(int alpha) {
         if (this.backgroundAlpha != alpha) {
             this.backgroundAlpha = alpha;
+            fireChangeEvent();
         }
     }
 
@@ -636,6 +652,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
      */
     public void setDrawingSupplier(DrawingSupplier supplier) {
         this.drawingSupplier = supplier;
+        fireChangeEvent();
     }
 
     /**
@@ -656,7 +673,9 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
      */
     public void setDrawingSupplier(DrawingSupplier supplier, boolean notify) {
         this.drawingSupplier = supplier;
-
+        if (notify) {
+            fireChangeEvent();
+        }
     }
 
     /**
@@ -689,6 +708,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
      */
     public void setOutlineVisible(boolean visible) {
         this.outlineVisible = visible;
+        fireChangeEvent();
     }
 
     /**
@@ -713,9 +733,8 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
      * @see #getOutlineStroke()
      */
     public void setOutlineStroke(float stroke) {
-
         this.outlineStroke = stroke;
-
+        fireChangeEvent();
     }
 
     /**
@@ -740,6 +759,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
      */
     public void setOutlineEffect(PathEffect effect) {
         this.outlineEffect = effect;
+        fireChangeEvent();
     }
 
     /**
@@ -767,6 +787,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
         if (paintType == null) {
             if (this.outlinePaintType != null) {
                 this.outlinePaintType = null;
+                fireChangeEvent();
             }
         } else {
             if (this.outlinePaintType != null) {
@@ -775,6 +796,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
                 }
             }
             this.outlinePaintType = paintType;
+            fireChangeEvent();
         }
     }
 
@@ -801,6 +823,7 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
     public void setForegroundAlpha(int alpha) {
         if (this.foregroundAlpha != alpha) {
             this.foregroundAlpha = alpha;
+            fireChangeEvent();
         }
     }
 
@@ -827,6 +850,24 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
      */
     public boolean isNotify() {
         return this.notify;
+    }
+
+    /**
+     * Sets a flag that controls whether or not listeners receive
+     * {@link PlotChangeEvent} notifications.
+     *
+     * @param notify  a boolean.
+     *
+     * @see #isNotify()
+     *
+     * @since 1.0.13
+     */
+    public void setNotify(boolean notify) {
+        this.notify = notify;
+        // if the flag is being set to true, there may be queued up changes...
+        if (notify) {
+            notifyListeners(new PlotChangeEvent(this));
+        }
     }
 
     /**
@@ -1234,6 +1275,28 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
         newEvent.setType(ChartChangeEventType.DATASET_UPDATED);
         notifyListeners(newEvent);
     }
+    
+    /**
+     * Registers an object for notification of changes to the plot.
+     *
+     * @param listener  the object to be registered.
+     *
+     * @see #removeChangeListener(PlotChangeListener)
+     */
+    public void addChangeListener(PlotChangeListener listener) {
+        this.listenerList.add(listener);
+    }
+
+    /**
+     * Unregisters an object for notification of changes to the plot.
+     *
+     * @param listener  the object to be unregistered.
+     *
+     * @see #addChangeListener(PlotChangeListener)
+     */
+    public void removeChangeListener(PlotChangeListener listener) {
+        this.listenerList.remove(listener);
+    }
 
     /**
      * Notifies all registered listeners that the plot has been modified.
@@ -1246,34 +1309,12 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
         if (!this.notify) {
             return;
         }
-//        Object[] listeners = this.listenerList.getListenerList();
-//        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-//            if (listeners[i] == PlotChangeListener.class) {
-//                ((PlotChangeListener) listeners[i + 1]).plotChanged(event);
-//            }
-//        }
-    }
-    
-    /**
-     * Registers an object for notification of changes to the plot.
-     *
-     * @param listener  the object to be registered.
-     *
-     * @see #removeChangeListener(PlotChangeListener)
-     */
-    public void addChangeListener(PlotChangeListener listener) {
-//        this.listenerList.add(PlotChangeListener.class, listener);
-    }
-
-    /**
-     * Unregisters an object for notification of changes to the plot.
-     *
-     * @param listener  the object to be unregistered.
-     *
-     * @see #addChangeListener(PlotChangeListener)
-     */
-    public void removeChangeListener(PlotChangeListener listener) {
-//        this.listenerList.remove(PlotChangeListener.class, listener);
+        if(listenerList.size() == 0) {
+            return;
+        }
+        for (int i = listenerList.size() - 1; i >= 0; i--) {
+            listenerList.get(i).plotChanged(event);
+        }
     }
     
     /**
@@ -1286,7 +1327,46 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
      */
     public void setBackgroundImage(BitmapDrawable image) {
         this.backgroundImage = image;
+        fireChangeEvent();
     }
+    
+//    /**
+//     * Sets the alignment for the background image and sends a
+//     * {@link PlotChangeEvent} to all registered listeners.  Alignment options
+//     * are defined by the {@link org.jfree.ui.Align} class in the JCommon
+//     * class library.
+//     *
+//     * @param alignment  the alignment.
+//     *
+//     * @see #getBackgroundImageAlignment()
+//     */
+//    public void setBackgroundImageAlignment(int alignment) {
+//        if (this.backgroundImageAlignment != alignment) {
+//            this.backgroundImageAlignment = alignment;
+//            fireChangeEvent();
+//        }
+//    }
+    
+//    /**
+//     * Sets the alpha transparency used when drawing the background image.
+//     *
+//     * @param alpha  the alpha transparency (in the range 0.0f to 1.0f, where
+//     *     0.0f is fully transparent, and 1.0f is fully opaque).
+//     *
+//     * @throws IllegalArgumentException if <code>alpha</code> is not within
+//     *     the specified range.
+//     *
+//     * @see #getBackgroundImageAlpha()
+//     */
+//    public void setBackgroundImageAlpha(float alpha) {
+//        if (alpha < 0.0f || alpha > 1.0f)
+//            throw new IllegalArgumentException(
+//                    "The 'alpha' value must be in the range 0.0f to 1.0f.");
+//        if (this.backgroundImageAlpha != alpha) {
+//            this.backgroundImageAlpha = alpha;
+//            fireChangeEvent();
+//        }
+//    }
     
     /**
      * Creates a clone of the plot.
@@ -1307,8 +1387,39 @@ public abstract class Plot implements LegendItemSource, Cloneable, Serializable,
         }
         clone.drawingSupplier
             = (DrawingSupplier) ObjectUtilities.clone(this.drawingSupplier);
-//        clone.listenerList = new EventListenerList();
+        clone.listenerList = new CopyOnWriteArrayList<PlotChangeListener>();
         return clone;
 
     }
+
+    /**
+     * Sends a {@link PlotChangeEvent} to all registered listeners.
+     *
+     * @since JFreeChart 1.0.10
+     */
+    protected void fireChangeEvent() {
+        notifyListeners(new PlotChangeEvent(this));
+    }
+    
+    /**
+     * Receives notification of a change to one of the plot's axes.
+     *
+     * @param event  information about the event (not used here).
+     */
+    public void axisChanged(AxisChangeEvent event) {
+        fireChangeEvent();
+    }
+    
+    /**
+     * Receives notification of a change to a marker that is assigned to the
+     * plot.
+     *
+     * @param event  the event.
+     *
+     * @since 1.0.3
+     */
+    public void markerChanged(MarkerChangeEvent event) {
+        fireChangeEvent();
+    }
+
 }

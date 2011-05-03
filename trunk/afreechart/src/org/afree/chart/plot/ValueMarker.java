@@ -59,6 +59,8 @@
 
 package org.afree.chart.plot;
 
+import org.afree.chart.event.MarkerChangeEvent;
+
 /**
  * A marker that represents a single value. Markers can be added to plots to
  * highlight specific values.
@@ -143,6 +145,7 @@ public class ValueMarker extends Marker {
      */
     public void setValue(double value) {
         this.value = value;
+        notifyListeners(new MarkerChangeEvent(this));
     }
 
     /**
