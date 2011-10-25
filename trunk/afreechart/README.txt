@@ -1,6 +1,6 @@
 AFreeChart : version 0.0.2
 
-(C) Copyright 2010, by Icom Systech Co., Ltd.
+(C) Copyright 2010, by ICOMSYSTECH Co.,Ltd.
 
 The latest version of AFreeChart can be obtained from:
     http://code.google.com/p/afreechart/downloads/list
@@ -41,6 +41,8 @@ The operation check is executed as following :
     Nexus One by Google
     Android OS - version 2.2
 
+    GALAXY S by SAMSUNG
+    Android OS - version 2.2
 
 ===============================================================
 3. DOCUMENTATION
@@ -62,7 +64,7 @@ AFreeChart has the following dependencies:
     The runtime jar file is distributed with AFreeChart.
 
     You can use this library free of charge.
-    Copyright owner of AFreeGraphics library is Icomsystech Co.,Ltd.
+    Copyright owner of AFreeGraphics library is ICOMSYSTECH Co.,Ltd.
 
 
 ===============================================================
@@ -106,6 +108,9 @@ Support questions can be posted in the Issues at
   Added new JDBC Chart, source location is the following.
     org.afree.chart.demo.activity
 
+24 Oct. 2011
+  Added 6 new sample codes.
+
 ===============================================================
 9. Trademarks
 ---------------------------------------------------------------
@@ -129,8 +134,9 @@ Support questions can be posted in the Issues at
 AFreeChart consists by the developer's contribution described 
 in the list below:
 
-    - Shiraki Seiyu  (for Icom Systech Co., Ltd)
+    - Shiraki Seiyu  (for ICOMSYSTECH Co.,Ltd)
     - Ikeda Koichiro
     - Sato Yoshiaki
     - Niwano Masayoshi
+    - Yamakami Souichirou
     - Nada Wataru  (for Tokyo University of information Sciences)

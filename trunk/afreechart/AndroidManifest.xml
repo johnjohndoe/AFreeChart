@@ -12,36 +12,6 @@
     <application android:icon="@drawable/icon" android:label="@string/app_name"
         android:debuggable="true">
         <uses-library android:name="android.test.runner" />
-        <!-- Demo activity -->
-        <activity android:name=".chart.demo.ChartHierarchyActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    
-        <activity android:name=".chart.demo.activity.PieChartDemo1Activity"
-            android:label="Pie Chart Demo 1">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="&CATEGORY_NAME;" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".chart.demo.activity.BarChartDemo1Activity"
-            android:label="Bar Chart Demo 1">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="&CATEGORY_NAME;" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".chart.demo.activity.TimeSeriesChartDemo1Activity"
-            android:label="Time Series Demo 1">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="&CATEGORY_NAME;" />
-            </intent-filter>
-        </activity>
     </application>
     
     <uses-sdk android:minSdkVersion="7" />
