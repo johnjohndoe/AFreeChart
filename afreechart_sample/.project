@@ -3,7 +3,6 @@
 	<name>afreechart_sample</name>
 	<comment></comment>
 	<projects>
-		<project>afreechart</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

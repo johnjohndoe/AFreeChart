@@ -5,7 +5,7 @@
 ]>
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="org.afree" 
+      package="org.afree.chart"
       android:versionCode="1"
       android:versionName="1.0">
 
@@ -13,30 +13,78 @@
         android:debuggable="true">
         <uses-library android:name="android.test.runner" />
         <!-- Demo activity -->
-        <activity android:name=".chart.demo.ChartHierarchyActivity"
+        <activity android:name=".demo.ChartHierarchyActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    
-        <activity android:name=".chart.demo.activity.PieChartDemo1Activity"
-            android:label="Pie Chart Demo 1">
+
+        <activity android:name=".demo.activity.AnnotationDemo01Activity"
+            android:label="Annotation Demo 01"
+            android:configChanges="orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="&CATEGORY_NAME;" />
             </intent-filter>
         </activity>
-        <activity android:name=".chart.demo.activity.BarChartDemo1Activity"
-            android:label="Bar Chart Demo 1">
+        <activity android:name=".demo.activity.BarChartDemo01Activity"
+            android:label="Bar Chart Demo 01">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="&CATEGORY_NAME;" />
             </intent-filter>
         </activity>
-        <activity android:name=".chart.demo.activity.TimeSeriesChartDemo1Activity"
-            android:label="Time Series Demo 1">
+        <activity android:name=".demo.activity.CandleStickChartDemo03Activity"
+            android:label="Candle Stick Chart Demo 03"
+            android:configChanges="orientation|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="&CATEGORY_NAME;" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".demo.activity.DeviationRendererDemo02Activity"
+            android:label="Deviation Renderer Demo 02"
+            android:configChanges="orientation|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="&CATEGORY_NAME;" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".demo.activity.MarkerDemo01Activity"
+            android:label="Marker Demo 01"
+            android:configChanges="orientation|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="&CATEGORY_NAME;" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".demo.activity.OverlaidXYPlotDemo02Activity"
+            android:label="Overlaid XY Plot Demo 02"
+            android:configChanges="orientation|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="&CATEGORY_NAME;" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".demo.activity.PieChartDemo01Activity"
+            android:label="Pie Chart Demo 01">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="&CATEGORY_NAME;" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".demo.activity.ScatterPlotDemo03Activity"
+            android:label="Scatter Plot Demo 03"
+            android:configChanges="orientation|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="&CATEGORY_NAME;" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".demo.activity.TimeSeriesChartDemo01Activity"
+            android:label="Time Series Demo 01">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="&CATEGORY_NAME;" />
@@ -45,6 +93,6 @@
     </application>
     
     <uses-sdk android:minSdkVersion="7" />
-    <instrumentation android:targetPackage="org.afree" android:name="android.test.InstrumentationTestRunner" />
+    <instrumentation android:targetPackage="org.afree.chart" android:name="android.test.InstrumentationTestRunner" />
     
 </manifest> 
