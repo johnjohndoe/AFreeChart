@@ -1,6 +1,6 @@
-AFreeChart : version 0.0.2
+AFreeChart : version 0.0.3
 
-(C) Copyright 2010, by ICOMSYSTECH Co.,Ltd.
+(C) Copyright 2010,2011 by ICOMSYSTECH Co.,Ltd.
 
 The latest version of AFreeChart can be obtained from:
     http://code.google.com/p/afreechart/downloads/list
@@ -59,7 +59,7 @@ AFreeChart has the following dependencies:
 
 (a) Android 2.1-update 1 (API Level7) or higher.
 
-(b) AFreeGraphics 0.0.2 or later. - To render all shapes, 
+(b) AFreeGraphics 0.0.3 or later. - To render all shapes, 
     AFreeChart uses functions of AFreeGraphics.
     The runtime jar file is distributed with AFreeChart.
 
@@ -108,8 +108,14 @@ Support questions can be posted in the Issues at
   Added new JDBC Chart, source location is the following.
     org.afree.chart.demo.activity
 
-24 Oct. 2011
-  Added 6 new sample codes.
+26 Oct. 2011
+  Version 0.0.3 release.
+  Added 6 new sample codes to "afreechart_sample" project.
+  Modified the header statement of GNU LGPL, in all source codes.
+    Inserted the word "Lesser" before "General".
+  Modified "trunk/afreechart/LICENSE" file.
+    Changed GNU LGPL text version from "2.1" to "3".
+
 
 ===============================================================
 9. Trademarks
