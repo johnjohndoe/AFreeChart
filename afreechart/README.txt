@@ -116,6 +116,9 @@ Support questions can be posted in the Issues at
   Modified "trunk/afreechart/LICENSE" file.
     Changed GNU LGPL text version from "2.1" to "3".
 
+27 Feb. 2012
+  Fixed the error about "Cannot find the class file for *".
+  Added "org.afree.graphics.*" files in "afreechart-0.0.3.jar".
 
 ===============================================================
 9. Trademarks
