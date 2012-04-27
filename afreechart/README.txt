@@ -1,4 +1,4 @@
-AFreeChart : version 0.0.3
+AFreeChart : version 0.0.4
 
 (C) Copyright 2010,2011 by ICOMSYSTECH Co.,Ltd.
 
@@ -117,8 +117,11 @@ Support questions can be posted in the Issues at
     Changed GNU LGPL text version from "2.1" to "3".
 
 27 Feb. 2012
-  Fixed the error about "Cannot find the class file for *".
-  Added "org.afree.graphics.*" files in "afreechart-0.0.3.jar".
+  Fixed the error about "Cannot find the class file for `*`".
+  Added "org.afree.graphics.`*`" files in "afreechart-0.0.3.jar".
+
+24 Apr. 2012
+  Added sliding category chart.
 
 ===============================================================
 9. Trademarks
@@ -149,3 +152,4 @@ in the list below:
     - Niwano Masayoshi
     - Yamakami Souichirou
     - Nada Wataru  (for Tokyo University of information Sciences)
+    - Kevin Moray  (Special Thanks)

@@ -36,5 +36,20 @@
 			<type>2</type>
 			<locationURI>_android_afreechart_7630c1b1/src</locationURI>
 		</link>
+		<link>
+			<name>afreechart_tests</name>
+			<type>2</type>
+			<locationURI>_android_afreechart_7630c1b1/tests</locationURI>
+		</link>
+		<link>
+			<name>afreegraphics_src</name>
+			<type>2</type>
+			<locationURI>_android_afreegraphics_a43f0bd8/src</locationURI>
+		</link>
+		<link>
+			<name>afreegraphics_tests</name>
+			<type>2</type>
+			<locationURI>_android_afreegraphics_a43f0bd8/tests</locationURI>
+		</link>
 	</linkedResources>
 </projectDescription>

@@ -36,6 +36,20 @@
                 <category android:name="&CATEGORY_NAME;" />
             </intent-filter>
         </activity>
+        <activity android:name=".demo.activity.SlidingCategoryPlotDemo01Activity"
+            android:label="Sliding Chart Demo 01">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="&CATEGORY_NAME;" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".demo.activity.SlidingCategoryPlotDemo02Activity"
+            android:label="Sliding Chart Demo 02">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="&CATEGORY_NAME;" />
+            </intent-filter>
+        </activity>
         <activity android:name=".demo.activity.CandleStickChartDemo03Activity"
             android:label="Candle Stick Chart Demo 03"
             android:configChanges="orientation|keyboardHidden">
