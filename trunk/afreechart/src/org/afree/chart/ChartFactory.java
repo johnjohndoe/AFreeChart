@@ -39,6 +39,7 @@
  * Changes (from 19-Nov-2010)
  * --------------------------
  * 19-Nov-2010 : port JFreeChart 1.0.13 to Android as "AFreeChart"
+ * 24-Apr-2012 : Added method to create slide category chart.
  * 
  * ------------- JFreeChart ---------------------------------------------
  * (C) Copyright 2000-2008, by Object Refinery Limited and Contributors.
@@ -156,6 +157,7 @@ import org.afree.chart.labels.ItemLabelAnchor;
 import org.afree.chart.labels.ItemLabelPosition;
 import org.afree.chart.labels.StandardPieSectionLabelGenerator;
 import org.afree.chart.plot.CategoryPlot;
+import org.afree.chart.plot.SlidingCategoryPlot;
 import org.afree.chart.plot.PiePlot;
 import org.afree.chart.plot.PlotOrientation;
 import org.afree.chart.plot.RingPlot;
@@ -291,6 +293,66 @@ public abstract class ChartFactory {
                 plot, legend);
         return chart;
 
+    }
+    
+    /**
+     * Creates a sliding bar chart. The chart object returned by this method uses a
+     * {@link SlidingCategoryPlot} instance as the plot, with a {@link CategoryAxis}
+     * for the domain axis, a {@link NumberAxis} as the range axis, and a
+     * {@link BarRenderer} as the renderer.
+     * 
+     * @param title
+     *            the chart title (<code>null</code> permitted).
+     * @param categoryAxisLabel
+     *            the label for the category axis (<code>null</code> permitted).
+     * @param valueAxisLabel
+     *            the label for the value axis (<code>null</code> permitted).
+     * @param dataset
+     *            the dataset for the chart (<code>null</code> permitted).
+     * @param orientation
+     *            the plot orientation (horizontal or vertical) (
+     *            <code>null</code> not permitted).
+     * @param legend
+     *            a flag specifying whether or not a legend is required.
+     * @param tooltips
+     *            configure chart to generate tool tips?
+     * @param urls
+     *            configure chart to generate URLs?
+     * 
+     * @return A bar chart.
+     */
+    public static AFreeChart createSlidingBarChart(String title,
+            String categoryAxisLabel, String valueAxisLabel,
+            CategoryDataset dataset, PlotOrientation orientation,
+            boolean legend, boolean tooltips, boolean urls){
+    	
+    	if (orientation == null) {
+            throw new IllegalArgumentException("Null 'orientation' argument.");
+        }
+        CategoryAxis categoryAxis = new CategoryAxis(categoryAxisLabel);
+        ValueAxis valueAxis = new NumberAxis(valueAxisLabel);
+
+        BarRenderer renderer = new BarRenderer();
+        if (orientation == PlotOrientation.HORIZONTAL) {
+            ItemLabelPosition position1 = new ItemLabelPosition(
+                    ItemLabelAnchor.OUTSIDE3, TextAnchor.CENTER_LEFT);
+            renderer.setBasePositiveItemLabelPosition(position1);
+            ItemLabelPosition position2 = new ItemLabelPosition(
+                    ItemLabelAnchor.OUTSIDE9, TextAnchor.CENTER_RIGHT);
+            renderer.setBaseNegativeItemLabelPosition(position2);
+        } else if (orientation == PlotOrientation.VERTICAL) {
+            ItemLabelPosition position1 = new ItemLabelPosition(
+                    ItemLabelAnchor.OUTSIDE12, TextAnchor.BOTTOM_CENTER);
+            renderer.setBasePositiveItemLabelPosition(position1);
+            ItemLabelPosition position2 = new ItemLabelPosition(
+                    ItemLabelAnchor.OUTSIDE6, TextAnchor.TOP_CENTER);
+            renderer.setBaseNegativeItemLabelPosition(position2);
+        }
+
+        SlidingCategoryPlot plot = new SlidingCategoryPlot(dataset, categoryAxis, valueAxis, renderer);
+        plot.setOrientation(orientation);
+        AFreeChart chart = new AFreeChart(title, AFreeChart.DEFAULT_TITLE_FONT, plot, legend);
+        return chart;
     }
     
     /**
