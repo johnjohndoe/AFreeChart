@@ -5,6 +5,7 @@
 ]>
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
       package="org.afree.chart"
       android:versionCode="1"
       android:versionName="1.0">
@@ -105,8 +106,11 @@
             </intent-filter>
         </activity>
     </application>
-    
+
     <uses-sdk android:minSdkVersion="7" />
-    <instrumentation android:targetPackage="org.afree.chart" android:name="android.test.InstrumentationTestRunner" />
-    
-</manifest> 
+    <instrumentation
+        android:targetPackage="org.afree.chart"
+        android:name="android.test.InstrumentationTestRunner"
+        tools:replace="android:targetPackage" />
+
+</manifest>
